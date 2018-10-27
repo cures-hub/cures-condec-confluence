@@ -8,13 +8,13 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="myConfluenceMacro"/>
+    <resource type="i18n" name="i18n" location="decisionKnowledgeImportMacro"/>
     
     <!-- add our web resources -->
     <web-resource key="issue-import-macro-resources" name="issue-import-macro-web-resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         
-        <resource type="download" name="myConfluenceMacro.css" location="/css/myConfluenceMacro.css"/>
+        <resource type="download" name="condec.css" location="/css/condec.css"/>
         <resource type="download" name="jsonImport.js" location="/js/jsonImport.js"/>
         <resource type="download" name="images/" location="/images"/>
 
