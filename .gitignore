@@ -1,0 +1,15 @@
+# Gitignore for Confluence ConDec plug-in
+
+# Directories
+target/
+bin/
+.idea/
+.metadata/
+
+# Files
+.classpath
+.project
+.settings
+*.iml
+*.class
+
