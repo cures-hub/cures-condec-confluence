@@ -1,33 +1,38 @@
-<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
-    <plugin-info>
-        <description>${project.description}</description>
-        <version>${project.version}</version>
-        <vendor name="${project.organization.name}" url="${project.organization.url}" />
-        <param name="plugin-icon">images/pluginIcon.png</param>
-        <param name="plugin-logo">images/pluginLogo.png</param>
-    </plugin-info>
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}"
+	plugins-version="2">
+	
+	<!-- Plug-in Information -->
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<param name="plugin-icon">images/pluginIcon.png</param>
+		<param name="plugin-logo">images/pluginLogo.png</param>
+	</plugin-info>
 
-    <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="decisionKnowledgeImportMacro"/>
-    
-    <!-- add our web resources -->
-    <web-resource key="issue-import-macro-resources" name="issue-import-macro-web-resources">
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
-        <resource type="download" name="condec.css" location="/css/condec.css"/>
-        <resource type="download" name="jsonImport.js" location="/js/jsonImport.js"/>
-        <resource type="download" name="images/" location="/images"/>
+	<!-- add our i18n resource -->
+	<resource type="i18n" name="i18n" location="decisionKnowledgeImportMacro" />
 
-        <context>Json Issue Import</context>
-    </web-resource>
+	<!-- add our web resources -->
+	<web-resource key="issue-import-macro-resources"
+		name="issue-import-macro-web-resources">
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
 
-    <xhtml-macro name="issue-import-macro" class="de.uhd.ifi.se.decision.macro.jsonimport" key='issue-import-macro'>
+		<resource type="download" name="condec.css" location="/css/condec.css" />
+		<resource type="download" name="jsonImport.js" location="/js/jsonImport.js" />
+		<resource type="download" name="images/" location="/images" />
 
-        <description key="jsonImportMacro.macro.desc"/>
-        <category name="formatting"/>
-        <parameters>
-            <parameter name="yourJsonArray" type="string" />
-        </parameters>
-    </xhtml-macro>
+		<context>Json Issue Import</context>
+	</web-resource>
+
+	<xhtml-macro name="issue-import-macro"
+		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro" key='issue-import-macro'>
+
+		<description key="jsonImportMacro.macro.desc" />
+		<category name="formatting" />
+		<parameters>
+			<parameter name="yourJsonArray" type="string" />
+		</parameters>
+	</xhtml-macro>
 
 </atlassian-plugin>

@@ -1,8 +1,9 @@
-package ut.com.atlassian.tutorial;
+package de.uhd.ifi.se.decision.management.confluence;
 
 import org.junit.Test;
-import de.uhd.ifi.se.decision.api.MyPluginComponent;
-import de.uhd.ifi.se.decision.impl.MyPluginComponentImpl;
+
+import de.uhd.ifi.se.decision.management.confluence.api.MyPluginComponent;
+import de.uhd.ifi.se.decision.management.confluence.impl.MyPluginComponentImpl;
 
 import static org.junit.Assert.assertEquals;
 

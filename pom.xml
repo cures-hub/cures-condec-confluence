@@ -14,7 +14,7 @@
 	</organization>
 
 	<name>Decision Knowlege Support for Meeting Minutes</name>
-	<description>This is a plugin with a macro to import jira Issues in Confluence.</description>
+	<description>This is a plugin that provides a macro to import decision knowledge in Confluence.</description>
 	<packaging>atlassian-plugin</packaging>
 
 	<dependencies>
@@ -80,6 +80,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>cures-condec-confluence</finalName>
 		<plugins>
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
@@ -154,4 +155,5 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
+	<url>https://github.com/cures-hub/cures-condec-confluence</url>
 </project>

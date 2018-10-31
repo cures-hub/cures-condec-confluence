@@ -1,9 +1,10 @@
-package de.uhd.ifi.se.decision.impl;
+package de.uhd.ifi.se.decision.management.confluence.impl;
 
 import com.atlassian.plugin.spring.scanner.annotation.export.ExportAsService;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.ApplicationProperties;
-import de.uhd.ifi.se.decision.api.MyPluginComponent;
+
+import de.uhd.ifi.se.decision.management.confluence.api.MyPluginComponent;
 
 import javax.inject.Inject;
 import javax.inject.Named;
