@@ -1,0 +1,26 @@
+</pre>
+<div id="wrapper">
+    <div class="box">
+        <h3>Decision Knowledge</h3>
+        <table class="aui">
+            <tbody>
+            <tr>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Type</th>
+                <th></th>
+            </tr>
+                #foreach($jsonIssue in $jsonIssues)
+                <tr>
+                    <td>
+                        <a target="_blank" href="$jsonIssue.getLink()">$jsonIssue.getKey()</a>
+                    </td>
+                    <td>$jsonIssue.getSummary()</td>
+                    <td>$jsonIssue.getType()</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+    </div>
+</div>
+<pre>
