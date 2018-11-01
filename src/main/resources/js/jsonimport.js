@@ -8,15 +8,49 @@
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
-			width: 400,
-			height: 400,
+			width: 550,
+			height: 600,
 			id: "example-dialog",
 			closeOnOutsideClick: true
 		});
+		function getJSON(url, callback) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", url, true);
+			xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+			xhr.responseType = "json";
+			xhr.onload = function () {
+				var status = xhr.status;
+				if (status === 200) {
+					callback(null, xhr.response);
+				} else {
+					callback(status);
+				}
+			};
+			xhr.send();
+		}
 
-
+		//get json from restpoint
+		var pageId = parseInt(AJS.params.pageId);
+		getJSON(AJS.Data.get('context-path') + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId="+pageId,function(error,data){
+			if(error==null){
+				var prefillValue=JSON.stringify(data);
+				var allTextAreas = $(".jsonDialogMacroContainer");
+				var selectedTextArea=$((allTextAreas)[allTextAreas.length - 1])
+				selectedTextArea.val(prefillValue);
+				var table="<h4>Current Issues</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>"
+				data.map(function(obj){
+					var tableRow="<tr><td><a target='_blank' href='"+obj["link"]+"'>"+obj["key"]+"</a></td>";
+					tableRow+="<td>"+obj["summary"]+"</td>";
+					tableRow+="<td>"+obj["type"]+"</td>";
+					tableRow+="</tr>";
+					table+=tableRow;
+				});
+				table+="</table>";
+				selectedTextArea.append("<br>"+table);
+			}
+		});
 		dialog.addPanel("Panel 1", "<h4>Paste here your jsonArray from Jira, existing issues from this page will be overwritten</h4><br>" +
-			"<textarea rows='4' cols='40' class='jsonPasteTextArea'></textarea>", "panel-body");
+			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='70' class='jsonPasteTextArea'></textarea></div>", "panel-body");
 
 
 		dialog.addLink("Cancel", function (dialog) {
@@ -29,6 +63,7 @@
 			console.log("closing Dialog");
 			//get all textareas
 			var allTextAreas = $(".jsonPasteTextArea");
+
 			var userInput = $((allTextAreas)[allTextAreas.length - 1]).val();
 
 			try {
@@ -37,7 +72,7 @@
 				showFlag("error", "Error parsing your input." + e);
 			}
 			var pageId = parseInt(AJS.params.pageId);
-			userObject["pageId"]=pageId;
+			userObject["pageId"] = pageId;
 			postIssueArray(userObject, function (some) {
 				console.log("here", some)
 			});
@@ -78,21 +113,7 @@
 		xhr.send(JSON.stringify(data));
 	}
 
-	function getJSON(url, callback) {
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", url, true);
-		xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-		xhr.responseType = "json";
-		xhr.onload = function () {
-			var status = xhr.status;
-			if (status === 200) {
-				callback(null, xhr.response);
-			} else {
-				callback(status);
-			}
-		};
-		xhr.send();
-	}
+
 
 
 	function showFlag(type, message) {

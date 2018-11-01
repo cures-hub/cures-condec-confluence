@@ -35,8 +35,8 @@ public class JsonIssue {
 		//generate unique id
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMs");
-		String datetime =ft.format(dNow);
-		this.id = datetime+key;
+		String datetime = ft.format(dNow);
+		this.id = datetime + key;
 
 	}
 
@@ -55,9 +55,11 @@ public class JsonIssue {
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getSummary() {
 		return summary;
 	}

@@ -5,13 +5,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 //import com.google.gson.*;
 
@@ -56,6 +54,21 @@ public class JsonIssueResource {
 		}
 
 		return Response.ok().build();
+	}
+
+	@Path("/getIssues")
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId) {
+		try {
+			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
+			ArrayList jsonArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId);
+			return Response.status(Response.Status.OK).entity(jsonArray).build();
+
+
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
 	}
 
 
