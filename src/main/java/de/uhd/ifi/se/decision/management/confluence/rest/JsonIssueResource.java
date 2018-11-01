@@ -1,6 +1,5 @@
 package de.uhd.ifi.se.decision.management.confluence.rest;
 
-import com.atlassian.confluence.json.json.Json;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
-//import com.google.gson.*;
 
 @Path("/issueRest")
 public class JsonIssueResource {
