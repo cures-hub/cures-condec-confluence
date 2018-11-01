@@ -40,8 +40,8 @@ public class JsonIssueResource {
 				}
 				String link = url + concatKey;
 				int myPageId = pageId;
-				String mySummary = myObj.has("summary") == true ? (String) myObj.get("summary") : "";
-				String myType = myObj.has("type") == true ? (String) myObj.get("type") : "";
+				String mySummary = myObj.has("summary")? (String) myObj.get("summary") : "";
+				String myType = myObj.has("type") ? (String) myObj.get("type") : "";
 				String myKey = completeKey;
 
 				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey);
