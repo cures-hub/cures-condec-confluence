@@ -1,15 +1,24 @@
 package de.uhd.ifi.se.decision.management.confluence.rest;
 
+//import com.atlassian.applinks.api.ApplicationLinkRequestFactory;
+//import com.atlassian.sal.api.net.Request;
+//import com.atlassian.sal.api.net.ResponseException;
+//import com.atlassian.sal.api.net.ResponseHandler;
+import com.atlassian.applinks.api.ApplicationLinkRequestFactory;
+import com.atlassian.sal.api.net.Request;
+import de.uhd.ifi.se.decision.management.confluence.oauth.ApiLinkService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.atlassian.applinks.api.ApplicationLink;
+import com.atlassian.applinks.api.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+//import java.net.HttpURLConnection;
 import java.util.ArrayList;
-
 
 @Path("/issueRest")
 public class JsonIssueResource {
@@ -63,6 +72,24 @@ public class JsonIssueResource {
 			ArrayList jsonArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId);
 			return Response.status(Response.Status.OK).entity(jsonArray).build();
 
+
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
+	}
+
+
+
+
+	@Path("/getIssuesFromJira")
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getDecisionKnowledgeElement(@QueryParam("pageId") String arguments) {
+		try {
+			//ApiLinkService al= new ApiLinkService(null);
+			ApiLinkService.makeGetRequestToJira();
+
+			return Response.status(Response.Status.OK).build();
 
 		} catch (Exception e) {
 			return Response.serverError().build();

@@ -102,6 +102,20 @@
 			<scope>provided</scope>
 		</dependency>
 
+
+        <dependency>
+            <groupId>com.atlassian.sal</groupId>
+            <artifactId>sal-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.applinks</groupId>
+            <artifactId>applinks-api</artifactId>
+            <version>5.4.1</version>
+            <scope>provided</scope>
+        </dependency>
+
 	</dependencies>
 
 	<build>
@@ -113,10 +127,12 @@
 				<version>${amps.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+					<jvmArgs>-Xmx4096m</jvmArgs>
+					<server>localhost</server>
 					<productVersion>${confluence.version}</productVersion>
 					<productDataVersion>${confluence.data.version}</productDataVersion>
 					<enableQuickReload>true</enableQuickReload>
-					<enableFastdev>true</enableFastdev>
+					<enableFastdev>false</enableFastdev>
 
 					<!-- See here for an explanation of default instructions: -->
 					<!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->

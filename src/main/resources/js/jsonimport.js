@@ -53,8 +53,6 @@
 	}
 	var updateMacro = function () {
 
-
-
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
 			width: 550,
@@ -82,7 +80,7 @@
 				selectedTextArea.append("<br>"+table);
 			}
 		});
-		dialog.addPanel("Panel 1", "<h4>Paste here your jsonArray from Jira, existing issues from this page will be overwritten</h4><br>" +
+		dialog.addPanel("Panel 1", "Test Connection to jira</button><h4>Paste here your jsonArray from Jira, existing issues from this page will be overwritten</h4><br>" +
 			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='70' class='jsonPasteTextArea'></textarea></div>", "panel-body");
 
 
@@ -109,6 +107,17 @@
 
 			dialog.hide();
 		});
+		dialog.addButton("Test Connection", function (dialog) {
+			//get all textareas
+            getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?pageId="+pageId,function(error,data){
+                if(error==null){
+                    var prefillValue=JSON.stringify(data);
+					console.log("resultFromJira",prefillValue)
+                }else{
+                    console.log("resultFromJiraError",error)
+
+                }
+            });		});
 		dialog.show();
 
 	};
