@@ -128,7 +128,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<jvmArgs>-Xmx4096m</jvmArgs>
-					<server>localhost</server>
 					<productVersion>${confluence.version}</productVersion>
 					<productDataVersion>${confluence.data.version}</productDataVersion>
 					<enableQuickReload>true</enableQuickReload>

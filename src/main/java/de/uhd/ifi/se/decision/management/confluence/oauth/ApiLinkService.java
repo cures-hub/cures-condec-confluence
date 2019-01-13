@@ -4,28 +4,60 @@ import com.atlassian.applinks.api.*;
 import com.atlassian.applinks.api.application.jira.JiraApplicationType;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.sal.api.net.Request;
+import com.atlassian.sal.api.net.Response;
+import com.atlassian.sal.api.net.ResponseException;
+import com.atlassian.sal.api.net.ResponseHandler;
+import com.google.gson.JsonParser;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Map;
 
+
+@Named("ComponentUtil")
 public class ApiLinkService {
 
     @ComponentImport
-    private static ApplicationLinkService applicationLinkService;
+    static private ApplicationLinkService applicationLinkService;
 
     @Inject
     public ApiLinkService(ApplicationLinkService oApplicationLinkService) {
         applicationLinkService = oApplicationLinkService;
     }
 
-   static public void makeGetRequestToJira() {
+    static public void makeGetRequestToJira() {
+        String responseBody="";
         try {
             ApplicationLink jiraApplicationLink = applicationLinkService.getPrimaryApplicationLink(JiraApplicationType.class);
             ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
-            ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET, "rest/api/2/search?jql=");
-        } catch (CredentialsRequiredException e) {
+            ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET,
+"rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?projectKey=TEST&query=?filter=allopenissues");
+            request.addHeader("Content-Type", "application/json");
+            responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>()
+            {
+                public String credentialsRequired(final Response response) throws ResponseException
+                {
+                    return response.getResponseBodyAsString();
+                }
+
+                public String handle(final Response response) throws ResponseException
+                {
+                    String res=response.getResponseBodyAsString();
+                    return res;
+                }
+            });
+
+        } catch (CredentialsRequiredException | ResponseException e) {
             e.printStackTrace();
         }
+
+
     }
+
+    public ApplicationLinkService getApplicationLinkService() {
+        return applicationLinkService;
+    }
+
 }
 
 

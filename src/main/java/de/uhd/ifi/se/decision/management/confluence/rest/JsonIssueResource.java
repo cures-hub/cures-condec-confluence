@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 //import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
+
 @Path("/issueRest")
 public class JsonIssueResource {
 	@POST
@@ -77,16 +78,11 @@ public class JsonIssueResource {
 			return Response.serverError().build();
 		}
 	}
-
-
-
-
 	@Path("/getIssuesFromJira")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getDecisionKnowledgeElement(@QueryParam("pageId") String arguments) {
 		try {
-			//ApiLinkService al= new ApiLinkService(null);
 			ApiLinkService.makeGetRequestToJira();
 
 			return Response.status(Response.Status.OK).build();
@@ -95,6 +91,10 @@ public class JsonIssueResource {
 			return Response.serverError().build();
 		}
 	}
+
+
+
+
 
 
 }
