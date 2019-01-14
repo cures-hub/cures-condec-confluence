@@ -4,13 +4,9 @@ package de.uhd.ifi.se.decision.management.confluence.rest;
 //import com.atlassian.sal.api.net.Request;
 //import com.atlassian.sal.api.net.ResponseException;
 //import com.atlassian.sal.api.net.ResponseHandler;
-import com.atlassian.applinks.api.ApplicationLinkRequestFactory;
-import com.atlassian.sal.api.net.Request;
 import de.uhd.ifi.se.decision.management.confluence.oauth.ApiLinkService;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.atlassian.applinks.api.ApplicationLink;
-import com.atlassian.applinks.api.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -26,9 +22,16 @@ public class JsonIssueResource {
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
 	@Path("/add-issue-array")
-	public Response addIssue(String jsonString, @Context HttpServletRequest request) {
-		JSONObject jsonObject = new JSONObject(jsonString);
-		String url = (String) jsonObject.get("url");
+	public Response addIssue(String jsonObjectString, @Context HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject(jsonObjectString);
+		Boolean useObjectUrl=false;
+		String url = "";
+
+		if(((String) jsonObject.get("url")).equals("USE_OBJECT_URL")){
+			useObjectUrl=true;
+		}else{
+			url = (String) jsonObject.get("url");
+		}
 		int pageId = (int) jsonObject.get("pageId");
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("data");
@@ -48,7 +51,18 @@ public class JsonIssueResource {
 				if (completeKey.indexOf(":") > -1) {
 					concatKey = concatKey.split(":")[0];
 				}
-				String link = url + concatKey;
+				String link="";
+
+				if(useObjectUrl){
+					if(myObj.has("url")){
+						link=(String)myObj.get("url");
+					}
+					if(myObj.has("link")){
+						link=(String)myObj.get("link");
+					}
+				}else{
+					link = url + concatKey;
+				}
 				int myPageId = pageId;
 				String mySummary = myObj.has("summary")? (String) myObj.get("summary") : "";
 				String myType = myObj.has("type") ? (String) myObj.get("type") : "";
@@ -81,20 +95,14 @@ public class JsonIssueResource {
 	@Path("/getIssuesFromJira")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getDecisionKnowledgeElement(@QueryParam("pageId") String arguments) {
+	public Response getDecisionKnowledgeElement(@QueryParam("query") String query) {
 		try {
-			ApiLinkService.makeGetRequestToJira();
+			String jsonString=	ApiLinkService.makeGetRequestToJira(query);
 
-			return Response.status(Response.Status.OK).build();
+			return Response.status(Response.Status.OK).entity(jsonString).build();
 
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
 	}
-
-
-
-
-
-
 }

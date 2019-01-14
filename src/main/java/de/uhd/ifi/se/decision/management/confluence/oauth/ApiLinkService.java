@@ -25,13 +25,13 @@ public class ApiLinkService {
         applicationLinkService = oApplicationLinkService;
     }
 
-    static public void makeGetRequestToJira() {
+    static public String makeGetRequestToJira(String query) {
         String responseBody="";
         try {
             ApplicationLink jiraApplicationLink = applicationLinkService.getPrimaryApplicationLink(JiraApplicationType.class);
             ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
             ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET,
-"rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?projectKey=TEST&query=?filter=allopenissues");
+"rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?projectKey=TEST&query=?"+query);
             request.addHeader("Content-Type", "application/json");
             responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>()
             {
@@ -42,14 +42,16 @@ public class ApiLinkService {
 
                 public String handle(final Response response) throws ResponseException
                 {
-                    String res=response.getResponseBodyAsString();
-                    return res;
+                    return response.getResponseBodyAsString();
                 }
             });
-
         } catch (CredentialsRequiredException | ResponseException e) {
             e.printStackTrace();
         }
+            return responseBody;
+
+
+
 
 
     }

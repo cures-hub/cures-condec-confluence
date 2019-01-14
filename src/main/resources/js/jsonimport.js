@@ -1,6 +1,7 @@
 (function () {
 
 	var macroName = "issue-import-macro";
+
 	function showFlag(type, message) {
 		AJS.flag({
 			type: type,
@@ -9,6 +10,7 @@
 			body: message
 		});
 	}
+
 	function postJSON(url, data, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -25,6 +27,7 @@
 		};
 		xhr.send(JSON.stringify(data));
 	}
+
 	function getJSON(url, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
@@ -40,6 +43,7 @@
 		};
 		xhr.send();
 	}
+
 	function postIssueArray(jsonArray, callback) {
 		postJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/add-issue-array", jsonArray,
 			function (error, result) {
@@ -51,6 +55,7 @@
 				}
 			});
 	}
+
 	var updateMacro = function () {
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
@@ -61,70 +66,135 @@
 			closeOnOutsideClick: true
 		});
 		//get json from restpoint
-		var pageId = parseInt(AJS.params.pageId,10);
-		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId="+pageId,function(error,data){
-			if(error==null){
-				var prefillValue=JSON.stringify(data);
-				var allTextAreas = $(".jsonDialogMacroContainer");
-				var selectedTextArea=$((allTextAreas)[allTextAreas.length - 1]);
+		var pageId = parseInt(AJS.params.pageId, 10);
+		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId=" + pageId, function (error, data) {
+			if (error == null) {
+				var prefillValue = JSON.stringify(data);
+				var allTextAreas = $(".jsonPasteTextArea");
+				var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);
 				selectedTextArea.val(prefillValue);
-				var table="<h4>Current Issues</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
-				data.map(function(obj){
-					var tableRow="<tr><td><a target='_blank' href='"+obj["link"]+"'>"+obj["key"]+"</a></td>";
-					tableRow+="<td>"+obj["summary"]+"</td>";
-					tableRow+="<td>"+obj["type"]+"</td>";
-					tableRow+="</tr>";
-					table+=tableRow;
+				var allHiddenAreas = $(".jqlResultField");
+				var selectedHiddenArea = $((allHiddenAreas)[allHiddenAreas.length - 1]);
+				selectedHiddenArea.val(prefillValue);
+				var resultFields = $(".jsonResultField");
+				var selectedResultField = $((resultFields)[resultFields.length - 1]);
+				var jqlResultFields = $(".jqlResultField");
+				var selectedJQLResultField = $((jqlResultFields)[jqlResultFields.length - 1]);
+
+				var table = getHTMLTableHeader();
+				data.map(function (obj) {
+					table += createJsonTable(obj);
 				});
-				table+="</table>";
-				selectedTextArea.append("<br>"+table);
+				table += "</table>";
+				selectedResultField[0].innerHTML = table;
+				selectedJQLResultField[0].innerHTML = table;
 			}
 		});
-		dialog.addPanel("Panel 1", "Test Connection to jira</button><h4>Paste here your jsonArray from Jira, existing issues from this page will be overwritten</h4><br>" +
-			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='70' class='jsonPasteTextArea'></textarea></div>", "panel-body");
+		dialog.addPanel("Manual", "<h4>Paste here your jsonArray from Jira, existing issues from this page will be overwritten</h4><br>" +
+			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='50' class='jsonPasteTextArea'></textarea></div><div class='jsonResultField'>", "panel-body");
+		dialog.addPanel("Direct", "<h4>Here you can use JQL if the connection to jira exists, using JQL overwrittes previous data from this page</h4><br>" +
+			"<div class='jsonDialogMacroContainer'><input class='jqlInputField text medium-field' placeholder='some jql...'></input><button class='jqlSearchButton aui-button'><span class=\"aui-icon aui-icon-small aui-iconfont-search\">Search</span></button></div><div class='jqlResultField'></div>" +
+			"<textarea class='hiddenJqlIssueSaver' style='display:none'></textarea>", "panel-body");
 
-
+		$(".jqlSearchButton").on("click", function () {
+			jqlCallToBackend();
+		});
 		dialog.addLink("Cancel", function (dialog) {
 			dialog.hide();
 		}, "#");
 
 		dialog.addHeader("Dialog");
 
-		dialog.addButton("ok", function (dialog) {
+		dialog.addButton("Use Manual Data", function (dialog) {
 			//get all textareas
 			var allTextAreas = $(".jsonPasteTextArea");
 
 			var userInput = $((allTextAreas)[allTextAreas.length - 1]).val();
 
 			try {
-				var userObject = JSON.parse(userInput);
+				var parsedUserInput = JSON.parse(userInput);
+				if (Array.isArray(parsedUserInput)) {
+					//	the object does not come from jira manually, but directly
+					parsedUserInput = {data: parsedUserInput, url: "USE_OBJECT_URL", pageId: pageId}
+				} else {
+					parsedUserInput["pageId"] = pageId;
+				}
+
 			} catch (e) {
 				showFlag("error", "Error parsing your input." + e);
 			}
-			userObject["pageId"] = pageId;
-			postIssueArray(userObject, function (some) {
+			postIssueArray(parsedUserInput, function (some) {
 			});
-
 			dialog.hide();
 		});
-		dialog.addButton("Test Connection", function (dialog) {
-			//get all textareas
-            getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?pageId="+pageId,function(error,data){
-                if(error==null){
-                    var prefillValue=JSON.stringify(data);
-					console.log("resultFromJira",prefillValue)
-                }else{
-                    console.log("resultFromJiraError",error)
 
-                }
-            });		});
+		dialog.addButton("Use Direct Data", function (dialog) {
+			var hiddenFields = $(".hiddenJqlIssueSaver");
+
+			var savedJsonString = $((hiddenFields)[hiddenFields.length - 1]).val();
+			if (savedJsonString.length > 0) {
+				try {
+					var aSaved = JSON.parse(savedJsonString);
+					var userObject = {data: aSaved, url: "USE_OBJECT_URL"};
+				} catch (e) {
+					showFlag("error", "An parsing error occured." + e);
+				}
+				var pageId = parseInt(AJS.params.pageId, 10);
+				userObject["pageId"] = pageId;
+				postIssueArray(userObject, function (some) {
+				});
+				dialog.hide();
+			} else {
+				showFlag("error", "No Search results where found");
+			}
+
+		});
+
+		function jqlCallToBackend() {
+			//get all input fields
+			var allInputFields = $(".jqlInputField");
+			var selectedUserInputField = $((allInputFields)[allInputFields.length - 1]);
+			var userInput = selectedUserInputField.val();
+			var resultFields = $(".jqlResultField");
+			var selectedResultField = $((resultFields)[resultFields.length - 1]);
+
+			var hiddenFields = $(".hiddenJqlIssueSaver");
+			var selectedHiddenField = $((hiddenFields)[hiddenFields.length - 1]);
+
+			getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?query=" + userInput, function (error, data) {
+				if (error == null) {
+					if (data.length === 0) {
+						showFlag("error", "No Search results where found");
+					}
+					selectedHiddenField.val(JSON.stringify(data));
+					var table = getHTMLTableHeader();
+					data.map(function (obj) {
+						table += createJsonTable(obj);
+					});
+					table += "</table>";
+					selectedResultField[0].innerHTML = table;
+				} else {
+					console.log("resultFromJiraError", error);
+				}
+			});
+		}
+
+		function createJsonTable(obj) {
+			var url = obj["url"] || obj["link"] || "";
+			var tableRow = "<tr><td><a target='_blank' href='" + url + "'>" + obj["key"] + "</a></td>";
+			tableRow += "<td>" + obj["summary"] + "</td>";
+			tableRow += "<td>" + obj["type"] + "</td>";
+			tableRow += "</tr>";
+			return tableRow;
+		}
+
+		function getHTMLTableHeader() {
+			return "<h4>Current Issues</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
+		}
+
 		dialog.show();
 
 	};
-
-
-
-
 
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function (e, macroNode) {
 		updateMacro();
