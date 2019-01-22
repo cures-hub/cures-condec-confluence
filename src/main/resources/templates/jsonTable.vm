@@ -2,13 +2,12 @@
 <div id="wrapper">
     <div class="box">
         <h3>Decision Knowledge</h3>
-        <table class="aui">
+        <table  class="aui aui-table-sortable jsonImportTable">
             <tbody>
             <tr>
                 <th>Key</th>
                 <th>Summary</th>
                 <th>Type</th>
-                <th></th>
             </tr>
                 #foreach($jsonIssue in $jsonIssues)
                 <tr>
@@ -24,3 +23,7 @@
     </div>
 </div>
 <pre>
+<script type="application/javascript">
+    AJS.tablessortable.setTableSortable(AJS.$(".jsonImportTable"));
+
+</script>
