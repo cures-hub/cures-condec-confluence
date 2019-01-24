@@ -44,8 +44,8 @@
 		xhr.send();
 	}
 
-	function postIssueArray(jsonArray, callback) {
-		postJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/add-issue-array", jsonArray,
+	function postIssueArray(jsonArray,pageId, macroId, callback ) {
+		postJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/add-issue-array?pageId="+pageId+"&macroId="+macroId, jsonArray,
 			function (error, result) {
 				if (error === null) {
 					callback(result);
@@ -56,7 +56,7 @@
 			});
 	}
 
-	var updateMacro = function () {
+	var updateMacro = function (sMacroId) {
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
@@ -67,7 +67,7 @@
 		});
 		//get json from restpoint
 		var pageId = parseInt(AJS.params.pageId, 10);
-		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId=" + pageId, function (error, data) {
+		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId=" + pageId+"&macroId="+sMacroId, function (error, data) {
 			if (error == null) {
 				var prefillValue = JSON.stringify(data);
 				var allTextAreas = $(".jsonPasteTextArea");
@@ -123,7 +123,7 @@
 			} catch (e) {
 				showFlag("error", "Error parsing your input." + e);
 			}
-			postIssueArray(parsedUserInput, function (some) {
+			postIssueArray(parsedUserInput,pageId,sMacroId, function (some) {
 			});
 			dialog.hide();
 		});
@@ -141,7 +141,7 @@
 				}
 				var pageId = parseInt(AJS.params.pageId, 10);
 				userObject["pageId"] = pageId;
-				postIssueArray(userObject, function (some) {
+				postIssueArray(userObject,pageId,sMacroId, function (some) {
 				});
 				dialog.hide();
 			} else {
@@ -197,7 +197,12 @@
 	};
 
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function (e, macroNode) {
-		updateMacro();
+		var sMacroId = macroNode.getAttribute("data-macro-id");
+		if (sMacroId && sMacroId !== "") {
+			updateMacro(sMacroId);
+		} else {
+			showFlag("error", "Please save the page first before updating the Macro")
+		}
 	});
 
 

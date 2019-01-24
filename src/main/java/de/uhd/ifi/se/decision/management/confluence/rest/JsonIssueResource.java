@@ -22,7 +22,7 @@ public class JsonIssueResource {
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
 	@Path("/add-issue-array")
-	public Response addIssue(String jsonObjectString, @Context HttpServletRequest request) {
+	public Response addIssue(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId, String jsonObjectString, @Context HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject(jsonObjectString);
 		Boolean useObjectUrl=false;
 		String url = "";
@@ -32,7 +32,6 @@ public class JsonIssueResource {
 		}else{
 			url = (String) jsonObject.get("url");
 		}
-		int pageId = (int) jsonObject.get("pageId");
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("data");
 		//first remove issues from this page
@@ -40,7 +39,7 @@ public class JsonIssueResource {
 			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
 
 			if (jsonArray.length() > 0) {
-				jsonIssueKeeping.removeJsonIssuesFromPageId(pageId);
+				jsonIssueKeeping.removeJsonIssuesFromPageId(pageId,macroId);
 			}
 
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -68,7 +67,7 @@ public class JsonIssueResource {
 				String myType = myObj.has("type") ? (String) myObj.get("type") : "";
 				String myKey = completeKey;
 
-				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey);
+				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey, macroId);
 				jsonIssueKeeping.addIssue(jsonIssue);
 			}
 		} catch (Exception e) {
@@ -81,10 +80,10 @@ public class JsonIssueResource {
 	@Path("/getIssues")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId) {
+	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId) {
 		try {
 			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
-			ArrayList jsonArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId);
+			ArrayList jsonArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(jsonArray).build();
 
 

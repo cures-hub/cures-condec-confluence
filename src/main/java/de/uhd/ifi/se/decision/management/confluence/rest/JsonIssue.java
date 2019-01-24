@@ -23,14 +23,17 @@ public class JsonIssue {
 	private String key;
 	@XmlElement
 	private String id;
+	@XmlElement
+	private String macroId;
 
 
-	public JsonIssue(String link, int pageId, String summary, String type, String key) {
+	public JsonIssue(String link, int pageId, String summary, String type, String key, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
 		this.key = key;
 		this.link = link;
+		this.macroId = macroId;
 
 		//generate unique id
 		Date dNow = new Date();
@@ -91,4 +94,13 @@ public class JsonIssue {
 	public void setLink(String link) {
 		this.link = link;
 	}
+
+	public String getMacroId() {
+		return macroId;
+	}
+
+	public void setMacroId(String macroId) {
+		this.macroId = macroId;
+	}
+
 }

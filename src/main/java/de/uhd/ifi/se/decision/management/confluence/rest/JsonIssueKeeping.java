@@ -39,26 +39,30 @@ public class JsonIssueKeeping {
 		bandanaManager.removeValue(this.bandanaContext, id);
 	}
 
-	public ArrayList getJsonArrayFromPageId(int pageId) {
+	public ArrayList getJsonArrayFromPageId(int pageId,String macroId) {
 		ArrayList myJsonArray = new ArrayList();
 
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			JsonIssue jsonIssue = (JsonIssue) this.bandanaManager.getValue(this.bandanaContext, id);
-			//add only if the page id corresponds
-			if (jsonIssue.getPageId() == pageId) {
+			//add only if the page id and Macro id corresponds // if macro id is null return all from page
+			if (jsonIssue.getPageId() == pageId && (jsonIssue.getMacroId().equals(macroId))||macroId==null) {
 				myJsonArray.add(jsonIssue);
 			}
 		}
 		return myJsonArray;
 	}
 
-	public void removeJsonIssuesFromPageId(int pageId) {
+	public void removeJsonIssuesFromPageId(int pageId, String macroId) {
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			JsonIssue jsonIssue = (JsonIssue) this.bandanaManager.getValue(this.bandanaContext, id);
-			//add only if the page id corresponds
-			if (jsonIssue.getPageId() == pageId) {
+			//remove only if the page id and Macro id corresponds remove all where macroId is null
+			String issueMacroId=jsonIssue.getMacroId();
+
+			if (isNullOrEmpty(issueMacroId)||(!isNullOrEmpty(issueMacroId) && jsonIssue.getPageId() == pageId && issueMacroId.equals(macroId))) {
 				this.removeIssue(jsonIssue.getId());
 			}
+
+
 		}
 
 	}
@@ -71,4 +75,9 @@ public class JsonIssueKeeping {
 	public void setBandanaManager(BandanaManager bandanaManager) {
 		this.bandanaManager = bandanaManager;
 	}
+	public static boolean isNullOrEmpty(String myString)
+	{
+		return myString == null || "".equals(myString);
+	}
+
 }
