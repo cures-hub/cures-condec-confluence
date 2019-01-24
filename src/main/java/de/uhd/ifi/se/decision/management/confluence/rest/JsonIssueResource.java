@@ -94,9 +94,22 @@ public class JsonIssueResource {
 	@Path("/getIssuesFromJira")
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getDecisionKnowledgeElement(@QueryParam("query") String query) {
+	public Response getDecisionKnowledgeElement( @QueryParam("projectKey") String projectKey,@QueryParam("query") String query) {
 		try {
-			String jsonString=	ApiLinkService.makeGetRequestToJira(query);
+			String jsonString=	ApiLinkService.makeGetRequestToJira(query, projectKey);
+
+			return Response.status(Response.Status.OK).entity(jsonString).build();
+
+		} catch (Exception e) {
+			return Response.serverError().build();
+		}
+	}
+	@Path("/getProjectsFromJira")
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getProjectsFromJira() {
+		try {
+			String jsonString=	ApiLinkService.getCurrentActiveJiraProjects();
 
 			return Response.status(Response.Status.OK).entity(jsonString).build();
 

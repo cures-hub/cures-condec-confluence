@@ -25,13 +25,20 @@ public class ApiLinkService {
         applicationLinkService = oApplicationLinkService;
     }
 
-    static public String makeGetRequestToJira(String query) {
+    static public String makeGetRequestToJira(String query, String projectKey) {
+        return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?projectKey="+projectKey+"&query="+query);
+    }
+    static public String getCurrentActiveJiraProjects() {
+        return getResponseFromJiraWithApplicationLink("rest/api/2/project");
+    }
+
+    private static String getResponseFromJiraWithApplicationLink(String jiraUrl){
         String responseBody="";
         try {
             ApplicationLink jiraApplicationLink = applicationLinkService.getPrimaryApplicationLink(JiraApplicationType.class);
             ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
             ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET,
-"rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?projectKey=TEST&query=?"+query);
+                    jiraUrl);
             request.addHeader("Content-Type", "application/json");
             responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>()
             {
@@ -48,12 +55,7 @@ public class ApiLinkService {
         } catch (CredentialsRequiredException | ResponseException e) {
             e.printStackTrace();
         }
-            return responseBody;
-
-
-
-
-
+        return responseBody;
     }
 
     public ApplicationLinkService getApplicationLinkService() {
