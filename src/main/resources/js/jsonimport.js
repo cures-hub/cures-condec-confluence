@@ -92,7 +92,7 @@
 		var projectKey = selectedProjectSelectForm.val();
 
 		if (projectKey && projectKey !== "") {
-			getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?projectKey="+ projectKey+"&query=" + userInput, function (error, data) {
+			getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?projectKey="+ projectKey+"&query=?" + userInput, function (error, data) {
 				if (error == null) {
 					if(!data){
 						showFlag("error", "An Error with the connection, check the Authorisation of Jira");
