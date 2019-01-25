@@ -19,6 +19,15 @@
 		tableRow += "</tr>";
 		return tableRow;
 	}
+	function itiOverSingleArray(aObj){
+		var tableRows="";
+		aObj.map(function (obj) {
+			tableRows+=createJsonTable(obj)
+		});
+		//add empty rows
+		tableRows+="<tr><th> </th><th> </th><th> </th></tr>";
+		return tableRows;
+	}
 
 
 	function getHTMLTableHeader() {
@@ -104,8 +113,8 @@
 						}
 						selectedHiddenField.val(JSON.stringify(data));
 						var table = getHTMLTableHeader();
-						data.map(function (obj) {
-							table += createJsonTable(obj);
+						data.map(function (aObj) {
+							table += itiOverSingleArray(aObj);
 						});
 						table += "</table>";
 						selectedResultField[0].innerHTML = table;

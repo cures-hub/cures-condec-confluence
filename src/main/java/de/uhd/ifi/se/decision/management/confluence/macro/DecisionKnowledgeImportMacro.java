@@ -48,12 +48,12 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			this.macroId=macroId;
 		}
 		// Save all issues in an ArrayList data structure.
-		ArrayList jsonIssueArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId,macroId);
+		ArrayList jsonIssueArray = jsonIssueKeeping.getJsonArrayGroupedFromPageId(pageId,macroId);
 		// Create a new context for rendering...
 
 
 		Map renderContext = MacroUtils.defaultVelocityContext();
-		renderContext.put("jsonIssues", jsonIssueArray);
+		renderContext.put("jsonArrays", jsonIssueArray);
 
 		return VelocityUtils.getRenderedTemplate("/templates/jsonTable.vm", renderContext);
 

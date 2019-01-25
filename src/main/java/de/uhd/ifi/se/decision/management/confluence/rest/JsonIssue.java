@@ -25,14 +25,22 @@ public class JsonIssue {
 	private String id;
 	@XmlElement
 	private String macroId;
+	@XmlElement
+	private Integer group;
+	@XmlElement
+	private String description;
 
 
-	public JsonIssue(String link, int pageId, String summary, String type, String key, String macroId) {
+
+
+	public JsonIssue(String link, int pageId, String summary, String type, String key, String description, Integer group, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
 		this.key = key;
 		this.link = link;
+		this.description = description;
+		this.group = group;
 		this.macroId = macroId;
 
 		//generate unique id
@@ -103,4 +111,18 @@ public class JsonIssue {
 		this.macroId = macroId;
 	}
 
+	public int getGroup() {
+		return this.group;
+	}
+	public void setGroup(Integer group) {
+		this.group = group;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

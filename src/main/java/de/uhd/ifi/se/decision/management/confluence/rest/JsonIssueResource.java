@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Path("/issueRest")
@@ -33,14 +34,18 @@ public class JsonIssueResource {
 			url = (String) jsonObject.get("url");
 		}
 
-		JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+		JSONArray listOfArrays  = (JSONArray) jsonObject.get("data");
 		//first remove issues from this page
+
 		try {
 			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
-
-			if (jsonArray.length() > 0) {
+			if (listOfArrays.length() > 0) {
 				jsonIssueKeeping.removeJsonIssuesFromPageId(pageId,macroId);
 			}
+
+			for(int j=0;j< listOfArrays.length();j++){
+				JSONArray jsonArray=listOfArrays.getJSONArray(j);
+
 
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject myObj = jsonArray.getJSONObject(i);
@@ -65,10 +70,12 @@ public class JsonIssueResource {
 				int myPageId = pageId;
 				String mySummary = myObj.has("summary")? (String) myObj.get("summary") : "";
 				String myType = myObj.has("type") ? (String) myObj.get("type") : "";
+				String description = myObj.has("description") ? (String) myObj.get("description") : "";
 				String myKey = completeKey;
 
-				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey, macroId);
+				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey,description,j, macroId);
 				jsonIssueKeeping.addIssue(jsonIssue);
+				}
 			}
 		} catch (Exception e) {
 			return Response.serverError().build();

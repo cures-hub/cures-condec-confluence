@@ -6,6 +6,7 @@ import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.spring.container.ContainerManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class JsonIssueKeeping {
@@ -50,6 +51,26 @@ public class JsonIssueKeeping {
 			}
 		}
 		return myJsonArray;
+	}
+
+	public ArrayList getJsonArrayGroupedFromPageId(int pageId, String macroId) {
+		ArrayList unsortedJsonIssues = getJsonArrayFromPageId(pageId, macroId);
+		ArrayList returnArray = new ArrayList();
+
+		for (int j = 0; j < unsortedJsonIssues.size(); j++) {
+			ArrayList groupArray = new ArrayList();
+
+			for (int i = 0; i < unsortedJsonIssues.size(); i++) {
+				JsonIssue jsonIssue = (JsonIssue) unsortedJsonIssues.get(i);
+				if (jsonIssue.getGroup() == j) {
+					groupArray.add(jsonIssue);
+				}
+			}
+			if (groupArray.size() > 0) {
+				returnArray.add(groupArray);
+			}
+		}
+		return returnArray;
 	}
 
 	public void removeJsonIssuesFromPageId(int pageId, String macroId) {
