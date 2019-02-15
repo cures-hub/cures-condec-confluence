@@ -38,6 +38,15 @@
 		return '<option value="' + oProject["key"] + '">' + oProject["name"] + '</option>';
 	}
 
+	function checkForError(oData) {
+		var bResult = false;
+		if (oData["error"] !== undefined) {
+			showFlag("error", "An Error occurred in the Jiira connection: "+oData["error"]);
+			bResult = true;
+		}
+		return bResult;
+	}
+
 	/*******************Rest Calling Functions************************/
 	function postJSON(url, data, callback) {
 		var xhr = new XMLHttpRequest();
@@ -106,19 +115,21 @@
 					if(!data){
 						showFlag("error", "An Error with the connection, check the Authorisation of Jira");
 					}else{
-						if (data && data.length === 0) {
-							showFlag("error", "No Search results where found");
-						}else{
-							showFlag("success", "Results found!");
+						var jqlError=checkForError(data);
+						if(!jqlError){
+							if (data && data.length === 0) {
+								showFlag("error", "No Search results where found");
+							}else{
+								showFlag("success", "Results found!");
+							}
+							selectedHiddenField.val(JSON.stringify(data));
+							var table = getHTMLTableHeader();
+							data.map(function (aObj) {
+								table += itiOverSingleArray(aObj);
+							});
+							table += "</table>";
+							selectedResultField[0].innerHTML = table;
 						}
-						selectedHiddenField.val(JSON.stringify(data));
-						var table = getHTMLTableHeader();
-						data.map(function (aObj) {
-							table += itiOverSingleArray(aObj);
-						});
-						table += "</table>";
-						selectedResultField[0].innerHTML = table;
-
 					}
 
 				} else {
@@ -145,56 +156,63 @@
 		var pageId = parseInt(AJS.params.pageId, 10);
 		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId, function (error, data) {
 			if (error == null) {
-				var prefillValue = JSON.stringify(data);
-				var allTextAreas = $(".jsonPasteTextArea");
-				var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);
-				selectedTextArea.val(prefillValue);
-				var allHiddenAreas = $(".hiddenJqlIssueSaver");
-				var selectedHiddenArea = $((allHiddenAreas)[allHiddenAreas.length - 1]);
-				selectedHiddenArea.val(prefillValue);
-				var resultFields = $(".jsonResultField");
-				var selectedResultField = $((resultFields)[resultFields.length - 1]);
-				var jqlResultFields = $(".jqlResultField");
-				var selectedJQLResultField = $((jqlResultFields)[jqlResultFields.length - 1]);
-
-				var table = getHTMLTableHeader();
-				data.map(function (obj) {
-					table += createJsonTable(obj);
-				});
-				table += "</table>";
-				selectedResultField[0].innerHTML = table;
-				selectedJQLResultField[0].innerHTML = table;
+				var jqlError = checkForError(data);
+				if (!jqlError) {
+					var prefillValue = JSON.stringify(data);
+					var allTextAreas = $(".jsonPasteTextArea");
+					var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);
+					selectedTextArea.val(prefillValue);
+					var allHiddenAreas = $(".hiddenJqlIssueSaver");
+					var selectedHiddenArea = $((allHiddenAreas)[allHiddenAreas.length - 1]);
+					selectedHiddenArea.val(prefillValue);
+					var resultFields = $(".jsonResultField");
+					var selectedResultField = $((resultFields)[resultFields.length - 1]);
+					var jqlResultFields = $(".jqlResultField");
+					var selectedJQLResultField = $((jqlResultFields)[jqlResultFields.length - 1]);
+					var table = getHTMLTableHeader();
+					data.map(function (obj) {
+						table += createJsonTable(obj);
+					});
+					table += "</table>";
+					selectedResultField[0].innerHTML = table;
+					selectedJQLResultField[0].innerHTML = table;
+				}
 			}
 		});
 		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getProjectsFromJira", function (error, data) {
 			if (error == null) {
-				var jqlInputField = $(".jqlInputFieldContainer");
-				var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
-				if (data && data.length > 0) {
-					var radioBoxes = '<form class="aui">\n' +
-						'    <div class="field-group">\n' +
-						'        <label for="select-example">Select Project</label>' +
-						'        <select class="projectSelect">';
+				var jqlError= checkForError(data);
+				if(!jqlError){
+					var jqlInputField = $(".jqlInputFieldContainer");
+					var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
+					if (data && data.length > 0) {
+						var radioBoxes = '<form class="aui">\n' +
+							'    <div class="field-group">\n' +
+							'        <label for="select-example">Select Project</label>' +
+							'        <select class="projectSelect">';
 
 
-					data.map(function (oProject) {
-						radioBoxes += addRadioBoxForProject(oProject)
-					});
-					radioBoxes += '</select></select></div></form>';
+						data.map(function (oProject) {
+							radioBoxes += addRadioBoxForProject(oProject)
+						});
+						radioBoxes += '</select></select></div></form>';
 
-					selectedJqlInputField.append(radioBoxes)
-				} else {
-					selectedJqlInputField.append("<h4>No Projects were Found</h4>")
+						selectedJqlInputField.append(radioBoxes)
+					} else {
+						selectedJqlInputField.append("<h4>No Projects were Found</h4>")
 
+					}
 				}
+
 			}
 		});
-		dialog.addPanel("Manual", "<h4>Paste here your jsonArray from Jira, existing issues from this macro</h4><br>" +
-			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='50' class='jsonPasteTextArea'></textarea></div><div class='jsonResultField'>", "panel-body");
 		dialog.addPanel("Direct", "<h4>Here you can use JQL if the connection to jira exists, using JQL overwrittes previous data from this macro</h4><br>" +
 			"<div class='jsonDialogMacroContainer'><div class='jqlInputFieldContainer'></div>" +
-			"<div class='field-group'><label for='text-input'>Search query</label><input class='jqlInputField text medium-field' placeholder='some jql...'/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>" +
+			"<div class='field-group'><label for='text-input'>Search query</label><input class='jqlInputField text medium-field' placeholder='jql='/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>" +
 			"<textarea class='hiddenJqlIssueSaver' style='display:none'></textarea>", "panel-body");
+		dialog.addPanel("Manual", "<h4>Paste here your jsonArray from Jira, existing issues from this macro</h4><br>" +
+			"<div class='jsonDialogMacroContainer'><textarea rows='4' cols='50' class='jsonPasteTextArea'></textarea></div><div class='jsonResultField'>", "panel-body");
+
 
 		$(".jqlSearchButton").on("click", function () {
 			jqlCallToBackend();
@@ -205,7 +223,7 @@
 
 		dialog.addHeader("Dialog");
 
-		dialog.addButton("Use Manual Data", function (dialog) {
+		dialog.addLink("Use Manual Data", function (dialog) {
 			//get all textareas
 			var allTextAreas = $(".jsonPasteTextArea");
 
@@ -226,7 +244,7 @@
 			postIssueArray(parsedUserInput, pageId, sMacroId, function (some) {
 			});
 			dialog.hide();
-		});
+		},"aui-button");
 
 		dialog.addButton("Use Direct Data", function (dialog) {
 			var hiddenFields = $(".hiddenJqlIssueSaver");

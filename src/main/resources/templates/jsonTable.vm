@@ -2,6 +2,8 @@
 <div id="wrapper">
     <div class="box">
         <h3>Decision Knowledge</h3>
+        $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluence:json-plugin-images")
+
         #foreach($jsonArray in $jsonArrays)
             <table class="aui aui-table-sortable jsonImportTable">
                 <tbody>
@@ -12,9 +14,12 @@
                     <th>Type</th>
                 </tr>
                     #foreach($jsonIssue in $jsonArray)
+                        #set ($type = $jsonIssue.getType())
+                        #set ($imgPath="$type.png")
                     <tr>
                         <td>
-                            <a target="_blank" href="$jsonIssue.getLink()">$jsonIssue.getKey()</a>
+                            <a target="_blank" href="$jsonIssue.getLink()"><span
+                                    class="type_images type_class_$jsonIssue.getType()"></span>$jsonIssue.getKey()</a>
                         </td>
                         <td>$jsonIssue.getSummary()</td>
                         <td>$jsonIssue.getDescription()</td>
@@ -27,9 +32,42 @@
         #end
 
     </div>
+
 </div>
 <pre>
 <script type="application/javascript">
-    AJS.tablessortable.setTableSortable(AJS.$(".jsonImportTable"));
 
+    AJS.tablessortable.setTableSortable(AJS.$(".jsonImportTable"));
+    setImages();
+
+    function setImages() {
+        $(".type_images").each(function (container) {
+            var jElement = $($(".type_images")[container]);
+            var sIssueType = getTypeFromClass(jElement);
+            var img = mapTypeToIconsAndCreateImg(sIssueType);
+            jElement.html(img);
+
+        })
+    }
+
+    function getTypeFromClass(jElement) {
+        //example type_class_Issue
+        var sWholeClass = jElement[0].classList[1];
+        var sType = sWholeClass.split("type_class_")[1].toLowerCase();
+        return sType;
+    }
+
+    function mapTypeToIconsAndCreateImg(sType) {
+        var img = new Image();
+        var path = "$req.contextPath/download/resources/de.uhd.ifi.se.decision.management.confluence:issue-import-macro-resources/images/"
+        var aImages = ["alternative", "argument", "argument_con", "argument_pro", "assessment", "assumption", "claim", "constraint", "context", "decision", "goal", "implication", "issue", "other", "problem", "solution"]
+        if (aImages.indexOf(sType) > -1) {
+            //just use some one of the
+            img.src = path + sType + ".png";
+        } else {
+             img.src = path + "other" + ".png";
+        }
+        return img;
+
+    }
 </script>

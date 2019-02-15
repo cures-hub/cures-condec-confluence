@@ -26,7 +26,7 @@ public class ApiLinkService {
     }
 
     static public String makeGetRequestToJira(String query, String projectKey) {
-        return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsLinkedToElementsMatchedByQuery.json?projectKey="+projectKey+"&query="+query);
+        return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?resultType=ELEMENTS_QUERY_LINKED&projectKey="+projectKey+"&query="+query);
     }
     static public String getCurrentActiveJiraProjects() {
         return getResponseFromJiraWithApplicationLink("rest/api/2/project");
