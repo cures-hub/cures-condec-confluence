@@ -11,6 +11,8 @@ import com.google.gson.JsonParser;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 
@@ -26,7 +28,9 @@ public class ApiLinkService {
     }
 
     static public String makeGetRequestToJira(String query, String projectKey) {
-        return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?resultType=ELEMENTS_QUERY_LINKED&projectKey="+projectKey+"&query="+query);
+		//sanitise query
+		String encodedQuery = encodeUserInputQuery(query);
+		return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?resultType=ELEMENTS_QUERY_LINKED&projectKey="+projectKey+"&query="+encodedQuery);
     }
     static public String getCurrentActiveJiraProjects() {
         return getResponseFromJiraWithApplicationLink("rest/api/2/project");
@@ -62,6 +66,17 @@ public class ApiLinkService {
         return applicationLinkService;
     }
 
+    private static String encodeUserInputQuery(String query) {
+        String encodedUrl = "";
+        try {
+            encodedUrl = URLEncoder.encode(query, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodedUrl;
+
+    }
 }
 
 
