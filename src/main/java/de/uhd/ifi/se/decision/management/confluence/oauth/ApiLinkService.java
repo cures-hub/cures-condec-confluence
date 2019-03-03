@@ -30,7 +30,7 @@ public class ApiLinkService {
     static public String makeGetRequestToJira(String query, String projectKey) {
 		//sanitise query
 		String encodedQuery = encodeUserInputQuery(query);
-		return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getAllElementsMatchingQuery.json?resultType=ELEMENTS_QUERY_LINKED&projectKey="+projectKey+"&query="+encodedQuery);
+		return getResponseFromJiraWithApplicationLink("rest/decisions/latest/decisions/getElements.json?allTrees=true&projectKey="+projectKey+"&query="+encodedQuery);
     }
     static public String getCurrentActiveJiraProjects() {
         return getResponseFromJiraWithApplicationLink("rest/api/2/project");
