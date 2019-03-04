@@ -23,7 +23,7 @@
 		<resource type="download" name="images/" location="/images" />
         <dependency>com.atlassian.auiplugin:ajs</dependency>
 
-		<context>Json Issue Import</context>
+		<context>Decision Knowledge Issues Import</context>
 	</web-resource>
 	<rest key="issue-import-rest-resources" path="/jsonIssues"
 		  version="1.0">

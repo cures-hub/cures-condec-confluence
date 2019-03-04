@@ -15,11 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Path("/issueRest")
-public class JsonIssueResource {
+public class DecisionKnowledgeElementResource {
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
 	@Path("/add-issue-array")
@@ -38,9 +37,9 @@ public class JsonIssueResource {
 		//first remove issues from this page
 
 		try {
-			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
+			DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping.getInstance();
 			if (listOfArrays.length() > 0) {
-				jsonIssueKeeping.removeJsonIssuesFromPageId(pageId,macroId);
+				decisionKnowledgeElementKeeping.removeDecisionKnowledgeElement(pageId,macroId);
 			}
 
 			for(int j=0;j< listOfArrays.length();j++){
@@ -73,8 +72,8 @@ public class JsonIssueResource {
 				String description = myObj.has("description") ? (String) myObj.get("description") : "";
 				String myKey = completeKey;
 
-				JsonIssue jsonIssue = new JsonIssue(link, myPageId, mySummary, myType, myKey,description,j, macroId);
-				jsonIssueKeeping.addIssue(jsonIssue);
+				DecisionKnowledgeElement decisionKnowledgeElement = new DecisionKnowledgeElement(link, myPageId, mySummary, myType, myKey,description,j, macroId);
+				decisionKnowledgeElementKeeping.addDecisionKnowledgeElement(decisionKnowledgeElement);
 				}
 			}
 		} catch (Exception e) {
@@ -89,8 +88,8 @@ public class JsonIssueResource {
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId) {
 		try {
-			JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
-			ArrayList jsonArray = jsonIssueKeeping.getJsonArrayFromPageId(pageId, macroId);
+			DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping.getInstance();
+			ArrayList jsonArray = decisionKnowledgeElementKeeping.getElementsFromPageIdAndMacroId(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(jsonArray).build();
 
 

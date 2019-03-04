@@ -6,64 +6,63 @@ import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.spring.container.ContainerManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class JsonIssueKeeping {
+public class DecisionKnowledgeElementKeeping {
 	// We are using the Confluence BandanaManager for persistent storage. For information, see:
 	// http://docs.atlassian.com/atlassian-bandana/0.2.0/com/atlassian/bandana/BandanaManager.html
 	private BandanaManager bandanaManager;
 	// The context for the BandanaManager.
 	private final BandanaContext bandanaContext;
 
-	private static JsonIssueKeeping INSTANCE;
+	private static DecisionKnowledgeElementKeeping INSTANCE;
 
-	public static JsonIssueKeeping getInstance() {
+	public static DecisionKnowledgeElementKeeping getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new JsonIssueKeeping();
+			INSTANCE = new DecisionKnowledgeElementKeeping();
 		}
 		return INSTANCE;
 	}
 
 	// Our constructor is private, such that it can only be called from within our getInstance
 	// method.
-	private JsonIssueKeeping() {
+	private DecisionKnowledgeElementKeeping() {
 		ContainerManager.autowireComponent(this);
-		this.bandanaContext = new ConfluenceBandanaContext("jsonissuekeeping");
+		this.bandanaContext = new ConfluenceBandanaContext("decisionknowledgeelementkeeping");
 	}
 
-	public void addIssue(JsonIssue jsonIssue) {
-		bandanaManager.setValue(this.bandanaContext, jsonIssue.getId(), jsonIssue);
+	public void addDecisionKnowledgeElement(DecisionKnowledgeElement decisionKnowledgeElement) {
+		bandanaManager.setValue(this.bandanaContext, decisionKnowledgeElement.getId(), decisionKnowledgeElement);
 	}
 
-	public void removeIssue(String id) {
+	public void removeDecisionKnowledgeElement(String id) {
 		bandanaManager.removeValue(this.bandanaContext, id);
 	}
 
-	public ArrayList getJsonArrayFromPageId(int pageId,String macroId) {
+	public ArrayList getElementsFromPageIdAndMacroId(int pageId, String macroId) {
 		ArrayList myJsonArray = new ArrayList();
 
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
-			JsonIssue jsonIssue = (JsonIssue) this.bandanaManager.getValue(this.bandanaContext, id);
+			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager.getValue(this.bandanaContext, id);
 			//add only if the page id and Macro id corresponds // if macro id is null return all from page
-			if (jsonIssue.getPageId() == pageId && (jsonIssue.getMacroId().equals(macroId))||macroId==null) {
-				myJsonArray.add(jsonIssue);
+			if (decisionKnowledgeElement.getPageId() == pageId && (decisionKnowledgeElement.getMacroId().equals(macroId))||macroId==null) {
+				myJsonArray.add(decisionKnowledgeElement);
 			}
 		}
 		return myJsonArray;
 	}
 
-	public ArrayList getJsonArrayGroupedFromPageId(int pageId, String macroId) {
-		ArrayList unsortedJsonIssues = getJsonArrayFromPageId(pageId, macroId);
+	public ArrayList getElementsGroupedFromPageIdAndMacroId(int pageId, String macroId) {
+		ArrayList unsortedJsonIssues = getElementsFromPageIdAndMacroId(pageId, macroId);
 		ArrayList returnArray = new ArrayList();
 
 		for (int j = 0; j < unsortedJsonIssues.size(); j++) {
 			ArrayList groupArray = new ArrayList();
 
 			for (int i = 0; i < unsortedJsonIssues.size(); i++) {
-				JsonIssue jsonIssue = (JsonIssue) unsortedJsonIssues.get(i);
-				if (jsonIssue.getGroup() == j) {
-					groupArray.add(jsonIssue);
+				DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) unsortedJsonIssues.get(i);
+				if (decisionKnowledgeElement.getGroup() == j) {
+					groupArray.add(decisionKnowledgeElement);
 				}
 			}
 			if (groupArray.size() > 0) {
@@ -73,14 +72,14 @@ public class JsonIssueKeeping {
 		return returnArray;
 	}
 
-	public void removeJsonIssuesFromPageId(int pageId, String macroId) {
+	public void removeDecisionKnowledgeElement(int pageId, String macroId) {
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
-			JsonIssue jsonIssue = (JsonIssue) this.bandanaManager.getValue(this.bandanaContext, id);
+			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager.getValue(this.bandanaContext, id);
 			//remove only if the page id and Macro id corresponds remove all where macroId is null
-			String issueMacroId=jsonIssue.getMacroId();
+			String issueMacroId= decisionKnowledgeElement.getMacroId();
 
-			if (isNullOrEmpty(issueMacroId)||(!isNullOrEmpty(issueMacroId) && jsonIssue.getPageId() == pageId && issueMacroId.equals(macroId))) {
-				this.removeIssue(jsonIssue.getId());
+			if (isNullOrEmpty(issueMacroId)||(!isNullOrEmpty(issueMacroId) && decisionKnowledgeElement.getPageId() == pageId && issueMacroId.equals(macroId))) {
+				this.removeDecisionKnowledgeElement(decisionKnowledgeElement.getId());
 			}
 
 

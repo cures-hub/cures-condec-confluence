@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class JsonIssue {
+public class DecisionKnowledgeElement {
 
 	@XmlElement
 	private String link;
@@ -33,7 +33,7 @@ public class JsonIssue {
 
 
 
-	public JsonIssue(String link, int pageId, String summary, String type, String key, String description, Integer group, String macroId) {
+	public DecisionKnowledgeElement(String link, int pageId, String summary, String type, String key, String description, Integer group, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
@@ -51,7 +51,7 @@ public class JsonIssue {
 
 	}
 
-	public JsonIssue() {
+	public DecisionKnowledgeElement() {
 	}
 
 

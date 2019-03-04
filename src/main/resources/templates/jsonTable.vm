@@ -13,17 +13,17 @@
                     <th>Description</th>
                     <th>Type</th>
                 </tr>
-                    #foreach($jsonIssue in $jsonArray)
-                        #set ($type = $jsonIssue.getType())
+                    #foreach($decisionKnowledgeElement in $jsonArray)
+                        #set ($type = $decisionKnowledgeElement.getType())
                         #set ($imgPath="$type.png")
                     <tr>
                         <td>
-                            <a target="_blank" href="$jsonIssue.getLink()"><span
-                                    class="type_images type_class_$jsonIssue.getType()"></span>$jsonIssue.getKey()</a>
+                            <a target="_blank" href="$decisionKnowledgeElement.getLink()"><span
+                                    class="type_images type_class_$decisionKnowledgeElement.getType()"></span>$decisionKnowledgeElement.getKey()</a>
                         </td>
-                        <td>$jsonIssue.getSummary()</td>
-                        <td>$jsonIssue.getDescription()</td>
-                        <td>$jsonIssue.getType()</td>
+                        <td>$decisionKnowledgeElement.getSummary()</td>
+                        <td>$decisionKnowledgeElement.getDescription()</td>
+                        <td>$decisionKnowledgeElement.getType()</td>
                     </tr>
                     #end
                 </tbody>

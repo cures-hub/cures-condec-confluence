@@ -11,7 +11,7 @@ import com.atlassian.confluence.xhtml.api.MacroDefinition;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
-import de.uhd.ifi.se.decision.management.confluence.rest.JsonIssueKeeping;
+import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementKeeping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		pageBuilderService.assembler().resources().requireWebResource("de.uhd.ifi.se.decision.management.confluence.macro:issue-import-macro-web-resources");
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		// Retrieve the instance of our JsonKeeping.
-		JsonIssueKeeping jsonIssueKeeping = JsonIssueKeeping.getInstance();
+		DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping.getInstance();
 
 		//get macroId
 
@@ -48,7 +48,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			this.macroId=macroId;
 		}
 		// Save all issues in an ArrayList data structure.
-		ArrayList jsonIssueArray = jsonIssueKeeping.getJsonArrayGroupedFromPageId(pageId,macroId);
+		ArrayList jsonIssueArray = decisionKnowledgeElementKeeping.getElementsGroupedFromPageIdAndMacroId(pageId,macroId);
 		// Create a new context for rendering...
 
 
