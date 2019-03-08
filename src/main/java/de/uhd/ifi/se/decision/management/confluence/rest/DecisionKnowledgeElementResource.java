@@ -23,20 +23,31 @@ public class DecisionKnowledgeElementResource {
 	@Consumes({MediaType.APPLICATION_JSON})
 	@Path("/add-issue-array")
 	public Response addIssue(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId, String jsonObjectString, @Context HttpServletRequest request) {
-		JSONObject jsonObject = new JSONObject(jsonObjectString);
-		Boolean useObjectUrl=false;
-		String url = "";
-
-		if(((String) jsonObject.get("url")).equals("USE_OBJECT_URL")){
-			useObjectUrl=true;
+	
+		Boolean result= handlePostRequestResult(pageId,macroId,jsonObjectString);
+		if(result){
+			return Response.ok().build();
 		}else{
-			url = (String) jsonObject.get("url");
+			return Response.serverError().build();
 		}
+	}
+	
+	public Boolean handlePostRequestResult(int pageId,String macroId, String jsonObjectString){
+		Boolean result=true;
+		try{
+			JSONObject jsonObject = new JSONObject(jsonObjectString);
+			Boolean useObjectUrl=false;
+			String url = "";
 
-		JSONArray listOfArrays  = (JSONArray) jsonObject.get("data");
-		//first remove issues from this page
+			if(((String) jsonObject.get("url")).equals("USE_OBJECT_URL")){
+				useObjectUrl=true;
+			}else{
+				url = (String) jsonObject.get("url");
+			}
 
-		try {
+			JSONArray listOfArrays  = (JSONArray) jsonObject.get("data");
+			//first remove issues from this page
+
 			DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping.getInstance();
 			if (listOfArrays.length() > 0) {
 				decisionKnowledgeElementKeeping.removeDecisionKnowledgeElement(pageId,macroId);
@@ -44,43 +55,44 @@ public class DecisionKnowledgeElementResource {
 
 			for(int j=0;j< listOfArrays.length();j++){
 				JSONArray jsonArray=listOfArrays.getJSONArray(j);
-
-
-			for (int i = 0; i < jsonArray.length(); i++) {
+				for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject myObj = jsonArray.getJSONObject(i);
-				String completeKey = (String) myObj.get("key");
-				String concatKey = completeKey;
-				//check if completeKey has :
-				if (completeKey.indexOf(":") > -1) {
-					concatKey = concatKey.split(":")[0];
-				}
-				String link="";
-
-				if(useObjectUrl){
-					if(myObj.has("url")){
-						link=(String)myObj.get("url");
-					}
-					if(myObj.has("link")){
-						link=(String)myObj.get("link");
-					}
-				}else{
-					link = url + concatKey;
-				}
-				int myPageId = pageId;
-				String mySummary = myObj.has("summary")? (String) myObj.get("summary") : "";
-				String myType = myObj.has("type") ? (String) myObj.get("type") : "";
-				String description = myObj.has("description") ? (String) myObj.get("description") : "";
-				String myKey = completeKey;
-
-				DecisionKnowledgeElement decisionKnowledgeElement = new DecisionKnowledgeElement(link, myPageId, mySummary, myType, myKey,description,j, macroId);
+				DecisionKnowledgeElement decisionKnowledgeElement = handleInnerForLoopAndCreateElement(myObj, useObjectUrl, url, pageId,j,macroId);
 				decisionKnowledgeElementKeeping.addDecisionKnowledgeElement(decisionKnowledgeElement);
 				}
 			}
-		} catch (Exception e) {
-			return Response.serverError().build();
 		}
+		catch(Exception e){
+			result=false;
+		}
+		return result;
+	}
 
-		return Response.ok().build();
+	private DecisionKnowledgeElement handleInnerForLoopAndCreateElement(JSONObject myObj, Boolean useObjectUrl,String globalUrl, int pageId,int group, String macroId){
+		String completeKey = (String) myObj.get("key");
+		String concatKey = completeKey;
+		//check if completeKey has :
+		if (completeKey.indexOf(":") > -1) {
+			concatKey = concatKey.split(":")[0];
+		}
+		String link="";
+
+		if(useObjectUrl){
+			if(myObj.has("url")){
+				link=(String)myObj.get("url");
+			}
+			if(myObj.has("link")){
+				link=(String)myObj.get("link");
+			}
+		}else{
+			link = globalUrl + concatKey;
+		}
+		int myPageId = pageId;
+		String mySummary = myObj.has("summary")? (String) myObj.get("summary") : "";
+		String myType = myObj.has("type") ? (String) myObj.get("type") : "";
+		String description = myObj.has("description") ? (String) myObj.get("description") : "";
+		String myKey = completeKey;
+		return new DecisionKnowledgeElement(link, myPageId, mySummary, myType, myKey,description,group, macroId);
 	}
 
 	@Path("/getIssues")
