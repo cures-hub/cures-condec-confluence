@@ -76,7 +76,7 @@
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
-		<!--REST-->
+		<!--REST -->
 		<dependency>
 			<groupId>com.atlassian.plugins.rest</groupId>
 			<artifactId>atlassian-rest-common</artifactId>
@@ -103,18 +103,18 @@
 		</dependency>
 
 
-        <dependency>
-            <groupId>com.atlassian.sal</groupId>
-            <artifactId>sal-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.applinks</groupId>
-            <artifactId>applinks-api</artifactId>
-            <version>5.4.1</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.atlassian.sal</groupId>
+			<artifactId>sal-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.applinks</groupId>
+			<artifactId>applinks-api</artifactId>
+			<version>5.4.1</version>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -176,6 +176,18 @@
 						</dependency>
 					</scannedDependencies>
 					<verbose>false</verbose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+					<check />
 				</configuration>
 			</plugin>
 		</plugins>
