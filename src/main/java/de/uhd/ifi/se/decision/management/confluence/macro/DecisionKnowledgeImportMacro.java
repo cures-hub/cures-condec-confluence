@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.atlassian.applinks.api.ApplicationLinkService;
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
 import com.atlassian.confluence.macro.Macro;
@@ -17,17 +16,17 @@ import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 
+import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementKeeping;
 
 @Scanned
 public class DecisionKnowledgeImportMacro implements Macro {
 
 	private PageBuilderService pageBuilderService;
-	@Autowired
-	public DecisionKnowledgeImportMacro(@ComponentImport PageBuilderService pageBuilderService,
-			@ComponentImport ApplicationLinkService applicationLinkService) {
-		this.pageBuilderService = pageBuilderService;
 
+	@Autowired
+	public DecisionKnowledgeImportMacro(@ComponentImport PageBuilderService pageBuilderService) {
+		this.pageBuilderService = pageBuilderService;
 	}
 
 	public DecisionKnowledgeImportMacro() {
@@ -47,10 +46,9 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		com.atlassian.fugue.Option<MacroId> option = macroDefinition.getMacroId();
 
 		String macroId = option.get().getId();
-		if (macroId != null && !macroId.isEmpty()) {
-		}
+		
 		// Save all issues in an ArrayList data structure.
-		ArrayList<?> jsonIssueArray = decisionKnowledgeElementKeeping.getElementsGroupedFromPageIdAndMacroId(pageId,
+		ArrayList<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = decisionKnowledgeElementKeeping.getElementsGroupedFromPageIdAndMacroId(pageId,
 				macroId);
 		// Create a new context for rendering...
 

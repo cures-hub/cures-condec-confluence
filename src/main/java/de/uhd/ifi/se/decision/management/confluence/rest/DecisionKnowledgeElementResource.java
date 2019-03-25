@@ -76,6 +76,7 @@ public class DecisionKnowledgeElementResource {
 		return result;
 	}
 
+	// FIXME: This is too complex.
 	private DecisionKnowledgeElement handleInnerForLoopAndCreateElement(JSONObject myObj, Boolean useObjectUrl,
 			String globalUrl, int pageId, int group, String macroId) {
 		String completeKey = (String) myObj.get("key");
