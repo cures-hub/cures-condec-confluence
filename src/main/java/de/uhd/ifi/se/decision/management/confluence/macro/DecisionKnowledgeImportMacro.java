@@ -12,14 +12,12 @@ import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.confluence.xhtml.api.MacroDefinition;
-import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementKeeping;
 
-@Scanned
 public class DecisionKnowledgeImportMacro implements Macro {
 
 	private PageBuilderService pageBuilderService;
@@ -32,6 +30,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 	public DecisionKnowledgeImportMacro() {
 	}
 
+	@Override
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
 		pageBuilderService.assembler().resources().requireWebResource(
@@ -46,10 +45,10 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		com.atlassian.fugue.Option<MacroId> option = macroDefinition.getMacroId();
 
 		String macroId = option.get().getId();
-		
+
 		// Save all issues in an ArrayList data structure.
-		ArrayList<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = decisionKnowledgeElementKeeping.getElementsGroupedFromPageIdAndMacroId(pageId,
-				macroId);
+		ArrayList<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = decisionKnowledgeElementKeeping
+				.getElementsGroupedFromPageIdAndMacroId(pageId, macroId);
 		// Create a new context for rendering...
 
 		Map<String, Object> renderContext = MacroUtils.defaultVelocityContext();
@@ -59,10 +58,12 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 	}
 
+	@Override
 	public BodyType getBodyType() {
 		return BodyType.NONE;
 	}
 
+	@Override
 	public OutputType getOutputType() {
 		return OutputType.BLOCK;
 	}

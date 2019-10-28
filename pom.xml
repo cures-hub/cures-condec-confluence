@@ -46,6 +46,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.2.0.RELEASE</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
@@ -123,13 +130,13 @@
 		<plugins>
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
-				<artifactId>maven-confluence-plugin</artifactId>
+				<artifactId>amps-maven-plugin</artifactId>
 				<version>${amps.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<jvmArgs>-Xmx4096m</jvmArgs>
 					<productVersion>${confluence.version}</productVersion>
-					<productDataVersion>${confluence.data.version}</productDataVersion>
+					<productDataVersion>${confluence.version}</productDataVersion>
 					<enableQuickReload>true</enableQuickReload>
 					<enableFastdev>false</enableFastdev>
 
@@ -178,27 +185,14 @@
 					<verbose>false</verbose>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-					<check />
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
 	<properties>
-		<confluence.version>6.7.1</confluence.version>
-		<confluence.data.version>6.7.1</confluence.data.version>
-		<amps.version>6.3.15</amps.version>
-		<plugin.testrunner.version>1.2.3</plugin.testrunner.version>
-		<atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
+		<confluence.version>7.0.3</confluence.version>
+		<amps.version>8.0.3</amps.version>
+		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
+		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
 			generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
