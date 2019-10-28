@@ -109,27 +109,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
 			<version>4.0.0</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
-
-		<dependency>
-			<groupId>com.atlassian.confluence</groupId>
-			<artifactId>confluence-test-support</artifactId>
-			<version>6.9.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.atlassian.confluence</groupId>
-			<artifactId>confluence-testutils</artifactId>
-			<version>6.12.0-m18</version>
-			<scope>test</scope>
-		</dependency>
-
 
 		<!-- Application links -->
 		<dependency>
@@ -200,6 +185,25 @@
 					</scannedDependencies>
 					<verbose>false</verbose>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-java</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<version>1.8</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

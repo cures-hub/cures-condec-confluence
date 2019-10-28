@@ -9,11 +9,11 @@
 		<param name="plugin-icon">images/pluginIcon.png</param>
 		<param name="plugin-logo">images/pluginLogo.png</param>
 	</plugin-info>
-
-	<!-- add our i18n resource -->
+	
+	<!-- Internationalisation -->
 	<resource type="i18n" name="i18n" location="decisionKnowledgeImportMacro" />
 
-	<!-- add our web resources -->
+	<!-- Web Resources -->
 	<web-resource key="issue-import-macro-resources"
 		name="issue-import-macro-web-resources">
         <context>editor</context>
@@ -21,6 +21,7 @@
 		<resource type="download" name="condec.css" location="/css/condec.css" />
 		<resource type="download" name="jsonimport.js" location="/js/jsonimport.js" />
 		<resource type="download" name="images/" location="/images" />
+		<resource type="download" name="pluginIcon.png" location="/images/pluginIcon.png" />
         <dependency>com.atlassian.auiplugin:ajs</dependency>
 
 		<context>Decision Knowledge Issues Import</context>
@@ -30,8 +31,9 @@
 		<description>Provides the REST resource for the jsonImport.</description>
 	</rest>
 
-	<xhtml-macro name="issue-import-macro"
-		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro" key='issue-import-macro'>
+	<xhtml-macro name="Decision Knowledge Import" key="issue-import-macro"
+		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro"
+		icon="/download/resources/de.uhd.ifi.se.decision.management.confluence:issue-import-macro-resources/pluginIcon.png">
 
 		<description key="jsonImportMacro.macro.desc" />
 		<category name="formatting" />
@@ -40,7 +42,7 @@
 		</parameters>
         <property-panel>
             <spacer/>
-            <button id="updateButton" label="Update Issues"/>
+            <button id="updateButton" label="Update Stand-up Table"/>
             <spacer/>
         </property-panel>
 	</xhtml-macro>
