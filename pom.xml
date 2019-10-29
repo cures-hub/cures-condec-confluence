@@ -55,6 +55,12 @@
 			<version>4.0.0</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Unit tests -->
 		<dependency>
@@ -175,6 +181,7 @@
 				<executions>
 					<execution>
 						<id>enforce-java</id>
+						<phase>package</phase>
 						<goals>
 							<goal>enforce</goal>
 						</goals>

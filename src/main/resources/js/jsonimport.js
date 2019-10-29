@@ -82,7 +82,7 @@
 	}
 
 	function postIssueArray(jsonArray, pageId, macroId, callback) {
-		postJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/add-issue-array?pageId=" + pageId + "&macroId=" + macroId, jsonArray,
+		postJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/add-issue-array?pageId=" + pageId + "&macroId=" + macroId, jsonArray,
 			function (error, result) {
 				if (error === null) {
 					callback(result);
@@ -110,7 +110,7 @@
 		var projectKey = selectedProjectSelectForm.val();
 
 		if (projectKey && projectKey !== "") {
-			getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssuesFromJira?projectKey="+ projectKey+"&query=?" + userInput, function (error, data) {
+			getJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/getIssuesFromJira?projectKey="+ projectKey+"&query=?" + userInput, function (error, data) {
 				if (error == null) {
 					if(!data){
 						showFlag("error", "An Error with the connection, check the Authorisation of Jira");
@@ -154,7 +154,7 @@
 		});
 		//get json from restpoint
 		var pageId = parseInt(AJS.params.pageId, 10);
-		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId, function (error, data) {
+		getJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId, function (error, data) {
 			if (error == null) {
 				var jqlError = checkForError(data);
 				if (!jqlError) {
@@ -179,7 +179,7 @@
 				}
 			}
 		});
-		getJSON(AJS.Data.get("context-path") + "/rest/jsonIssues/1.0/issueRest/getProjectsFromJira", function (error, data) {
+		getJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/getProjectsFromJira", function (error, data) {
 			if (error == null) {
 				var jqlError= checkForError(data);
 				if(!jqlError){

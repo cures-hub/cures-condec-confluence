@@ -1,6 +1,6 @@
 <atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}"
 	plugins-version="2">
-	
+
 	<!-- Plug-in Information -->
 	<plugin-info>
 		<description>${project.description}</description>
@@ -9,42 +9,48 @@
 		<param name="plugin-icon">images/pluginIcon.png</param>
 		<param name="plugin-logo">images/pluginLogo.png</param>
 	</plugin-info>
-	
+
 	<!-- Internationalisation -->
-	<resource type="i18n" name="i18n" location="decisionKnowledgeImportMacro" />
+	<resource type="i18n" name="i18n" location="i18n/condec" />
 
 	<!-- Web Resources -->
-	<web-resource key="issue-import-macro-resources"
-		name="issue-import-macro-web-resources">
-        <context>editor</context>
-
+	<web-resource key="decision-knowledge-import-resources"
+		name="ConDec Decision Knowledge in Wiki Pages Resources">
+		<description>
+			Provides the JavaScript files for the import of decision knowledge into wiki pages
+			(e.g. for meetings).
+		</description>
+		<context>editor</context>
+		<context>Decision Knowledge Import Macro</context>
 		<resource type="download" name="condec.css" location="/css/condec.css" />
 		<resource type="download" name="jsonimport.js" location="/js/jsonimport.js" />
 		<resource type="download" name="images/" location="/images" />
-		<resource type="download" name="pluginIcon.png" location="/images/pluginIcon.png" />
-        <dependency>com.atlassian.auiplugin:ajs</dependency>
-
-		<context>Decision Knowledge Issues Import</context>
+		<resource type="download" name="pluginIconBig.png" location="/images/pluginIconBig.png" />
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
 	</web-resource>
-	<rest key="issue-import-rest-resources" path="/jsonIssues"
-		  version="1.0">
-		<description>Provides the REST resource for the jsonImport.</description>
+
+	<!-- REST API -->
+	<rest key="decision-knowledge-rest" name="Decision Knowledge REST" path="/condec"
+		version="1.0">
+		<description>Provides REST resources to manage decision knowledge.</description>
 	</rest>
 
-	<xhtml-macro name="Decision Knowledge Import" key="issue-import-macro"
+	<!-- Decision Knowledge Import in Wiki Pages -->
+	<xhtml-macro name="Decision Knowledge Import Macro"
+		key="decision-knowledge-import-macro"
 		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro"
-		icon="/download/resources/de.uhd.ifi.se.decision.management.confluence:issue-import-macro-resources/pluginIcon.png">
-
-		<description key="jsonImportMacro.macro.desc" />
+		icon="/download/resources/de.uhd.ifi.se.decision.management.confluence:decision-knowledge-import-resources/pluginIconBig.png">
 		<category name="formatting" />
-		<parameters>
-			<!--<parameter name="yourJsonArray" type="string" />-->
-		</parameters>
-        <property-panel>
-            <spacer/>
-            <button id="updateButton" label="Update Stand-up Table"/>
-            <spacer/>
-        </property-panel>
+		
+		<description>Enables to import requirements, tasks, and decision knowledge from Jira into
+			Confluence.
+		</description>
+
+		<property-panel>
+			<spacer />
+			<button id="updateButton" label="Update Stand-up Table" />
+			<spacer />
+		</property-panel>
 	</xhtml-macro>
 
 </atlassian-plugin>
