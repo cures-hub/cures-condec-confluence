@@ -46,6 +46,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.2.0.RELEASE</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
@@ -102,17 +109,18 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
-			<version>3.1.0</version>
+			<version>4.0.0</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
+
+		<!-- Application links -->
 		<dependency>
 			<groupId>com.atlassian.applinks</groupId>
 			<artifactId>applinks-api</artifactId>
-			<version>5.4.1</version>
+			<version>7.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -123,13 +131,13 @@
 		<plugins>
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
-				<artifactId>maven-confluence-plugin</artifactId>
+				<artifactId>amps-maven-plugin</artifactId>
 				<version>${amps.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<jvmArgs>-Xmx4096m</jvmArgs>
 					<productVersion>${confluence.version}</productVersion>
-					<productDataVersion>${confluence.data.version}</productDataVersion>
+					<productDataVersion>${confluence.version}</productDataVersion>
 					<enableQuickReload>true</enableQuickReload>
 					<enableFastdev>false</enableFastdev>
 
@@ -179,26 +187,67 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-					<check />
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-java</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<version>1.8</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 
+	<profiles>
+		<!-- Creates coverage reports in target/site/jacoco/ -->
+		<profile>
+			<id>jacoco</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${jacoco-version}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<!-- attached to Maven test phase -->
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<properties>
-		<confluence.version>6.7.1</confluence.version>
-		<confluence.data.version>6.7.1</confluence.data.version>
-		<amps.version>6.3.15</amps.version>
-		<plugin.testrunner.version>1.2.3</plugin.testrunner.version>
-		<atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
+		<confluence.version>7.0.3</confluence.version>
+		<amps.version>8.0.3</amps.version>
+		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
+		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
+		<jacoco-version>0.8.4</jacoco-version>
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
 			generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>

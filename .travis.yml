@@ -4,7 +4,7 @@ cache:
   directories:
   - $HOME/.m2
 jdk:
-- oraclejdk8
+- oraclejdk11
 before_install:
 - wget https://marketplace.atlassian.com/download/plugins/atlassian-plugin-sdk-tgz
 - mkdir opt
@@ -14,15 +14,11 @@ before_install:
 - chmod a+x opt/atlassian-plugin-sdk/apache-maven-*/bin/*
 - export PATH=opt/atlassian-plugin-sdk/bin:opt/atlassian-plugin-sdk/apache-maven-*/bin:$PATH
 - atlas-version
-install:
-- atlas-mvn install -q -DskipTests=true
+install: true
 script:
-- atlas-package
-- atlas-mvn cobertura:cobertura
+  - atlas-package -P jacoco
 notifications:
-email: false
-test:
-- atlas-mvn test
+  email: false
 deploy:
   provider: releases
   api_key:
@@ -33,4 +29,4 @@ deploy:
     tags: true
     repo: cures-hub/cures-condec-confluence
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/target/site/jacoco/jacoco.xml

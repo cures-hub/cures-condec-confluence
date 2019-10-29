@@ -1,43 +1,30 @@
-</pre>
+$webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluence:json-plugin-images")
 <div id="wrapper">
     <div class="box">
-        <h3>Decision Knowledge</h3>
-        $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluence:json-plugin-images")
-
         #foreach($jsonArray in $jsonArrays)
-            <table class="aui aui-table-sortable jsonImportTable">
+            <table class="aui aui-table-list aui-table-sortable">
                 <tbody>
                 <tr>
-                    <th>Key</th>
+                	<th>Type</th>
                     <th>Summary</th>
-                    <th>Description</th>
-                    <th>Type</th>
+                    <th>Key</th>                    
                 </tr>
                     #foreach($decisionKnowledgeElement in $jsonArray)
                         #set ($type = $decisionKnowledgeElement.getType())
                         #set ($imgPath="$type.png")
-                    <tr>
-                        <td>
-                            <a target="_blank" href="$decisionKnowledgeElement.getLink()"><span
-                                    class="type_images type_class_$decisionKnowledgeElement.getType()"></span>$decisionKnowledgeElement.getKey()</a>
-                        </td>
+                <tr>
+                    	<td><a target="_blank" href="$decisionKnowledgeElement.getLink()"><span class="type_images type_class_$decisionKnowledgeElement.getType()"></span> $decisionKnowledgeElement.getType()</a></td>                    	
                         <td>$decisionKnowledgeElement.getSummary()</td>
-                        <td>$decisionKnowledgeElement.getDescription()</td>
-                        <td>$decisionKnowledgeElement.getType()</td>
-                    </tr>
+                        <td><a target="_blank" href="$decisionKnowledgeElement.getLink()">$decisionKnowledgeElement.getKey()</a></td>                        
+                </tr>
                     #end
                 </tbody>
             </table>
             <hr>
         #end
-
     </div>
-
 </div>
-<pre>
 <script type="application/javascript">
-
-    AJS.tablessortable.setTableSortable(AJS.$(".jsonImportTable"));
     setImages();
 
     function setImages() {
@@ -51,7 +38,7 @@
     }
 
     function getTypeFromClass(jElement) {
-        //example type_class_Issue
+        // example type_class_Issue
         var sWholeClass = jElement[0].classList[1];
         var sType = sWholeClass.split("type_class_")[1].toLowerCase();
         return sType;
@@ -64,19 +51,19 @@
         if (aImages.indexOf(sType) > -1) {
             var img = new Image();
 
-            //just use some one of the
+            // just use some one of the
             img.src = path + sType + ".png";
             res=img;
         } else {
         	var oIcons={"aui-iconfont-jira-completed-task":["aufgabe","task"],
                 "aui-iconfont-subtask":["unteraufgabe","subtask"]
         	};
-            //standard icon
+            // standard icon
             var sIcon="aui-iconfont-jira";
-            //check oIcons for sType
+            // check oIcons for sType
             Object.entries(oIcons).map(function (aElement){
                 if (aElement[1].indexOf(sType)>-1){
-                	//found translation
+                	// found translation
                     sIcon=aElement[0];
                 }
             })
@@ -84,6 +71,5 @@
         	res=span;
         }
         return res;
-
     }
 </script>

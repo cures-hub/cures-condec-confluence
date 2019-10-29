@@ -41,7 +41,7 @@
 	function checkForError(oData) {
 		var bResult = false;
 		if (oData["error"] !== undefined) {
-			showFlag("error", "An Error occurred in the Jiira connection: "+oData["error"]);
+			showFlag("error", "An Error occurred in the Jira connection: "+oData["error"]);
 			bResult = true;
 		}
 		return bResult;

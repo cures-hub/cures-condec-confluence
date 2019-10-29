@@ -17,11 +17,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-//import com.atlassian.applinks.api.ApplicationLinkRequestFactory;
-//import com.atlassian.sal.api.net.Request;
-//import com.atlassian.sal.api.net.ResponseException;
-//import com.atlassian.sal.api.net.ResponseHandler;
-import de.uhd.ifi.se.decision.management.confluence.oauth.ApiLinkService;
+import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 
 @Path("/issueRest")
 public class DecisionKnowledgeElementResource {
@@ -128,7 +124,7 @@ public class DecisionKnowledgeElementResource {
 	public Response getDecisionKnowledgeElement(@QueryParam("projectKey") String projectKey,
 			@QueryParam("query") String query) {
 		try {
-			String jsonString = ApiLinkService.makeGetRequestToJira(query, projectKey);
+			String jsonString = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
 
 			return Response.status(Response.Status.OK).entity(jsonString).build();
 
@@ -142,10 +138,8 @@ public class DecisionKnowledgeElementResource {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getProjectsFromJira() {
 		try {
-			String jsonString = ApiLinkService.getCurrentActiveJiraProjects();
-
-			return Response.status(Response.Status.OK).entity(jsonString).build();
-
+			String jiraProjects = JiraClient.instance.getJiraProjectsAsJson();
+			return Response.status(Response.Status.OK).entity(jiraProjects).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
