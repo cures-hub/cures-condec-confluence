@@ -1,6 +1,6 @@
 (function () {
 
-	var macroName = "issue-import-macro";
+	var macroName = "decision-knowledge-import-macro";
 
 	function showFlag(type, message) {
 		AJS.flag({

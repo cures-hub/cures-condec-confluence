@@ -34,7 +34,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
 		pageBuilderService.assembler().resources().requireWebResource(
-				"de.uhd.ifi.se.decision.management.confluence.macro:issue-import-macro-web-resources");
+				"de.uhd.ifi.se.decision.management.confluence.macro:decision-knowledge-import-resources");
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		// Retrieve the instance of our JsonKeeping.
 		DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping.getInstance();

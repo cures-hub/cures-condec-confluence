@@ -36,16 +36,14 @@
 	</rest>
 
 	<!-- Decision Knowledge Import in Wiki Pages -->
-	<xhtml-macro name="Decision Knowledge Import Macro"
-		key="decision-knowledge-import-macro"
+	<xhtml-macro name="Decision Knowledge Import" key="decision-knowledge-import-macro"
 		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro"
 		icon="/download/resources/de.uhd.ifi.se.decision.management.confluence:decision-knowledge-import-resources/pluginIconBig.png">
-		<category name="formatting" />
-		
-		<description>Enables to import requirements, tasks, and decision knowledge from Jira into
-			Confluence.
-		</description>
-
+		<description key="condec.import.macro.description" />
+		<category name="external-content" />
+		<parameters>
+			<!--<parameter name="yourJsonArray" type="string" /> -->
+		</parameters>
 		<property-panel>
 			<spacer />
 			<button id="updateButton" label="Update Stand-up Table" />
