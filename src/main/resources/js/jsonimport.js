@@ -31,7 +31,7 @@
 	}
 
 	function getHTMLTableHeader() {
-		return "<h4>Current Issues</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
+		return "<h4>Current Knowledge Elements</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
 	}
 
 	function addRadioBoxForProject(oProject) {
@@ -76,7 +76,7 @@
 
 	/** *****************Init dialog Functions*********************** */
 
-	var updateMacro = function(sMacroId) {
+	var updateMacro = function(macroId) {
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
@@ -87,7 +87,7 @@
 		});
 		// get json from restpoint
 		var pageId = parseInt(AJS.params.pageId, 10);
-		conDecAPI.getIssues(pageId, sMacroId, function(data) {
+		conDecAPI.getIssues(pageId, macroId, function(data) {
 			var prefillValue = JSON.stringify(data);
 			var allTextAreas = $(".jsonPasteTextArea");
 			var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);
@@ -107,6 +107,7 @@
 			selectedResultField[0].innerHTML = table;
 			selectedJQLResultField[0].innerHTML = table;
 		});
+		
 		conDecAPI.getProjectsFromJira(function(data) {
 			var jqlInputField = $(".jqlInputFieldContainer");
 			var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
@@ -171,7 +172,7 @@
 			} catch (e) {
 				showFlag("error", "Error parsing your input." + e);
 			}
-			conDecAPI.postIssueArray(parsedUserInput, pageId, sMacroId, function(some) {
+			conDecAPI.postIssueArray(parsedUserInput, pageId, macroId, function(some) {
 			});
 			dialog.hide();
 		}, "aui-button");
@@ -192,7 +193,7 @@
 				}
 				var pageId = parseInt(AJS.params.pageId, 10);
 				userObject["pageId"] = pageId;
-				conDecAPI.postIssueArray(userObject, pageId, sMacroId, function(some) {
+				conDecAPI.postIssueArray(userObject, pageId, macroId, function(some) {
 				});
 				dialog.hide();
 			} else {
@@ -207,9 +208,9 @@
 	};
 
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function(e, macroNode) {
-		var sMacroId = macroNode.getAttribute("data-macro-id");
-		if (sMacroId && sMacroId !== "") {
-			updateMacro(sMacroId);
+		var macroId = macroNode.getAttribute("data-macro-id");
+		if (macroId && macroId !== "") {
+			updateMacro(macroId);
 		} else {
 			showFlag("error", "Please save the page first before updating the Macro")
 		}
