@@ -5,70 +5,76 @@
  * nothing
     
  Is required by
- * condec.knowledge.overview.js
+ * condec.knowledge.import.js
   
  Is referenced in HTML by
  * nowhere
  */
 (function(global) {
 	var ConDecAPI = function ConDecAPI() {
-		this.restPrefix = AJS.contextPath() + "/rest/condec/latest";
+		this.restPrefix = AJS.Data.get("context-path") + "/rest/condec/latest";
 	};
 
 	/*
-	 * external references: condec.knowledge.overview
+	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getProjectsFromJira = function getDecisionKnowledgeFromJira(callback) {
+	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
 		console.log("conDecApi getProjectsFromJira");
 		var url = this.restPrefix + "/issueRest/getProjectsFromJira";
 
-		getJSON(url + "/getProjectsFromJira", function(error, data) {
-			showFlag("error", error);
-			if (error == null) {
-				var jqlError = checkForError(data);
-				if (!jqlError) {
-					var jqlInputField = $(".jqlInputFieldContainer");
-					var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
-					if (data && data.length > 0) {
-						var radioBoxes = '<form class="aui">\n' + '    <div class="field-group">\n'
-								+ '        <label for="select-example">Select Project</label>'
-								+ '        <select class="projectSelect">';
-
-						data.map(function(oProject) {
-							radioBoxes += addRadioBoxForProject(oProject)
-						});
-						radioBoxes += '</select></select></div></form>';
-
-						selectedJqlInputField.append(radioBoxes)
-					} else {
-						selectedJqlInputField.append("<h4>No Projects were Found</h4>")
-
-					}
-				}
-			} else {
-				showFlag("error", error);
+		getJSON(url, function(error, data) {
+			if (error === null && !checkForError(data)) {
+				callback(data);
 			}
 		});
 	};
 
-	function getResponseAsReturnValue(url) {
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", url, false);
-		xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-		xhr.send();
-		var status = xhr.status;
-		if (status === 200) {
-			try {
-				console.log(xhr.response);
-				var parsedResponse = JSON.parse(xhr.response);
-				return parsedResponse;
-			} catch (error) {
-				console.log(error);
-				return null;
+	/*
+	 * external references: condec.knowledge.import
+	 */
+	ConDecAPI.prototype.getIssuesFromJira = function getIssuesFromJira(projectKey, userInput, callback) {
+		var url = this.restPrefix + "/issueRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
+		getJSON(url, function(error, data) {
+			if (error == null && data && !checkForError(data)) {
+				callback(data);
 			}
+		});
+	};
+
+	/*
+	 * external references: condec.knowledge.import
+	 */
+	ConDecAPI.prototype.getIssues = function getIssues(pageId, sMacroId, callback) {
+		var url = this.restPrefix + "/issueRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId;
+		getJSON(url, function(error, data) {
+			if (error == null && !checkForError(data)) {
+				callback(data);
+			}
+		});
+	};
+
+	/*
+	 * external references: condec.knowledge.import
+	 */
+	ConDecAPI.prototype.postIssueArray = function postIssueArray(jsonArray, pageId, macroId, callback) {
+		postJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/add-issue-array?pageId=" + pageId
+				+ "&macroId=" + macroId, jsonArray, function(error, result) {
+			if (error === null) {
+				callback(result);
+				showFlag("success", "Json Issues updated");
+			} else {
+				showFlag("error", "An Server Error occured." + error);
+			}
+		});
+	};
+	
+	function checkForError(oData) {
+		var bResult = false;
+		if (oData["error"] !== undefined) {
+			showFlag("error", "An Error occurred in the Jira connection: " + oData["error"]);
+			bResult = true;
 		}
-		showFlag("error", xhr.response.error, status);
-		return null;
+		return bResult;
 	}
 
 	function getJSON(url, callback) {
@@ -87,6 +93,24 @@
 			}
 		};
 		xhr.send();
+	}
+	
+	function postJSON(url, data, callback) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.responseType = "json";
+		xhr.onload = function () {
+			var status = xhr.status;
+			if (status === 200) {
+				callback(null, xhr.response);
+			} else {
+				showFlag("error", xhr.response.error, status);
+				callback(status, xhr.response);
+			}
+		};
+		xhr.send(JSON.stringify(data));
 	}
 
 	function showFlag(type, message, status) {
