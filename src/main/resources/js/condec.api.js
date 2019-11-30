@@ -21,7 +21,6 @@
 	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
 		console.log("conDecApi getProjectsFromJira");
 		var url = this.restPrefix + "/issueRest/getProjectsFromJira";
-
 		getJSON(url, function(error, data) {
 			if (error === null && !checkForError(data)) {
 				callback(data);
@@ -35,8 +34,13 @@
 	ConDecAPI.prototype.getIssuesFromJira = function getIssuesFromJira(projectKey, userInput, callback) {
 		var url = this.restPrefix + "/issueRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
 		getJSON(url, function(error, data) {
-			if (error == null && data && !checkForError(data)) {
+			if (error == null && data && !checkForError(data)) {				
+				if (data && data.length === 0) {
+					showFlag("error", "No search results were found.");
+				} 
 				callback(data);
+			} else {
+				showFlag("success", "Results were found!");
 			}
 		});
 	};
@@ -57,17 +61,17 @@
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.postIssueArray = function postIssueArray(jsonArray, pageId, macroId, callback) {
-		postJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/add-issue-array?pageId=" + pageId
-				+ "&macroId=" + macroId, jsonArray, function(error, result) {
-			if (error === null) {
+		var url = this.restPrefix + "/issueRest/add-issue-array?pageId=" + pageId + "&macroId=" + macroId;
+		postJSON(url, jsonArray, function(error, result) {
+			if (error === null) {				
+				showFlag("success", "The stand-up table was successfully created.");
 				callback(result);
-				showFlag("success", "Json Issues updated");
 			} else {
-				showFlag("error", "An Server Error occured." + error);
+				showFlag("error", "A server error occured: " + error);
 			}
 		});
 	};
-	
+
 	function checkForError(oData) {
 		var bResult = false;
 		if (oData["error"] !== undefined) {
@@ -94,14 +98,14 @@
 		};
 		xhr.send();
 	}
-	
+
 	function postJSON(url, data, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
 		xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
 		xhr.setRequestHeader("Accept", "application/json");
 		xhr.responseType = "json";
-		xhr.onload = function () {
+		xhr.onload = function() {
 			var status = xhr.status;
 			if (status === 200) {
 				callback(null, xhr.response);
