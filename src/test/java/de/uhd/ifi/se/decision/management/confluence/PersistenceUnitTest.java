@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementKeeping;
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementResource;
 

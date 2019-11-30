@@ -15,7 +15,7 @@ import com.atlassian.confluence.xhtml.api.MacroDefinition;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElementKeeping;
 
 public class DecisionKnowledgeImportMacro implements Macro {

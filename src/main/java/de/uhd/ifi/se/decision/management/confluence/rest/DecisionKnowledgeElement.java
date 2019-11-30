@@ -1,4 +1,4 @@
-package de.uhd.ifi.se.decision.management.confluence.model;
+package de.uhd.ifi.se.decision.management.confluence.rest;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

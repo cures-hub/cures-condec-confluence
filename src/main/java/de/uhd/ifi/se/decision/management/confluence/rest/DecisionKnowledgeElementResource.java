@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 
 @Path("/issueRest")
@@ -138,11 +137,7 @@ public class DecisionKnowledgeElementResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getProjectsFromJira() {
-		try {
-			String jiraProjects = JiraClient.instance.getJiraProjectsAsJson();
-			return Response.status(Response.Status.OK).entity(jiraProjects).build();
-		} catch (Exception e) {
-			return Response.serverError().build();
-		}
+		String jiraProjects = JiraClient.instance.getJiraProjectsAsJson();
+		return Response.status(Response.Status.OK).entity(jiraProjects).build();
 	}
 }

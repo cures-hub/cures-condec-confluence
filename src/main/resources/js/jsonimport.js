@@ -179,33 +179,7 @@
 				}
 			}
 		});
-		getJSON(AJS.Data.get("context-path") + "/rest/condec/latest/issueRest/getProjectsFromJira", function (error, data) {
-			if (error == null) {
-				var jqlError= checkForError(data);
-				if(!jqlError){
-					var jqlInputField = $(".jqlInputFieldContainer");
-					var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
-					if (data && data.length > 0) {
-						var radioBoxes = '<form class="aui">\n' +
-							'    <div class="field-group">\n' +
-							'        <label for="select-example">Select Project</label>' +
-							'        <select class="projectSelect">';
-
-
-						data.map(function (oProject) {
-							radioBoxes += addRadioBoxForProject(oProject)
-						});
-						radioBoxes += '</select></select></div></form>';
-
-						selectedJqlInputField.append(radioBoxes)
-					} else {
-						selectedJqlInputField.append("<h4>No Projects were Found</h4>")
-
-					}
-				}
-
-			}
-		});
+		conDecAPI.getProjectsFromJira();
 		dialog.addPanel("Direct", "<h4>Here you can use JQL if the connection to jira exists, using JQL overwrittes previous data from this macro</h4><br>" +
 			"<div class='jsonDialogMacroContainer'><div class='jqlInputFieldContainer'></div>" +
 			"<div class='field-group'><label for='text-input'>Search query</label><input class='jqlInputField text medium-field' placeholder='jql='/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>" +
