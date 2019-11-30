@@ -19,6 +19,7 @@
 		tableRow += "</tr>";
 		return tableRow;
 	}
+	
 	function itiOverSingleArray(aObj) {
 		var tableRows = "";
 		aObj.map(function(obj) {

@@ -51,7 +51,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		Map<String, Object> renderContext = MacroUtils.defaultVelocityContext();
 		renderContext.put("jsonArrays", jsonIssueArray);
 
-		return VelocityUtils.getRenderedTemplate("/templates/jsonTable.vm", renderContext);
+		return VelocityUtils.getRenderedTemplate("/templates/standUpTable.vm", renderContext);
 
 	}
 
