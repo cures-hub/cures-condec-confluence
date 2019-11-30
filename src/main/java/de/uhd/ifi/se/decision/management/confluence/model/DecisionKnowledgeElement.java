@@ -1,11 +1,12 @@
-package de.uhd.ifi.se.decision.management.confluence.rest;
+package de.uhd.ifi.se.decision.management.confluence.model;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -30,10 +31,8 @@ public class DecisionKnowledgeElement {
 	@XmlElement
 	private String description;
 
-
-
-
-	public DecisionKnowledgeElement(String link, int pageId, String summary, String type, String key, String description, Integer group, String macroId) {
+	public DecisionKnowledgeElement(String link, int pageId, String summary, String type, String key,
+			String description, Integer group, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
@@ -43,17 +42,15 @@ public class DecisionKnowledgeElement {
 		this.group = group;
 		this.macroId = macroId;
 
-		//generate unique id
+		// generate unique id
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMs");
 		String datetime = ft.format(dNow);
 		this.id = datetime + key;
-
 	}
 
 	public DecisionKnowledgeElement() {
 	}
-
 
 	public int getPageId() {
 		return pageId;
@@ -114,6 +111,7 @@ public class DecisionKnowledgeElement {
 	public int getGroup() {
 		return this.group;
 	}
+
 	public void setGroup(Integer group) {
 		this.group = group;
 	}

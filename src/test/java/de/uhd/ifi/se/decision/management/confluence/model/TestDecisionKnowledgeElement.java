@@ -1,13 +1,14 @@
-package de.uhd.ifi.se.decision.management.confluence;
+package de.uhd.ifi.se.decision.management.confluence.model;
 
-import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
 import org.junit.Test;
+
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 
-public class DecisionKnowledgeElementUnitTest
+public class TestDecisionKnowledgeElement
 {
 	DecisionKnowledgeElement de =new DecisionKnowledgeElement();
 	

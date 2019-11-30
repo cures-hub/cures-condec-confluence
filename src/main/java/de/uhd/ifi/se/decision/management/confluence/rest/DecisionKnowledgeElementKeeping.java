@@ -7,6 +7,8 @@ import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.spring.container.ContainerManager;
 
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+
 public class DecisionKnowledgeElementKeeping {
 	// We are using the Confluence BandanaManager for persistent storage. For
 	// information, see:
