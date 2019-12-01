@@ -1,65 +1,78 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
 
-import static org.junit.Assert.assertEquals;
+public class TestDecisionKnowledgeElement {
+	DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl();
 
-import org.junit.Before;
-
-public class TestDecisionKnowledgeElement
-{
-	DecisionKnowledgeElement de =new DecisionKnowledgeElementImpl();
-	
 	@Before
-	public void createElement()
-	{
-		de.setDescription("myDescription");
-		de.setGroup(123);
-		de.setId("myId");
-		de.setKey("myKey");
-		de.setLink("myLink");
-		de.setMacroId("myMacroId");
-		de.setPageId(1);
-		de.setSummary("mySummary");
-		de.setType("myType");
+	public void createElement() {
+		element.setDescription("myDescription");
+		element.setGroup(123);
+		element.setId("myId");
+		element.setKey("myKey");
+		element.setLink("myLink");
+		element.setMacroId("myMacroId");
+		element.setPageId(1);
+		element.setSummary("mySummary");
+		element.setType("myType");
 	}
-	
+
 	@Test
-	public void testDescription(){
-		assertEquals("Description not equal!", "myDescription", de.getDescription());
+	public void testConstructor() {
+		DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl("", 0, "", "", "", "", 0, "");
+		assertNotNull(element);
 	}
+
 	@Test
-	public void testGroup(){
-		assertEquals("Group not equal!", 123, de.getGroup());
+	public void testDescription() {
+		assertEquals("myDescription", element.getDescription());
 	}
+
 	@Test
-	public void testId(){
-		assertEquals("Id not equal!", "myId", de.getId());
+	public void testGroup() {
+		assertEquals(123, element.getGroup());
 	}
+
 	@Test
-	public void testKey(){
-		assertEquals("Key not equal!", "myKey", de.getKey());
+	public void testId() {
+		assertEquals("myId", element.getId());
 	}
+
 	@Test
-	public void testLink(){
-		assertEquals("Link not equal!", "myLink", de.getLink());
+	public void testKey() {
+		assertEquals("myKey", element.getKey());
 	}
+
 	@Test
-	public void testMacroId(){
-		assertEquals("MacroId not equal!", "myMacroId", de.getMacroId());
+	public void testLink() {
+		assertEquals("myLink", element.getLink());
 	}
+
 	@Test
-	public void testPageId(){
-		assertEquals("PageId not equal!", 1, de.getPageId());
-	}	@Test
-	public void testSummary(){
-		assertEquals("Summary not equal!", "mySummary", de.getSummary());
-	}	@Test
-	public void testType(){
-		assertEquals("Type not equal!", "myType", de.getType());
+	public void testMacroId() {
+		assertEquals("myMacroId", element.getMacroId());
 	}
-	
+
+	@Test
+	public void testPageId() {
+		assertEquals(1, element.getPageId());
+	}
+
+	@Test
+	public void testSummary() {
+		assertEquals("mySummary", element.getSummary());
+	}
+
+	@Test
+	public void testType() {
+		assertEquals("myType", element.getType());
+	}
 
 }

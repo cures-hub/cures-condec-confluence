@@ -46,8 +46,8 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 
 		// generate unique id
 		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMs");
-		String datetime = ft.format(dNow);
+		SimpleDateFormat format = new SimpleDateFormat("yyMMddhhmmssMs");
+		String datetime = format.format(dNow);
 		this.id = datetime + key;
 	}
 
