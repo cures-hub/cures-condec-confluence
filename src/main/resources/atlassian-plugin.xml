@@ -23,7 +23,7 @@
 		<context>editor</context>
 		<context>Decision Knowledge Import Macro</context>
 		<resource type="download" name="condec.css" location="/css/condec.css" />
-		<resource type="download" name="condec.knowledge.import.js" location="/js/condec.knowledge.import.js" />
+		<resource type="download" name="jsonimport.js" location="/js/jsonimport.js" />
 		<resource type="download" name="condec.api.js" location="/js/condec.api.js" />
 		<resource type="download" name="images/" location="/images" />
 		<resource type="download" name="pluginIconBig.png" location="/images/pluginIconBig.png" />
