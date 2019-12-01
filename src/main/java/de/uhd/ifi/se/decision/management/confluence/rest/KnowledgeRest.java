@@ -15,5 +15,4 @@ public interface KnowledgeRest {
 	Response getDecisionKnowledgeElement(String projectKey, String query);
 
 	Response getProjectsFromJira();
-
 }

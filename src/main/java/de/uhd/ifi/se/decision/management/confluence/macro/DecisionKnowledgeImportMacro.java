@@ -39,8 +39,8 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		String macroId = getMacroId(conversionContext);
 
 		// Save all issues in an ArrayList data structure.
-		KnowledgePersistenceManager decisionKnowledgeElementKeeping = KnowledgePersistenceManagerImpl.getInstance();
-		List<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = decisionKnowledgeElementKeeping
+		KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
+		List<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = persistenceManager
 				.getElementsGroupedFromPageIdAndMacroId(pageId, macroId);
 
 		// Create a new context for rendering...

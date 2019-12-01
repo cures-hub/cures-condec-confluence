@@ -1,4 +1,4 @@
-package de.uhd.ifi.se.decision.management.confluence;
+package de.uhd.ifi.se.decision.management.confluence.persistence;
 
 import static org.junit.Assert.assertEquals;
 

@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
@@ -102,7 +103,7 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 		String myType = myObj.has("type") ? (String) myObj.get("type") : "";
 		String description = myObj.has("description") ? (String) myObj.get("description") : "";
 		String myKey = completeKey;
-		return new DecisionKnowledgeElement(link, myPageId, mySummary, myType, myKey, description, group, macroId);
+		return new DecisionKnowledgeElementImpl(link, myPageId, mySummary, myType, myKey, description, group, macroId);
 	}
 
 	@Override

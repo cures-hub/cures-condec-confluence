@@ -2,13 +2,15 @@ package de.uhd.ifi.se.decision.management.confluence.model;
 
 import org.junit.Test;
 
+import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 
 public class TestDecisionKnowledgeElement
 {
-	DecisionKnowledgeElement de =new DecisionKnowledgeElement();
+	DecisionKnowledgeElement de =new DecisionKnowledgeElementImpl();
 	
 	@Before
 	public void createElement()
