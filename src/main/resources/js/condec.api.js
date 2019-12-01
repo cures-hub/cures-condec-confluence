@@ -34,7 +34,7 @@
 	ConDecAPI.prototype.getKnowledgeElementsFromJira = function getKnowledgeElementsFromJira(projectKey, userInput, callback) {
 		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
 		getJSON(url, function(error, data) {
-			if (error == null && !checkForError(data)) {				
+			if (error === null && !checkForError(data)) {				
 				if (data.length === 0) {
 					showFlag("error", "No search results were found.");
 				} 
