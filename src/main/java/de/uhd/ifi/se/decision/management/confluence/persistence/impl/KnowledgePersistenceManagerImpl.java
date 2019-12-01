@@ -114,7 +114,7 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 	}
 
 	public static boolean isNullOrEmpty(String myString) {
-		return myString == null || "".equals(myString);
+		return myString == null || myString.isBlank();
 	}
 
 }

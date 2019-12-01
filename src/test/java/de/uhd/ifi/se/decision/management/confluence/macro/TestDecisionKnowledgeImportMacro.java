@@ -1,10 +1,13 @@
 package de.uhd.ifi.se.decision.management.confluence.macro;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.atlassian.confluence.macro.Macro.BodyType;
+import com.atlassian.confluence.macro.Macro.OutputType;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.sal.api.component.ComponentLocator;
 
@@ -36,4 +39,13 @@ public class TestDecisionKnowledgeImportMacro {
 		}
 	}
 
+	@Test
+	public void testGetBodyType() {
+		assertEquals(BodyType.NONE, macro.getBodyType());
+	}
+
+	@Test
+	public void testGetOutputType() {
+		assertEquals(OutputType.BLOCK, macro.getOutputType());
+	}
 }
