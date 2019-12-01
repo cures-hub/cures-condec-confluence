@@ -51,7 +51,7 @@
 	ConDecAPI.prototype.getKnowledgeElements = function getKnowledgeElements(pageId, sMacroId, callback) {
 		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElements?pageId=" + pageId + "&macroId=" + sMacroId;
 		getJSON(url, function(error, data) {
-			if (error == null && !checkForError(data)) {
+			if (error === null && !checkForError(data)) {
 				callback(data);
 			}
 		});

@@ -14,7 +14,7 @@ import de.uhd.ifi.se.decision.management.confluence.rest.impl.KnowledgeRestImpl;
 
 @Ignore
 public class PersistenceUnitTest {
-	int pageId = 999999999;
+	public int pageId = 999999999;
 	public String macroId = "88888888";
 	public KnowledgeRestImpl rest = new KnowledgeRestImpl();
 	// this part fails

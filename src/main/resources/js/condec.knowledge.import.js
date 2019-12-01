@@ -23,7 +23,7 @@
 	function itiOverSingleArray(aObj) {
 		var tableRows = "";
 		aObj.map(function(obj) {
-			tableRows += createJsonTable(obj)
+			tableRows += createJsonTable(obj);
 		});
 		// add empty rows
 		tableRows += "<tr><th> </th><th> </th><th> </th></tr>";
@@ -115,7 +115,7 @@
 						+ '        <select class="projectSelect">';
 
 				data.map(function(oProject) {
-					radioBoxes += addRadioBoxForProject(oProject)
+					radioBoxes += addRadioBoxForProject(oProject);
 				});
 				radioBoxes += '</select></select></div></form>';
 
@@ -162,7 +162,7 @@
 						data : parsedUserInput,
 						url : "USE_OBJECT_URL",
 						pageId : pageId
-					}
+					};
 					conDecAPI.storeKnowledgeElements(parsedUserInput, pageId, macroId, function(some) {
 					});
 				} else {
