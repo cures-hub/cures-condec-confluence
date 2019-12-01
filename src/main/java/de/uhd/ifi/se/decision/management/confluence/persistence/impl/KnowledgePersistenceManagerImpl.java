@@ -1,13 +1,17 @@
-package de.uhd.ifi.se.decision.management.confluence.rest;
+package de.uhd.ifi.se.decision.management.confluence.persistence.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.spring.container.ContainerManager;
 
-public class DecisionKnowledgeElementKeeping {
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
+
+public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceManager {
 	// We are using the Confluence BandanaManager for persistent storage. For
 	// information, see:
 	// http://docs.atlassian.com/atlassian-bandana/0.2.0/com/atlassian/bandana/BandanaManager.html
@@ -15,11 +19,11 @@ public class DecisionKnowledgeElementKeeping {
 	// The context for the BandanaManager.
 	private final BandanaContext bandanaContext;
 
-	private static DecisionKnowledgeElementKeeping INSTANCE;
+	private static KnowledgePersistenceManager INSTANCE;
 
-	public static DecisionKnowledgeElementKeeping getInstance() {
+	public static KnowledgePersistenceManager getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new DecisionKnowledgeElementKeeping();
+			INSTANCE = new KnowledgePersistenceManagerImpl();
 		}
 		return INSTANCE;
 	}
@@ -27,21 +31,24 @@ public class DecisionKnowledgeElementKeeping {
 	// Our constructor is private, such that it can only be called from within our
 	// getInstance
 	// method.
-	private DecisionKnowledgeElementKeeping() {
+	private KnowledgePersistenceManagerImpl() {
 		ContainerManager.autowireComponent(this);
 		this.bandanaContext = new ConfluenceBandanaContext("decisionknowledgeelementkeeping");
 	}
 
+	@Override
 	public void addDecisionKnowledgeElement(DecisionKnowledgeElement decisionKnowledgeElement) {
 		bandanaManager.setValue(this.bandanaContext, decisionKnowledgeElement.getId(), decisionKnowledgeElement);
 	}
 
+	@Override
 	public void removeDecisionKnowledgeElement(String id) {
 		bandanaManager.removeValue(this.bandanaContext, id);
 	}
 
-	public ArrayList<DecisionKnowledgeElement> getElementsFromPageIdAndMacroId(int pageId, String macroId) {
-		ArrayList<DecisionKnowledgeElement> myJsonArray = new ArrayList<DecisionKnowledgeElement>();
+	@Override
+	public List<DecisionKnowledgeElement> getElementsFromPageIdAndMacroId(int pageId, String macroId) {
+		List<DecisionKnowledgeElement> myJsonArray = new ArrayList<DecisionKnowledgeElement>();
 
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager
@@ -56,10 +63,11 @@ public class DecisionKnowledgeElementKeeping {
 		return myJsonArray;
 	}
 
-	public ArrayList<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId,
+	@Override
+	public List<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId,
 			String macroId) {
-		ArrayList<DecisionKnowledgeElement> unsortedJsonIssues = getElementsFromPageIdAndMacroId(pageId, macroId);
-		ArrayList<ArrayList<DecisionKnowledgeElement>> returnArray = new ArrayList<ArrayList<DecisionKnowledgeElement>>();
+		List<DecisionKnowledgeElement> unsortedJsonIssues = getElementsFromPageIdAndMacroId(pageId, macroId);
+		List<ArrayList<DecisionKnowledgeElement>> returnArray = new ArrayList<ArrayList<DecisionKnowledgeElement>>();
 
 		for (int j = 0; j < unsortedJsonIssues.size(); j++) {
 			ArrayList<DecisionKnowledgeElement> groupArray = new ArrayList<DecisionKnowledgeElement>();
@@ -77,6 +85,7 @@ public class DecisionKnowledgeElementKeeping {
 		return returnArray;
 	}
 
+	@Override
 	public void removeDecisionKnowledgeElement(int pageId, String macroId) {
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager
@@ -94,10 +103,12 @@ public class DecisionKnowledgeElementKeeping {
 
 	// Getters and setters for the BandanaManager are called by Confluence
 	// (injection).
+	@Override
 	public BandanaManager getBandanaManager() {
 		return bandanaManager;
 	}
 
+	@Override
 	public void setBandanaManager(BandanaManager bandanaManager) {
 		this.bandanaManager = bandanaManager;
 	}

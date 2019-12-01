@@ -2,8 +2,6 @@ package de.uhd.ifi.se.decision.management.confluence.model;
 
 import org.junit.Test;
 
-import de.uhd.ifi.se.decision.management.confluence.rest.DecisionKnowledgeElement;
-
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;

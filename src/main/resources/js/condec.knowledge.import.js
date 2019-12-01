@@ -70,11 +70,9 @@
 				selectedResultField[0].innerHTML = table;
 			});
 		} else {
-			showFlag("error", "No Project was found or the connection to jira is broken");
+			showFlag("error", "No project was found or the connection to jira is broken.");
 		}
 	}
-
-	/** *****************Init dialog Functions*********************** */
 
 	var updateMacro = function(macroId) {
 
@@ -123,7 +121,7 @@
 
 				selectedJqlInputField.append(radioBoxes)
 			} else {
-				selectedJqlInputField.append("<h4>No Projects were Found</h4>")
+				selectedJqlInputField.append("<h4>No projects were found.</h4>")
 			}
 		});
 		dialog
@@ -165,15 +163,15 @@
 						url : "USE_OBJECT_URL",
 						pageId : pageId
 					}
+					conDecAPI.storeKnowledgeElements(parsedUserInput, pageId, macroId, function(some) {
+					});
 				} else {
 					parsedUserInput["pageId"] = pageId;
 				}
-
 			} catch (e) {
 				showFlag("error", "Error parsing your input." + e);
 			}
-			conDecAPI.postIssueArray(parsedUserInput, pageId, macroId, function(some) {
-			});
+			
 			dialog.hide();
 		}, "aui-button");
 
@@ -189,22 +187,19 @@
 						url : "USE_OBJECT_URL"
 					};
 				} catch (e) {
-					showFlag("error", "An parsing error occured." + e);
+					showFlag("error", "A parsing error occured." + e);
 				}
 				var pageId = parseInt(AJS.params.pageId, 10);
 				userObject["pageId"] = pageId;
-				conDecAPI.postIssueArray(userObject, pageId, macroId, function(some) {
+				conDecAPI.storeKnowledgeElements(userObject, pageId, macroId, function(some) {
 				});
 				dialog.hide();
 			} else {
-				showFlag("error", "No Search results where found");
+				showFlag("error", "No search results were found.");
 			}
-
 		});
-		/** *****************END UPDATE Macro Function*********************** */
-
+		
 		dialog.show();
-
 	};
 
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function(e, macroNode) {
@@ -212,7 +207,7 @@
 		if (macroId && macroId !== "") {
 			updateMacro(macroId);
 		} else {
-			showFlag("error", "Please save the page first before updating the Macro")
+			showFlag("error", "Please save the page first before updating the macro.")
 		}
 	});
 

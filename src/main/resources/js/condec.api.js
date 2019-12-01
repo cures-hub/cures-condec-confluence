@@ -20,7 +20,7 @@
 	 */
 	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
 		console.log("conDecApi getProjectsFromJira");
-		var url = this.restPrefix + "/issueRest/getProjectsFromJira";
+		var url = this.restPrefix + "/knowledgeRest/getProjectsFromJira";
 		getJSON(url, function(error, data) {
 			if (error === null && !checkForError(data)) {
 				callback(data);
@@ -32,7 +32,7 @@
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getIssuesFromJira = function getIssuesFromJira(projectKey, userInput, callback) {
-		var url = this.restPrefix + "/issueRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
+		var url = this.restPrefix + "/knowledgeRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
 		getJSON(url, function(error, data) {
 			if (error == null && !checkForError(data)) {				
 				if (data.length === 0) {
@@ -49,7 +49,7 @@
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getIssues = function getIssues(pageId, sMacroId, callback) {
-		var url = this.restPrefix + "/issueRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId;
+		var url = this.restPrefix + "/knowledgeRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId;
 		getJSON(url, function(error, data) {
 			if (error == null && !checkForError(data)) {
 				callback(data);
@@ -60,8 +60,8 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.postIssueArray = function postIssueArray(jsonArray, pageId, macroId, callback) {
-		var url = this.restPrefix + "/issueRest/add-issue-array?pageId=" + pageId + "&macroId=" + macroId;
+	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(jsonArray, pageId, macroId, callback) {
+		var url = this.restPrefix + "/knowledgeRest/storeKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
 		postJSON(url, jsonArray, function(error, result) {
 			if (error === null) {				
 				showFlag("success", "The stand-up table was successfully created.");
@@ -75,7 +75,7 @@
 	function checkForError(data) {
 		var hasError = false;
 		if (data !== null && data["error"] !== undefined) {
-			showFlag("error", "An Error occurred in the Jira connection: " + data["error"]);
+			showFlag("error", "An error occurred in the Jira connection: " + data["error"]);
 			hasError = true;
 		}
 		return hasError;

@@ -1,7 +1,6 @@
-package de.uhd.ifi.se.decision.management.confluence.rest;
+package de.uhd.ifi.se.decision.management.confluence.rest.impl;
 
-//import java.net.HttpURLConnection;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -17,29 +16,34 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
+import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
+import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
+import de.uhd.ifi.se.decision.management.confluence.rest.KnowledgeRest;
 
-@Path("/issueRest")
-public class DecisionKnowledgeElementResource {
+@Path("/knowledgeRest")
+public class KnowledgeRestImpl implements KnowledgeRest {
+
+	@Override
+	@Path("/storeKnowledgeElements")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	@Path("/add-issue-array")
-	public Response addIssue(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId,
-			String jsonObjectString, @Context HttpServletRequest request) {
+	public Response storeKnowledgeElements(@Context HttpServletRequest request, @QueryParam("pageId") int pageId,
+			@QueryParam("macroId") String macroId, String jsonObjectString) {
 
-		Boolean result = handlePostRequestResult(pageId, macroId, jsonObjectString);
+		boolean result = handlePostRequestResult(pageId, macroId, jsonObjectString);
 		if (result) {
 			return Response.ok().build();
-		} else {
-			return Response.serverError().build();
 		}
+		return Response.serverError().build();
 	}
 
-	public Boolean handlePostRequestResult(int pageId, String macroId, String jsonObjectString) {
-		Boolean result = true;
+	public boolean handlePostRequestResult(int pageId, String macroId, String jsonObjectString) {
+		boolean result = true;
 		try {
 			JSONObject jsonObject = new JSONObject(jsonObjectString);
-			Boolean useObjectUrl = false;
+			boolean useObjectUrl = false;
 			String url = "";
 
 			if (((String) jsonObject.get("url")).equals("USE_OBJECT_URL")) {
@@ -51,8 +55,7 @@ public class DecisionKnowledgeElementResource {
 			JSONArray listOfArrays = (JSONArray) jsonObject.get("data");
 			// first remove issues from this page
 
-			DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping
-					.getInstance();
+			KnowledgePersistenceManager decisionKnowledgeElementKeeping = KnowledgePersistenceManagerImpl.getInstance();
 			if (listOfArrays.length() > 0) {
 				decisionKnowledgeElementKeeping.removeDecisionKnowledgeElement(pageId, macroId);
 			}
@@ -68,6 +71,7 @@ public class DecisionKnowledgeElementResource {
 			}
 		} catch (Exception e) {
 			result = false;
+			System.out.println(e);
 		}
 		return result;
 	}
@@ -101,23 +105,23 @@ public class DecisionKnowledgeElementResource {
 		return new DecisionKnowledgeElement(link, myPageId, mySummary, myType, myKey, description, group, macroId);
 	}
 
+	@Override
 	@Path("/getIssues")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId,
 			@QueryParam("macroId") String macroId) {
 		try {
-			DecisionKnowledgeElementKeeping decisionKnowledgeElementKeeping = DecisionKnowledgeElementKeeping
-					.getInstance();
-			ArrayList<DecisionKnowledgeElement> jsonArray = decisionKnowledgeElementKeeping
+			KnowledgePersistenceManager decisionKnowledgeElementKeeping = KnowledgePersistenceManagerImpl.getInstance();
+			List<DecisionKnowledgeElement> jsonArray = decisionKnowledgeElementKeeping
 					.getElementsFromPageIdAndMacroId(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(jsonArray).build();
-
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
 	}
 
+	@Override
 	@Path("/getIssuesFromJira")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -133,6 +137,7 @@ public class DecisionKnowledgeElementResource {
 		}
 	}
 
+	@Override
 	@Path("/getProjectsFromJira")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
