@@ -9,10 +9,11 @@ import org.junit.Test;
 import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
 
 public class TestDecisionKnowledgeElement {
-	DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl();
+	private DecisionKnowledgeElement element;
 
 	@Before
 	public void createElement() {
+		element = new DecisionKnowledgeElementImpl();
 		element.setDescription("myDescription");
 		element.setGroup(123);
 		element.setId("myId");

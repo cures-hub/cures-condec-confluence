@@ -9,19 +9,19 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePe
 public class MainPluginUnitTests {
 
 	@Test
-	public void testIsNullOrEmpty_false() {
+	public void testIsNullOrEmptyFalse() {
 		boolean isEmpty = KnowledgePersistenceManagerImpl.isNullOrEmpty("abcd");
 		assertEquals(false, isEmpty);
 	}
 
 	@Test
-	public void testIsNullOrEmpty_true() {
+	public void testIsNullOrEmptyTrue() {
 		boolean isEmpty = KnowledgePersistenceManagerImpl.isNullOrEmpty("");
 		assertEquals(true, isEmpty);
 	}
 
 	@Test
-	public void testIsNullOrEmpty_NullTrue() {
+	public void testIsNullOrEmptyNullTrue() {
 		boolean isEmpty = KnowledgePersistenceManagerImpl.isNullOrEmpty(null);
 		assertEquals(true, isEmpty);
 	}

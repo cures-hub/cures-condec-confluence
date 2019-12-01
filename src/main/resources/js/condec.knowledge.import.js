@@ -119,9 +119,9 @@
 				});
 				radioBoxes += '</select></select></div></form>';
 
-				selectedJqlInputField.append(radioBoxes)
+				selectedJqlInputField.append(radioBoxes);
 			} else {
-				selectedJqlInputField.append("<h4>No projects were found.</h4>")
+				selectedJqlInputField.append("<h4>No projects were found.</h4>");
 			}
 		});
 		dialog
@@ -207,7 +207,7 @@
 		if (macroId && macroId !== "") {
 			updateMacro(macroId);
 		} else {
-			showFlag("error", "Please save the page first before updating the macro.")
+			showFlag("error", "Please save the page first before updating the macro.");
 		}
 	});
 
