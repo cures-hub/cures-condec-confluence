@@ -34,8 +34,8 @@
 	ConDecAPI.prototype.getIssuesFromJira = function getIssuesFromJira(projectKey, userInput, callback) {
 		var url = this.restPrefix + "/issueRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
 		getJSON(url, function(error, data) {
-			if (error == null && data && !checkForError(data)) {				
-				if (data && data.length === 0) {
+			if (error == null && !checkForError(data)) {				
+				if (data.length === 0) {
 					showFlag("error", "No search results were found.");
 				} 
 				callback(data);
@@ -72,13 +72,13 @@
 		});
 	};
 
-	function checkForError(oData) {
-		var bResult = false;
-		if (oData["error"] !== undefined) {
-			showFlag("error", "An Error occurred in the Jira connection: " + oData["error"]);
-			bResult = true;
+	function checkForError(data) {
+		var hasError = false;
+		if (data !== null && data["error"] !== undefined) {
+			showFlag("error", "An Error occurred in the Jira connection: " + data["error"]);
+			hasError = true;
 		}
-		return bResult;
+		return hasError;
 	}
 
 	function getJSON(url, callback) {
