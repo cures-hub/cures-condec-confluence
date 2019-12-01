@@ -13,7 +13,8 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockComponentLocator;
 import de.uhd.ifi.se.decision.management.confluence.rest.impl.KnowledgeRestImpl;
 
-public class TestGetProjectsFromJira {
+public class TestGetKnowledgeElementsFromJira {
+
 	private KnowledgeRest knowledgeRest;
 
 	@Before
@@ -24,7 +25,8 @@ public class TestGetProjectsFromJira {
 
 	@Test
 	public void testValid() {
-		Response response = knowledgeRest.getProjectsFromJira();
+		Response response = knowledgeRest.getKnowledgeElementsFromJira("CONDEC", "");
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
+
 }

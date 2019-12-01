@@ -10,9 +10,9 @@ public interface KnowledgeRest {
 
 	Response storeKnowledgeElements(HttpServletRequest request, int pageId, String macroId, String jsonObjectString);
 
-	Response getDecisionKnowledgeElement(int pageId, String macroId);
+	Response getKnowledgeElements(int pageId, String macroId);
 
-	Response getDecisionKnowledgeElement(String projectKey, String query);
+	Response getKnowledgeElementsFromJira(String projectKey, String query);
 
 	Response getProjectsFromJira();
 }

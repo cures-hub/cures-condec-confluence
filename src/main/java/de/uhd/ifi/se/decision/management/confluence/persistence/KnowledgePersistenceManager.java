@@ -16,7 +16,7 @@ public interface KnowledgePersistenceManager {
 
 	void removeDecisionKnowledgeElement(String id);
 
-	List<DecisionKnowledgeElement> getElementsFromPageIdAndMacroId(int pageId, String macroId);
+	List<DecisionKnowledgeElement> getElements(int pageId, String macroId);
 
 	List<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId, String macroId);
 

@@ -31,8 +31,8 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getIssuesFromJira = function getIssuesFromJira(projectKey, userInput, callback) {
-		var url = this.restPrefix + "/knowledgeRest/getIssuesFromJira?projectKey=" + projectKey + "&query=?" + userInput;
+	ConDecAPI.prototype.getKnowledgeElementsFromJira = function getKnowledgeElementsFromJira(projectKey, userInput, callback) {
+		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
 		getJSON(url, function(error, data) {
 			if (error == null && !checkForError(data)) {				
 				if (data.length === 0) {
@@ -48,8 +48,8 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getIssues = function getIssues(pageId, sMacroId, callback) {
-		var url = this.restPrefix + "/knowledgeRest/getIssues?pageId=" + pageId + "&macroId=" + sMacroId;
+	ConDecAPI.prototype.getKnowledgeElements = function getKnowledgeElements(pageId, sMacroId, callback) {
+		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElements?pageId=" + pageId + "&macroId=" + sMacroId;
 		getJSON(url, function(error, data) {
 			if (error == null && !checkForError(data)) {
 				callback(data);

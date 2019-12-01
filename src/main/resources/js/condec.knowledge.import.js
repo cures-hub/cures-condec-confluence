@@ -55,7 +55,7 @@
 		var projectKey = selectedProjectSelectForm.val();
 
 		if (projectKey && projectKey !== "") {
-			conDecAPI.getIssuesFromJira(projectKey, userInput, function(data) {
+			conDecAPI.getKnowledgeElementsFromJira(projectKey, userInput, function(data) {
 				if (data && data.length === 0) {
 					showFlag("error", "No Search results where found");
 				} else {
@@ -85,7 +85,7 @@
 		});
 		// get json from restpoint
 		var pageId = parseInt(AJS.params.pageId, 10);
-		conDecAPI.getIssues(pageId, macroId, function(data) {
+		conDecAPI.getKnowledgeElements(pageId, macroId, function(data) {
 			var prefillValue = JSON.stringify(data);
 			var allTextAreas = $(".jsonPasteTextArea");
 			var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);

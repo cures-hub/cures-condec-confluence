@@ -47,7 +47,7 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 	}
 
 	@Override
-	public List<DecisionKnowledgeElement> getElementsFromPageIdAndMacroId(int pageId, String macroId) {
+	public List<DecisionKnowledgeElement> getElements(int pageId, String macroId) {
 		List<DecisionKnowledgeElement> myJsonArray = new ArrayList<DecisionKnowledgeElement>();
 
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
@@ -66,7 +66,7 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 	@Override
 	public List<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId,
 			String macroId) {
-		List<DecisionKnowledgeElement> unsortedJsonIssues = getElementsFromPageIdAndMacroId(pageId, macroId);
+		List<DecisionKnowledgeElement> unsortedJsonIssues = getElements(pageId, macroId);
 		List<ArrayList<DecisionKnowledgeElement>> returnArray = new ArrayList<ArrayList<DecisionKnowledgeElement>>();
 
 		for (int j = 0; j < unsortedJsonIssues.size(); j++) {

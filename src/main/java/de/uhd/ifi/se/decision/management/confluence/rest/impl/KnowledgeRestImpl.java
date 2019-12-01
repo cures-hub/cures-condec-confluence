@@ -107,15 +107,13 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 	}
 
 	@Override
-	@Path("/getIssues")
+	@Path("/getKnowledgeElements")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getDecisionKnowledgeElement(@QueryParam("pageId") int pageId,
-			@QueryParam("macroId") String macroId) {
+	public Response getKnowledgeElements(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId) {
 		try {
-			KnowledgePersistenceManager decisionKnowledgeElementKeeping = KnowledgePersistenceManagerImpl.getInstance();
-			List<DecisionKnowledgeElement> jsonArray = decisionKnowledgeElementKeeping
-					.getElementsFromPageIdAndMacroId(pageId, macroId);
+			KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
+			List<DecisionKnowledgeElement> jsonArray = persistenceManager.getElements(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(jsonArray).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
@@ -123,16 +121,14 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 	}
 
 	@Override
-	@Path("/getIssuesFromJira")
+	@Path("/getKnowledgeElementsFromJira")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getDecisionKnowledgeElement(@QueryParam("projectKey") String projectKey,
+	public Response getKnowledgeElementsFromJira(@QueryParam("projectKey") String projectKey,
 			@QueryParam("query") String query) {
 		try {
 			String jsonString = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
-
 			return Response.status(Response.Status.OK).entity(jsonString).build();
-
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
