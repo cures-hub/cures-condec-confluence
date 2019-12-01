@@ -2,6 +2,7 @@ package de.uhd.ifi.se.decision.management.confluence.macro;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,7 +40,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		// get macroId
 
 		MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
-		com.atlassian.fugue.Option<MacroId> option = macroDefinition.getMacroId();
+		Optional<MacroId> option = macroDefinition.getMacroIdentifier();
 
 		String macroId = option.get().getId();
 
