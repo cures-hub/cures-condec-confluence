@@ -32,3 +32,13 @@ atlas-run
 
 ### Download of Precompiled .jar-File
 The precompiled .jar-File for the latest release can be found here: https://github.com/cures-hub/cures-condec-confluence/releases/latest
+
+## Usage
+
+### Application Link between Confluence and Jira
+To share decision knowledge between Jira and Confluence, they need to be linked via an [application link](https://confluence.atlassian.com/adminjiraserver/using-applinks-to-link-to-other-applications-938846918.html).
+The authentication type needs to be **OAuth (impersonation)**.
+
+### Decision Knowledge Import Macro
+The *Decision Knowledge Import Macro* can be used to create a stand-up table in meetings. 
+The stand-up table contains relevant requirements, as well as open and solved decision problems for a certain time frame.

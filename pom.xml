@@ -18,54 +18,65 @@
 	<packaging>atlassian-plugin</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
+		<!-- Confluence -->
 		<dependency>
 			<groupId>com.atlassian.confluence</groupId>
 			<artifactId>confluence</artifactId>
 			<version>${confluence.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.atlassian.plugin</groupId>
 			<artifactId>atlassian-spring-scanner-annotation</artifactId>
 			<version>${atlassian.spring.scanner.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.atlassian.plugin</groupId>
 			<artifactId>atlassian-spring-scanner-runtime</artifactId>
 			<version>${atlassian.spring.scanner.version}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.2.0.RELEASE</version>
+			<version>5.2.1.RELEASE</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.atlassian.sal</groupId>
+			<artifactId>sal-api</artifactId>
+			<version>4.0.0</version>
+			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
 
-		<!-- WIRED TEST RUNNER DEPENDENCIES -->
+		<!-- Unit tests -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.atlassian.plugins</groupId>
 			<artifactId>atlassian-plugins-osgi-testrunner</artifactId>
 			<version>${plugin.testrunner.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- REST -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>jsr311-api</artifactId>
@@ -76,24 +87,18 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.2.2-atlassian-1</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20180813</version>
-		</dependency>
-		<!--REST -->
-		<dependency>
-			<groupId>com.atlassian.plugins.rest</groupId>
-			<artifactId>atlassian-rest-common</artifactId>
-			<version>1.0.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-			<version>1.1.1</version>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20190722</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.plugins.rest</groupId>
+			<artifactId>atlassian-rest-common</artifactId>
+			<version>6.1.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -101,19 +106,6 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>20050407</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.atlassian.sal</groupId>
-			<artifactId>sal-api</artifactId>
-			<version>4.0.0</version>
-			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
 
 		<!-- Application links -->
@@ -123,7 +115,6 @@
 			<version>7.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -140,7 +131,7 @@
 					<productDataVersion>${confluence.version}</productDataVersion>
 					<enableQuickReload>true</enableQuickReload>
 					<enableFastdev>false</enableFastdev>
-
+					<allowGoogleTracking>false</allowGoogleTracking>
 					<!-- See here for an explanation of default instructions: -->
 					<!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
 					<instructions>
@@ -148,7 +139,7 @@
 
 						<!-- Add package to export here -->
 						<Export-Package>
-							com.atlassian.tutorial.api,
+							de.uhd.ifi.se.decision.management.confluence.*,
 						</Export-Package>
 
 						<!-- Add package import here -->
@@ -189,9 +180,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M2</version>
 				<executions>
 					<execution>
 						<id>enforce-java</id>
+						<phase>package</phase>
 						<goals>
 							<goal>enforce</goal>
 						</goals>
@@ -243,7 +236,7 @@
 	</profiles>
 
 	<properties>
-		<confluence.version>7.0.3</confluence.version>
+		<confluence.version>7.0.4</confluence.version>
 		<amps.version>8.0.3</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
