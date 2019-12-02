@@ -56,7 +56,7 @@ public class KnowledgePersistenceManager {
 		return elements;
 	}
 
-	public static void removeDecisionKnowledgeElement(int pageId, String macroId) {
+	public static void removeDecisionKnowledgeElements(int pageId, String macroId) {
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) bandanaManager
 					.getValue(bandanaContext, id);
@@ -69,6 +69,10 @@ public class KnowledgePersistenceManager {
 				removeDecisionKnowledgeElement(decisionKnowledgeElement.getId());
 			}
 		}
+	}
+
+	public static void setBandanaManager(BandanaManager bandanaManager) {
+		KnowledgePersistenceManager.bandanaManager = bandanaManager;
 	}
 
 	public static boolean isNullOrEmpty(String myString) {

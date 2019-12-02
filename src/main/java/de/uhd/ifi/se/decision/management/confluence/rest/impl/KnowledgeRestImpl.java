@@ -48,7 +48,7 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 		try {
 			// first remove issues from this page
 			if (elements.size() > 0) {
-				KnowledgePersistenceManager.removeDecisionKnowledgeElement(pageId, macroId);
+				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
 			}
 
 			for (DecisionKnowledgeElement element : elements) {
@@ -58,7 +58,7 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return false;
 		}
 
