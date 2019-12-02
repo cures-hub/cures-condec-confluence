@@ -1,8 +1,10 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
@@ -23,9 +25,18 @@ public interface DecisionKnowledgeElement {
 		try {
 			elements = objectMapper.readValue(jsonString, objectMapper.getTypeFactory()
 					.constructCollectionType(List.class, DecisionKnowledgeElementImpl.class));
+		} catch (JsonMappingException e) {
+			try {
+				List<DecisionKnowledgeElement[]> myelements = objectMapper.readValue(jsonString, objectMapper
+						.getTypeFactory().constructCollectionType(List.class, DecisionKnowledgeElementImpl[].class));
+				elements = Arrays.asList(myelements.get(0));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return elements;
 	}
 
@@ -56,10 +67,6 @@ public interface DecisionKnowledgeElement {
 	String getMacroId();
 
 	void setMacroId(String macroId);
-
-	int getGroup();
-
-	void setGroup(Integer group);
 
 	String getDescription();
 

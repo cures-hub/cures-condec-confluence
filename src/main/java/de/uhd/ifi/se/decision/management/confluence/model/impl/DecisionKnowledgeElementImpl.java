@@ -8,10 +8,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 
 	@XmlElement
@@ -114,6 +118,11 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 		this.link = link;
 	}
 
+	@JsonProperty("url")
+	public void setUrl(String link) {
+		this.setLink(link);
+	}
+
 	@Override
 	public String getMacroId() {
 		return macroId;
@@ -122,16 +131,6 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	@Override
 	public void setMacroId(String macroId) {
 		this.macroId = macroId;
-	}
-
-	@Override
-	public int getGroup() {
-		return this.group;
-	}
-
-	@Override
-	public void setGroup(Integer group) {
-		this.group = group;
 	}
 
 	@Override

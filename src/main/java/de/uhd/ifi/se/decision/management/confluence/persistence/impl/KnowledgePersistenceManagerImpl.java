@@ -65,28 +65,6 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 	}
 
 	@Override
-	public List<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId,
-			String macroId) {
-		List<DecisionKnowledgeElement> unsortedJsonIssues = getElements(pageId, macroId);
-		List<ArrayList<DecisionKnowledgeElement>> returnArray = new ArrayList<ArrayList<DecisionKnowledgeElement>>();
-
-		for (int j = 0; j < unsortedJsonIssues.size(); j++) {
-			ArrayList<DecisionKnowledgeElement> groupArray = new ArrayList<DecisionKnowledgeElement>();
-
-			for (int i = 0; i < unsortedJsonIssues.size(); i++) {
-				DecisionKnowledgeElement decisionKnowledgeElement = unsortedJsonIssues.get(i);
-				if (decisionKnowledgeElement.getGroup() == j) {
-					groupArray.add(decisionKnowledgeElement);
-				}
-			}
-			if (groupArray.size() > 0) {
-				returnArray.add(groupArray);
-			}
-		}
-		return returnArray;
-	}
-
-	@Override
 	public void removeDecisionKnowledgeElement(int pageId, String macroId) {
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager

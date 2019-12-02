@@ -15,7 +15,6 @@ public class TestDecisionKnowledgeElement {
 	public void createElement() {
 		element = new DecisionKnowledgeElementImpl();
 		element.setDescription("myDescription");
-		element.setGroup(123);
 		element.setId("myId");
 		element.setKey("myKey");
 		element.setLink("myLink");
@@ -34,11 +33,6 @@ public class TestDecisionKnowledgeElement {
 	@Test
 	public void testDescription() {
 		assertEquals("myDescription", element.getDescription());
-	}
-
-	@Test
-	public void testGroup() {
-		assertEquals(123, element.getGroup());
 	}
 
 	@Test

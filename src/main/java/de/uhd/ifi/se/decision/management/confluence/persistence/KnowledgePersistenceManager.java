@@ -1,6 +1,5 @@
 package de.uhd.ifi.se.decision.management.confluence.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.atlassian.bandana.BandanaManager;
@@ -17,8 +16,6 @@ public interface KnowledgePersistenceManager {
 	void removeDecisionKnowledgeElement(String id);
 
 	List<DecisionKnowledgeElement> getElements(int pageId, String macroId);
-
-	List<ArrayList<DecisionKnowledgeElement>> getElementsGroupedFromPageIdAndMacroId(int pageId, String macroId);
 
 	void removeDecisionKnowledgeElement(int pageId, String macroId);
 

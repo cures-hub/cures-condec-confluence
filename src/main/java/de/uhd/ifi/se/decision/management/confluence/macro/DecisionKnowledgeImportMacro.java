@@ -1,6 +1,5 @@
 package de.uhd.ifi.se.decision.management.confluence.macro;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,12 +39,11 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 		// Save all issues in an ArrayList data structure.
 		KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
-		List<ArrayList<DecisionKnowledgeElement>> jsonIssueArray = persistenceManager
-				.getElementsGroupedFromPageIdAndMacroId(pageId, macroId);
+		List<DecisionKnowledgeElement> knowledgeElements = persistenceManager.getElements(pageId, macroId);
 
 		// Create a new context for rendering...
 		Map<String, Object> renderContext = MacroUtils.defaultVelocityContext();
-		renderContext.put("jsonArrays", jsonIssueArray);
+		renderContext.put("knowledgeElements", knowledgeElements);
 
 		return VelocityUtils.getRenderedTemplate("/templates/standUpTable.vm", renderContext);
 	}

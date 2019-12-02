@@ -20,7 +20,7 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
 import de.uhd.ifi.se.decision.management.confluence.rest.KnowledgeRest;
 
-@Path("/knowledgeRest")
+@Path("/knowledge")
 public class KnowledgeRestImpl implements KnowledgeRest {
 
 	@Override
@@ -68,14 +68,18 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 	}
 
 	@Override
-	@Path("/getKnowledgeElements")
+	@Path("/getStoredKnowledgeElements")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getKnowledgeElements(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId) {
+	public Response getStoredKnowledgeElements(@QueryParam("pageId") int pageId,
+			@QueryParam("macroId") String macroId) {
+		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		try {
 			KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
-			List<DecisionKnowledgeElement> jsonArray = persistenceManager.getElements(pageId, macroId);
-			return Response.status(Response.Status.OK).entity(jsonArray).build();
+			List<DecisionKnowledgeElement> storedElements = persistenceManager.getElements(pageId, macroId);
+			return Response.status(Response.Status.OK).entity(storedElements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
