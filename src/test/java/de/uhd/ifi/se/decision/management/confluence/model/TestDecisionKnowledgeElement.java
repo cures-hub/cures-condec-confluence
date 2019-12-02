@@ -26,7 +26,7 @@ public class TestDecisionKnowledgeElement {
 
 	@Test
 	public void testConstructor() {
-		DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl("", 0, "", "", "", "", 0, "");
+		DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl("", 0, "", "", "", "", "");
 		assertNotNull(element);
 	}
 

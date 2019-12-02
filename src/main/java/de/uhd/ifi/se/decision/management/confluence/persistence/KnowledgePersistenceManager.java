@@ -27,8 +27,8 @@ public class KnowledgePersistenceManager {
 
 	@Inject
 	public KnowledgePersistenceManager(BandanaManager bandanaManager) {
-		KnowledgePersistenceManager.bandanaManager = bandanaManager;
-		KnowledgePersistenceManager.bandanaContext = new ConfluenceBandanaContext("knowledge");
+		setBandanaManager(bandanaManager);
+		setBandanaContext(new ConfluenceBandanaContext("knowledge"));
 	}
 
 	public static void addDecisionKnowledgeElement(DecisionKnowledgeElement decisionKnowledgeElement) {
@@ -73,6 +73,10 @@ public class KnowledgePersistenceManager {
 
 	public static void setBandanaManager(BandanaManager bandanaManager) {
 		KnowledgePersistenceManager.bandanaManager = bandanaManager;
+	}
+
+	public static void setBandanaContext(BandanaContext bandanaContext) {
+		KnowledgePersistenceManager.bandanaContext = bandanaContext;
 	}
 
 	public static boolean isNullOrEmpty(String myString) {

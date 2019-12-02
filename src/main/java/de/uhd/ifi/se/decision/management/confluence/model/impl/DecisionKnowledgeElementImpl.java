@@ -33,19 +33,16 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	@XmlElement
 	private String macroId;
 	@XmlElement
-	private Integer group;
-	@XmlElement
 	private String description;
 
 	public DecisionKnowledgeElementImpl(String link, int pageId, String summary, String type, String key,
-			String description, Integer group, String macroId) {
+			String description, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
 		this.key = key;
 		this.link = link;
 		this.description = description;
-		this.group = group;
 		this.macroId = macroId;
 
 		// generate unique id

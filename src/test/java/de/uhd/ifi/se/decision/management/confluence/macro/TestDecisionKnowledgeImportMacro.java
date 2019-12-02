@@ -11,9 +11,11 @@ import com.atlassian.confluence.macro.Macro.OutputType;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.sal.api.component.ComponentLocator;
 
+import de.uhd.ifi.se.decision.management.confluence.mocks.MockBandanaManager;
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockComponentLocator;
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockConversionContext;
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockPageBuilderService;
+import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 
 public class TestDecisionKnowledgeImportMacro {
 
@@ -23,6 +25,7 @@ public class TestDecisionKnowledgeImportMacro {
 	public void setUp() throws Exception {
 		ComponentLocator.setComponentLocator(new MockComponentLocator());
 		macro = new DecisionKnowledgeImportMacro(new MockPageBuilderService());
+		KnowledgePersistenceManager.setBandanaManager(new MockBandanaManager());
 	}
 
 	@Test
@@ -30,7 +33,7 @@ public class TestDecisionKnowledgeImportMacro {
 		assertNotNull(new DecisionKnowledgeImportMacro(null));
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = ExceptionInInitializerError.class)
 	public void testExecute() {
 		try {
 			macro.execute(null, null, new MockConversionContext());

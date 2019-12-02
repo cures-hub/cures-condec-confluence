@@ -24,7 +24,6 @@ public class TestGetStoredKnowledgeElements {
 
 	@Test
 	public void testValid() {
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
-				knowledgeRest.getStoredKnowledgeElements(1, "1").getStatus());
+		assertEquals(Status.OK.getStatusCode(), knowledgeRest.getStoredKnowledgeElements(1, "1").getStatus());
 	}
 }
