@@ -64,7 +64,7 @@
 		var url = this.restPrefix + "/knowledgeRest/storeKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
 		postJSON(url, jsonArray, function(error, result) {
 			if (error === null) {				
-				showFlag("success", "The stand-up table was successfully created.");
+				showFlag("success", "The stand-up table was successfully updated.");
 				callback(result);
 			} else {
 				showFlag("error", "A server error occured: " + error);

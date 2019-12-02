@@ -3,7 +3,6 @@ package de.uhd.ifi.se.decision.management.confluence.macro;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,6 +13,7 @@ import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.confluence.xhtml.api.MacroDefinition;
+import com.atlassian.fugue.Option;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 
@@ -54,8 +54,9 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		String macroId = "0";
 		try {
 			MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
-			Optional<MacroId> option = macroDefinition.getMacroIdentifier();
+			Option<MacroId> option = macroDefinition.getMacroId();
 			macroId = option.get().getId();
+			System.out.println(macroId);
 		} catch (Exception e) {
 		}
 		return macroId;

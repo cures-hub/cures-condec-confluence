@@ -48,19 +48,20 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 
 	@Override
 	public List<DecisionKnowledgeElement> getElements(int pageId, String macroId) {
-		List<DecisionKnowledgeElement> myJsonArray = new ArrayList<DecisionKnowledgeElement>();
+		List<DecisionKnowledgeElement> elements = new ArrayList<DecisionKnowledgeElement>();
 
 		for (String id : this.bandanaManager.getKeys(this.bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) this.bandanaManager
 					.getValue(this.bandanaContext, id);
 			// add only if the page id and Macro id corresponds // if macro id is null
 			// return all from page
-			if (decisionKnowledgeElement.getPageId() == pageId
+			if (decisionKnowledgeElement != null && decisionKnowledgeElement.getPageId() == pageId
+					&& decisionKnowledgeElement.getMacroId() != null
 					&& (decisionKnowledgeElement.getMacroId().equals(macroId)) || macroId == null) {
-				myJsonArray.add(decisionKnowledgeElement);
+				elements.add(decisionKnowledgeElement);
 			}
 		}
-		return myJsonArray;
+		return elements;
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class KnowledgePersistenceManagerImpl implements KnowledgePersistenceMana
 	}
 
 	public static boolean isNullOrEmpty(String myString) {
-		return myString == null || myString.isBlank();
+		return myString == null || myString.isEmpty();
 	}
 
 }

@@ -18,8 +18,14 @@ public class TestStoreKnowledgeElements {
 	}
 
 	@Test
-	public void testInvalid() {
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+	public void testInvalidRequest() {
+		assertEquals(Status.BAD_REQUEST.getStatusCode(),
 				knowledgeRest.storeKnowledgeElements(null, 1, "", "").getStatus());
+	}
+
+	@Test
+	public void testValidRequest() {
+		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+				knowledgeRest.storeKnowledgeElements(null, 1, "1", "").getStatus());
 	}
 }

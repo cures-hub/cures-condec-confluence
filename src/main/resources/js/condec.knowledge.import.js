@@ -19,7 +19,7 @@
 		tableRow += "</tr>";
 		return tableRow;
 	}
-	
+
 	function itiOverSingleArray(aObj) {
 		var tableRows = "";
 		aObj.map(function(obj) {
@@ -105,7 +105,7 @@
 			selectedResultField[0].innerHTML = table;
 			selectedJQLResultField[0].innerHTML = table;
 		});
-		
+
 		conDecAPI.getProjectsFromJira(function(data) {
 			var jqlInputField = $(".jqlInputFieldContainer");
 			var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
@@ -156,22 +156,12 @@
 
 			try {
 				var parsedUserInput = JSON.parse(userInput);
-				if (Array.isArray(parsedUserInput)) {
-					// the object does not come from jira manually, but directly
-					parsedUserInput = {
-						data : parsedUserInput,
-						url : "USE_OBJECT_URL",
-						pageId : pageId
-					};
-					conDecAPI.storeKnowledgeElements(parsedUserInput, pageId, macroId, function(some) {
-					});
-				} else {
-					parsedUserInput["pageId"] = pageId;
-				}
+				conDecAPI.storeKnowledgeElements(parsedUserInput, pageId, macroId, function(some) {
+				});
 			} catch (e) {
 				showFlag("error", "Error parsing your input." + e);
 			}
-			
+
 			dialog.hide();
 		}, "aui-button");
 
@@ -182,23 +172,18 @@
 			if (savedJsonString.length > 0) {
 				try {
 					var aSaved = JSON.parse(savedJsonString);
-					var userObject = {
-						data : aSaved,
-						url : "USE_OBJECT_URL"
-					};
 				} catch (e) {
 					showFlag("error", "A parsing error occured." + e);
 				}
 				var pageId = parseInt(AJS.params.pageId, 10);
-				userObject["pageId"] = pageId;
-				conDecAPI.storeKnowledgeElements(userObject, pageId, macroId, function(some) {
+				conDecAPI.storeKnowledgeElements(aSaved, pageId, macroId, function(some) {
 				});
 				dialog.hide();
 			} else {
 				showFlag("error", "No search results were found.");
 			}
 		});
-		
+
 		dialog.show();
 	};
 

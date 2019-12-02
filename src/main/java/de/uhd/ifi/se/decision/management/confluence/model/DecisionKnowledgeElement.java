@@ -1,5 +1,9 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
@@ -9,6 +13,21 @@ import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledge
  */
 @JsonDeserialize(as = DecisionKnowledgeElementImpl.class)
 public interface DecisionKnowledgeElement {
+
+	public static List<DecisionKnowledgeElement> parseJsonString(String jsonString) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.writerWithDefaultPrettyPrinter();
+
+		List<DecisionKnowledgeElement> elements = new ArrayList<DecisionKnowledgeElement>();
+
+		try {
+			elements = objectMapper.readValue(jsonString, objectMapper.getTypeFactory()
+					.constructCollectionType(List.class, DecisionKnowledgeElementImpl.class));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return elements;
+	}
 
 	int getPageId();
 
