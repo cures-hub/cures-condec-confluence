@@ -18,7 +18,6 @@ import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
-import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
 
 public class DecisionKnowledgeImportMacro implements Macro {
 
@@ -38,8 +37,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		String macroId = getMacroId(conversionContext);
 
 		// Save all issues in an ArrayList data structure.
-		KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
-		List<DecisionKnowledgeElement> knowledgeElements = persistenceManager.getElements(pageId, macroId);
+		List<DecisionKnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 
 		// Create a new context for rendering...
 		Map<String, Object> renderContext = MacroUtils.defaultVelocityContext();

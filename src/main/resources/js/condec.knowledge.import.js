@@ -78,8 +78,8 @@
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
-			width : 800,
-			height : 600,
+			width : 960,
+			height : 800,
 			id : "example-dialog",
 			closeOnOutsideClick : true
 		});

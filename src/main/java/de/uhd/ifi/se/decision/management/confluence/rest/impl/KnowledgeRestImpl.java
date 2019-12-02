@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response.Status;
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
-import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
 import de.uhd.ifi.se.decision.management.confluence.rest.KnowledgeRest;
 
 @Path("/knowledge")
@@ -48,15 +47,14 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 
 		try {
 			// first remove issues from this page
-			KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
 			if (elements.size() > 0) {
-				persistenceManager.removeDecisionKnowledgeElement(pageId, macroId);
+				KnowledgePersistenceManager.removeDecisionKnowledgeElement(pageId, macroId);
 			}
 
 			for (DecisionKnowledgeElement element : elements) {
 				element.setPageId(pageId);
 				element.setMacroId(macroId);
-				persistenceManager.addDecisionKnowledgeElement(element);
+				KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
 			}
 
 		} catch (Exception e) {
@@ -77,8 +75,7 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		try {
-			KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
-			List<DecisionKnowledgeElement> storedElements = persistenceManager.getElements(pageId, macroId);
+			List<DecisionKnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(storedElements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
