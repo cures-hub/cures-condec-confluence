@@ -20,10 +20,10 @@
 	 */
 	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
 		console.log("conDecApi getProjectsFromJira");
-		var url = this.restPrefix + "/knowledgeRest/getProjectsFromJira";
-		getJSON(url, function(error, data) {
-			if (error === null && !checkForError(data)) {
-				callback(data);
+		var url = this.restPrefix + "/knowledge/getProjectsFromJira";
+		getJSON(url, function(error, projects) {
+			if (error === null && !checkForError(projects)) {
+				callback(projects);
 			}
 		});
 	};
@@ -32,13 +32,13 @@
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getKnowledgeElementsFromJira = function getKnowledgeElementsFromJira(projectKey, userInput, callback) {
-		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
-		getJSON(url, function(error, data) {
-			if (error === null && !checkForError(data)) {				
-				if (data.length === 0) {
+		var url = this.restPrefix + "/knowledge/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
+		getJSON(url, function(error, elements) {
+			if (error === null && !checkForError(elements)) {				
+				if (elements.length === 0) {
 					showFlag("error", "No search results were found.");
 				} 
-				callback(data);
+				callback(elements);
 			} else {
 				showFlag("success", "Results were found!");
 			}
@@ -48,11 +48,11 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getKnowledgeElements = function getKnowledgeElements(pageId, sMacroId, callback) {
-		var url = this.restPrefix + "/knowledgeRest/getKnowledgeElements?pageId=" + pageId + "&macroId=" + sMacroId;
-		getJSON(url, function(error, data) {
-			if (error === null && !checkForError(data)) {
-				callback(data);
+	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, macroId, callback) {
+		var url = this.restPrefix + "/knowledge/getStoredKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
+		getJSON(url, function(error, elements) {
+			if (error === null && !checkForError(elements)) {
+				callback(elements);
 			}
 		});
 	};
@@ -60,12 +60,17 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(jsonArray, pageId, macroId, callback) {
-		var url = this.restPrefix + "/knowledgeRest/storeKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
+	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(userInput, pageId, macroId) {
+		var jsonArray = "";
+        try {
+        	jsonArray = JSON.parse(userInput);
+        } catch (e) {
+            showFlag("error", "Your input could not be parsed. " + e);
+        }
+		var url = this.restPrefix + "/knowledge/storeKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
 		postJSON(url, jsonArray, function(error, result) {
 			if (error === null) {				
-				showFlag("success", "The stand-up table was successfully created.");
-				callback(result);
+				showFlag("success", "The stand-up table was successfully updated.");
 			} else {
 				showFlag("error", "A server error occured: " + error);
 			}

@@ -25,6 +25,7 @@ public class MockComponentLocator extends ComponentLocator {
 	protected <T> Collection<T> getComponentsInternal(Class<T> iface) {
 		List<T> components = new ArrayList<>();
 		components.add((T) new MockApplicationLinkService());
+		components.add((T) new MockBandanaManager());
 		return components;
 	}
 

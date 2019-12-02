@@ -12,18 +12,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import javax.ws.rs.core.Response.Status;
 
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
-import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
-import de.uhd.ifi.se.decision.management.confluence.persistence.impl.KnowledgePersistenceManagerImpl;
 import de.uhd.ifi.se.decision.management.confluence.rest.KnowledgeRest;
 
-@Path("/knowledgeRest")
+@Path("/knowledge")
 public class KnowledgeRestImpl implements KnowledgeRest {
 
 	@Override
@@ -31,90 +27,56 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response storeKnowledgeElements(@Context HttpServletRequest request, @QueryParam("pageId") int pageId,
-			@QueryParam("macroId") String macroId, String jsonObjectString) {
+			@QueryParam("macroId") String macroId, String jsonString) {
 
-		boolean result = handlePostRequestResult(pageId, macroId, jsonObjectString);
+		if (pageId == 0 || macroId == null || macroId.isEmpty() || jsonString == null) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		boolean result = handlePostRequestResult(pageId, macroId, jsonString);
 		if (result) {
 			return Response.ok().build();
 		}
 		return Response.serverError().build();
 	}
 
-	public boolean handlePostRequestResult(int pageId, String macroId, String jsonObjectString) {
+	public boolean handlePostRequestResult(int pageId, String macroId, String jsonString) {
 		boolean result = true;
+
+		List<DecisionKnowledgeElement> elements = DecisionKnowledgeElement.parseJsonString(jsonString);
+
 		try {
-			JSONObject jsonObject = new JSONObject(jsonObjectString);
-			boolean useObjectUrl = false;
-			String url = "";
-
-			if (((String) jsonObject.get("url")).equals("USE_OBJECT_URL")) {
-				useObjectUrl = true;
-			} else {
-				url = (String) jsonObject.get("url");
-			}
-
-			JSONArray listOfArrays = (JSONArray) jsonObject.get("data");
 			// first remove issues from this page
-
-			KnowledgePersistenceManager decisionKnowledgeElementKeeping = KnowledgePersistenceManagerImpl.getInstance();
-			if (listOfArrays.length() > 0) {
-				decisionKnowledgeElementKeeping.removeDecisionKnowledgeElement(pageId, macroId);
+			if (elements.size() > 0) {
+				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
 			}
 
-			for (int j = 0; j < listOfArrays.length(); j++) {
-				JSONArray jsonArray = listOfArrays.getJSONArray(j);
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject myObj = jsonArray.getJSONObject(i);
-					DecisionKnowledgeElement decisionKnowledgeElement = handleInnerForLoopAndCreateElement(myObj,
-							useObjectUrl, url, pageId, j, macroId);
-					decisionKnowledgeElementKeeping.addDecisionKnowledgeElement(decisionKnowledgeElement);
-				}
+			for (DecisionKnowledgeElement element : elements) {
+				element.setPageId(pageId);
+				element.setMacroId(macroId);
+				KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
 			}
+
 		} catch (Exception e) {
-			result = false;
-			System.out.println(e);
+			e.printStackTrace();
+			return false;
 		}
+
 		return result;
 	}
 
-	// FIXME: This is too complex.
-	private DecisionKnowledgeElement handleInnerForLoopAndCreateElement(JSONObject myObj, Boolean useObjectUrl,
-			String globalUrl, int pageId, int group, String macroId) {
-		String completeKey = (String) myObj.get("key");
-		String concatKey = completeKey;
-		// check if completeKey has :
-		if (completeKey.indexOf(":") > -1) {
-			concatKey = concatKey.split(":")[0];
-		}
-		String link = "";
-
-		if (useObjectUrl) {
-			if (myObj.has("url")) {
-				link = (String) myObj.get("url");
-			}
-			if (myObj.has("link")) {
-				link = (String) myObj.get("link");
-			}
-		} else {
-			link = globalUrl + concatKey;
-		}
-		int myPageId = pageId;
-		String mySummary = myObj.has("summary") ? (String) myObj.get("summary") : "";
-		String myType = myObj.has("type") ? (String) myObj.get("type") : "";
-		String description = myObj.has("description") ? (String) myObj.get("description") : "";
-		String myKey = completeKey;
-		return new DecisionKnowledgeElementImpl(link, myPageId, mySummary, myType, myKey, description, group, macroId);
-	}
-
 	@Override
-	@Path("/getKnowledgeElements")
+	@Path("/getStoredKnowledgeElements")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getKnowledgeElements(@QueryParam("pageId") int pageId, @QueryParam("macroId") String macroId) {
+	public Response getStoredKnowledgeElements(@QueryParam("pageId") int pageId,
+			@QueryParam("macroId") String macroId) {
+		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		try {
-			KnowledgePersistenceManager persistenceManager = KnowledgePersistenceManagerImpl.getInstance();
-			List<DecisionKnowledgeElement> jsonArray = persistenceManager.getElements(pageId, macroId);
-			return Response.status(Response.Status.OK).entity(jsonArray).build();
+			List<DecisionKnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+			return Response.status(Response.Status.OK).entity(storedElements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}

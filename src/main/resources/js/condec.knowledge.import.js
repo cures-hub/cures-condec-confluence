@@ -19,7 +19,7 @@
 		tableRow += "</tr>";
 		return tableRow;
 	}
-	
+
 	function itiOverSingleArray(aObj) {
 		var tableRows = "";
 		aObj.map(function(obj) {
@@ -70,7 +70,7 @@
 				selectedResultField[0].innerHTML = table;
 			});
 		} else {
-			showFlag("error", "No project was found or the connection to jira is broken.");
+			showFlag("error", "No project was found or the connection to Jira is broken.");
 		}
 	}
 
@@ -78,14 +78,14 @@
 
 		// Standard sizes are 400, 600, 800 and 960 pixels wide
 		var dialog = new AJS.Dialog({
-			width : 550,
-			height : 600,
+			width : 960,
+			height : 800,
 			id : "example-dialog",
 			closeOnOutsideClick : true
 		});
 		// get json from restpoint
 		var pageId = parseInt(AJS.params.pageId, 10);
-		conDecAPI.getKnowledgeElements(pageId, macroId, function(data) {
+		conDecAPI.getStoredKnowledgeElements(pageId, macroId, function(data) {
 			var prefillValue = JSON.stringify(data);
 			var allTextAreas = $(".jsonPasteTextArea");
 			var selectedTextArea = $((allTextAreas)[allTextAreas.length - 1]);
@@ -105,7 +105,7 @@
 			selectedResultField[0].innerHTML = table;
 			selectedJQLResultField[0].innerHTML = table;
 		});
-		
+
 		conDecAPI.getProjectsFromJira(function(data) {
 			var jqlInputField = $(".jqlInputFieldContainer");
 			var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
@@ -118,7 +118,6 @@
 					radioBoxes += addRadioBoxForProject(oProject);
 				});
 				radioBoxes += '</select></select></div></form>';
-
 				selectedJqlInputField.append(radioBoxes);
 			} else {
 				selectedJqlInputField.append("<h4>No projects were found.</h4>");
@@ -142,63 +141,32 @@
 		$(".jqlSearchButton").on("click", function() {
 			jqlCallToBackend();
 		});
+		
 		dialog.addLink("Cancel", function(dialog) {
 			dialog.hide();
 		}, "#");
 
-		dialog.addHeader("Dialog");
+		dialog.addHeader("Knowledge Import Dialog");
 
-		dialog.addLink("Use Manual Data", function(dialog) {
-			// get all textareas
+		dialog.addLink("Use Manual Input", function(dialog) {
 			var allTextAreas = $(".jsonPasteTextArea");
-
 			var userInput = $((allTextAreas)[allTextAreas.length - 1]).val();
-
-			try {
-				var parsedUserInput = JSON.parse(userInput);
-				if (Array.isArray(parsedUserInput)) {
-					// the object does not come from jira manually, but directly
-					parsedUserInput = {
-						data : parsedUserInput,
-						url : "USE_OBJECT_URL",
-						pageId : pageId
-					};
-					conDecAPI.storeKnowledgeElements(parsedUserInput, pageId, macroId, function(some) {
-					});
-				} else {
-					parsedUserInput["pageId"] = pageId;
-				}
-			} catch (e) {
-				showFlag("error", "Error parsing your input." + e);
-			}
-			
+			conDecAPI.storeKnowledgeElements(userInput, pageId, macroId);
 			dialog.hide();
 		}, "aui-button");
 
-		dialog.addButton("Use Direct Data", function(dialog) {
+		dialog.addButton("Use Imported Knowledge From Jira", function(dialog) {
 			var hiddenFields = $(".hiddenJqlIssueSaver");
-
 			var savedJsonString = $((hiddenFields)[hiddenFields.length - 1]).val();
 			if (savedJsonString.length > 0) {
-				try {
-					var aSaved = JSON.parse(savedJsonString);
-					var userObject = {
-						data : aSaved,
-						url : "USE_OBJECT_URL"
-					};
-				} catch (e) {
-					showFlag("error", "A parsing error occured." + e);
-				}
 				var pageId = parseInt(AJS.params.pageId, 10);
-				userObject["pageId"] = pageId;
-				conDecAPI.storeKnowledgeElements(userObject, pageId, macroId, function(some) {
-				});
+				conDecAPI.storeKnowledgeElements(savedJsonString, pageId, macroId);
 				dialog.hide();
 			} else {
 				showFlag("error", "No search results were found.");
 			}
 		});
-		
+
 		dialog.show();
 	};
 

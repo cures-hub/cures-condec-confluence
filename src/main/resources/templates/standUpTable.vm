@@ -1,6 +1,5 @@
 <div id="wrapper">
     <div class="box">
-        #foreach($jsonArray in $jsonArrays)
             <table class="aui aui-table-list aui-table-sortable">
                 <tbody>
                 <tr>
@@ -8,7 +7,7 @@
                     <th>Summary</th>
                     <th>Key</th>                    
                 </tr>
-                    #foreach($decisionKnowledgeElement in $jsonArray)
+                    #foreach($decisionKnowledgeElement in $knowledgeElements)
                         #set ($type = $decisionKnowledgeElement.getType())
                         #set ($imgPath="$type.png")
                 <tr>
@@ -20,7 +19,6 @@
                 </tbody>
             </table>
             <hr>
-        #end
     </div>
 </div>
 <script type="application/javascript">

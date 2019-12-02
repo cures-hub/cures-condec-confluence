@@ -8,10 +8,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 
 	@XmlElement
@@ -29,19 +33,16 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	@XmlElement
 	private String macroId;
 	@XmlElement
-	private Integer group;
-	@XmlElement
 	private String description;
 
 	public DecisionKnowledgeElementImpl(String link, int pageId, String summary, String type, String key,
-			String description, Integer group, String macroId) {
+			String description, String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
 		this.key = key;
 		this.link = link;
 		this.description = description;
-		this.group = group;
 		this.macroId = macroId;
 
 		// generate unique id
@@ -114,6 +115,11 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 		this.link = link;
 	}
 
+	@JsonProperty("url")
+	public void setUrl(String link) {
+		this.setLink(link);
+	}
+
 	@Override
 	public String getMacroId() {
 		return macroId;
@@ -122,16 +128,6 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	@Override
 	public void setMacroId(String macroId) {
 		this.macroId = macroId;
-	}
-
-	@Override
-	public int getGroup() {
-		return this.group;
-	}
-
-	@Override
-	public void setGroup(Integer group) {
-		this.group = group;
 	}
 
 	@Override
