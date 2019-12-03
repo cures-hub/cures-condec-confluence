@@ -21,13 +21,30 @@
 			(e.g. for meetings).
 		</description>
 		<context>editor</context>
+		<context>atl.general</context>
 		<context>Decision Knowledge Import Macro</context>
 		<resource type="download" name="condec.css" location="/css/condec.css" />
-		<resource type="download" name="condec.knowledge.import.js" location="/js/condec.knowledge.import.js" />
+		<resource type="download" name="condec.knowledge.import.js"
+			location="/js/condec.knowledge.import.js" />
 		<resource type="download" name="condec.api.js" location="/js/condec.api.js" />
 		<resource type="download" name="images/" location="/images" />
 		<resource type="download" name="pluginIconBig.png" location="/images/pluginIconBig.png" />
 		<dependency>com.atlassian.auiplugin:ajs</dependency>
+		<dependency>com.atlassian.auiplugin:aui-flag</dependency>
+		<dependency>com.atlassian.auiplugin:aui-buttons</dependency>
+		<dependency>com.atlassian.auiplugin:aui-forms</dependency>
+		<dependency>com.atlassian.auiplugin:aui-navigation</dependency>
+		<dependency>com.atlassian.auiplugin:aui-toggle</dependency>
+		<dependency>com.atlassian.auiplugin:table</dependency>
+		<dependency>com.atlassian.auiplugin:aui-lozenge</dependency>
+		<dependency>com.atlassian.auiplugin:dialog2</dependency>
+		<dependency>com.atlassian.auiplugin:aui-dropdown2</dependency>
+		<dependency>com.atlassian.auiplugin:aui-select2</dependency>
+		<dependency>com.atlassian.auiplugin:aui-experimental-iconfont</dependency>
+		<dependency>com.atlassian.auiplugin:aui-tooltips</dependency>
+		<dependency>com.atlassian.auiplugin:tabs</dependency>
+		<dependency>com.atlassian.auiplugin:aui-expander</dependency>
+		<dependency>com.atlassian.auiplugin:aui-table-sortable</dependency>
 	</web-resource>
 
 	<!-- REST API -->
@@ -37,18 +54,18 @@
 	</rest>
 
 	<!-- Decision Knowledge Import in Wiki Pages -->
-	<xhtml-macro name="Decision Knowledge Import" key="decision-knowledge-import-macro"
+	<xhtml-macro name="decision-knowledge-import-macro"
+		key="decision-knowledge-import-macro"
 		class="de.uhd.ifi.se.decision.management.confluence.macro.DecisionKnowledgeImportMacro"
 		icon="/download/resources/de.uhd.ifi.se.decision.management.confluence:decision-knowledge-import-resources/pluginIconBig.png">
 		<description key="condec.import.macro.description" />
 		<category name="external-content" />
 		<parameters>
-			<!--<parameter name="yourJsonArray" type="string" /> -->
+			<parameter name="yourJsonArray" type="string" />
+			<parameter name="project" type="enum" />
 		</parameters>
 		<property-panel>
-			<spacer />
 			<button id="updateButton" label="Update Stand-up Table" />
-			<spacer />
 		</property-panel>
 	</xhtml-macro>
 

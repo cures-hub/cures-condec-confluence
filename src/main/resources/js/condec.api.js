@@ -133,6 +133,11 @@
 			body : message
 		});
 	}
+	
+	/*
+	 * external references: condec.knowledge.import
+	 */
+	ConDecAPI.prototype.showFlag = showFlag;
 
 	// export ConDecAPI
 	global.conDecAPI = new ConDecAPI();
