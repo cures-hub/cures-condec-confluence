@@ -4,9 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.impl.JiraClientImpl;
 
 /**
@@ -40,9 +42,9 @@ public interface JiraClient {
 	 * 
 	 * @param jiraIssueKeys
 	 *            as a set of strings.
-	 * @return JSON string.
+	 * @return list of decision knowledge elements.
 	 */
-	String getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys);
+	List<DecisionKnowledgeElement> getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys);
 
 	/**
 	 * Retrieves the decision knowledge elements from Jira that match a certain
@@ -52,9 +54,9 @@ public interface JiraClient {
 	 *            JQL query.
 	 * @param projectKey
 	 *            of the Jira project.
-	 * @return JSON String.
+	 * @return list of decision knowledge elements.
 	 */
-	String getDecisionKnowledgeFromJira(String query, String projectKey);
+	List<DecisionKnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey);
 
 	/**
 	 * Returns all Jira issue keys mentioned in a message.

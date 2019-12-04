@@ -1,41 +1,52 @@
-(function() {
-
+AJS.bind("init.rte", function() {
+	
 	var macroName = "decision-knowledge-import-macro";
 
-	function showFlag(type, message) {
-		AJS.flag({
-			type : type,
-			close : "auto",
-			title : type.charAt(0).toUpperCase() + type.slice(1),
-			body : message
-		});
-	}
-	/** *****************HTML creating Functions*********************** */
-	function createJsonTable(obj) {
-		var url = obj["url"] || obj["link"] || "";
-		var tableRow = "<tr><td><a target='_blank' href='" + url + "'>" + obj["key"] + "</a></td>";
-		tableRow += "<td>" + obj["summary"] + "</td>";
-		tableRow += "<td>" + obj["type"] + "</td>";
-		tableRow += "</tr>";
-		return tableRow;
+	var jsOverrides = {
+		"fields" : {
+			"enum" : {
+				"project" : function(params, options) {
+					var field = AJS.MacroBrowser.ParameterFields["enum"](params, options);
+					conDecAPI.getProjectsFromJira(function(projects) {
+						var options = "";
+						projects.map(function(project) {
+							options += createOptionForProject(project);
+						});
+						field.input.append(options);
+					});
+					return field;
+				}
+			}
+		}
+	};
+
+	function createOptionForProject(project) {
+		return '<option value="' + project["key"] + '">' + project["name"] + '</option>';
 	}
 
-	function itiOverSingleArray(aObj) {
+	AJS.MacroBrowser.setMacroJsOverride(macroName, jsOverrides);
+	
+	function createTableHeader() {
+		return "<h4>Current Knowledge Elements</h4>" + "<table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
+	}
+
+	function itiOverSingleArray(elements) {
 		var tableRows = "";
-		aObj.map(function(obj) {
-			tableRows += createJsonTable(obj);
+		elements.map(function(element) {
+			tableRows += createTableRow(element);
 		});
 		// add empty rows
 		tableRows += "<tr><th> </th><th> </th><th> </th></tr>";
 		return tableRows;
 	}
 
-	function getHTMLTableHeader() {
-		return "<h4>Current Knowledge Elements</h4><br><table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
-	}
-
-	function addRadioBoxForProject(oProject) {
-		return '<option value="' + oProject["key"] + '">' + oProject["name"] + '</option>';
+	function createTableRow(element) {
+		var url = element["url"] || element["link"] || "";
+		var tableRow = "<tr><td><a target='_blank' href='" + url + "'>" + element["key"] + "</a></td>";
+		tableRow += "<td>" + element["summary"] + "</td>";
+		tableRow += "<td>" + element["type"] + "</td>";
+		tableRow += "</tr>";
+		return tableRow;
 	}
 
 	function jqlCallToBackend() {
@@ -57,26 +68,27 @@
 		if (projectKey && projectKey !== "") {
 			conDecAPI.getKnowledgeElementsFromJira(projectKey, userInput, function(data) {
 				if (data && data.length === 0) {
-					showFlag("error", "No Search results where found");
+					conDecAPI.showFlag("error", "No Search results were found");
 				} else {
-					showFlag("success", "Results found!");
+					conDecAPI.showFlag("success", "Results found!");
 				}
 				selectedHiddenField.val(JSON.stringify(data));
-				var table = getHTMLTableHeader();
-				data.map(function(aObj) {
-					table += itiOverSingleArray(aObj);
+				var table = createTableHeader();
+				data.map(function(elements) {
+					table += itiOverSingleArray(elements);
 				});
 				table += "</table>";
 				selectedResultField[0].innerHTML = table;
 			});
 		} else {
-			showFlag("error", "No project was found or the connection to Jira is broken.");
+			conDecAPI.showFlag("error", "No project was found or the connection to Jira is broken.");
 		}
 	}
 
 	var updateMacro = function(macroId) {
 
-		// Standard sizes are 400, 600, 800 and 960 pixels wide
+		// Standard sizes are 400, 600, 800 and 960 pixels
+		// wide
 		var dialog = new AJS.Dialog({
 			width : 960,
 			height : 800,
@@ -97,9 +109,9 @@
 			var selectedResultField = $((resultFields)[resultFields.length - 1]);
 			var jqlResultFields = $(".jqlResultField");
 			var selectedJQLResultField = $((jqlResultFields)[jqlResultFields.length - 1]);
-			var table = getHTMLTableHeader();
-			data.map(function(obj) {
-				table += createJsonTable(obj);
+			var table = createTableHeader();
+			data.map(function(element) {
+				table += createTableRow(element);
 			});
 			table += "</table>";
 			selectedResultField[0].innerHTML = table;
@@ -111,37 +123,37 @@
 			var selectedJqlInputField = $((jqlInputField)[jqlInputField.length - 1]);
 			if (data && data.length > 0) {
 				var radioBoxes = '<form class="aui">\n' + '    <div class="field-group">\n'
-						+ '        <label for="select-example">Select Project</label>'
-						+ '        <select class="projectSelect">';
+						+ '       <label for="select-example">Select Project</label>'
+						+ '       <select class="projectSelect">';
 
-				data.map(function(oProject) {
-					radioBoxes += addRadioBoxForProject(oProject);
+				data.map(function(project) {
+					radioBoxes += createOptionForProject(project);
 				});
 				radioBoxes += '</select></select></div></form>';
 				selectedJqlInputField.append(radioBoxes);
 			} else {
-				selectedJqlInputField.append("<h4>No projects were found.</h4>");
+				selectedJqlInputField.append("<p>No projects were found.</p>");
 			}
 		});
 		dialog
 				.addPanel(
-						"Direct",
-						"<h4>Here you can use JQL if the connection to jira exists, using JQL overwrittes previous data from this macro</h4><br>"
+						"Import from Jira",
+						"<p>If you chose to \"freeze\" the input, you can edit the stand-up table here.</p>"
 								+ "<div class='jsonDialogMacroContainer'><div class='jqlInputFieldContainer'></div>"
-								+ "<div class='field-group'><label for='text-input'>Search query</label><input class='jqlInputField text medium-field' placeholder='jql='/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>"
+								+ "<div class='field-group'><label for='text-input'>Search query:</label> <input class='jqlInputField text medium-long-field' placeholder='jql='/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>"
 								+ "<textarea class='hiddenJqlIssueSaver' style='display:none'></textarea>",
 						"panel-body");
 		dialog
 				.addPanel(
-						"Manual",
-						"<h4>Paste here your jsonArray from Jira, existing issues from this macro</h4><br>"
+						"Parse JSON String",
+						"<p>Paste a JSON String exported from Jira or manually edit the existing one.</p>"
 								+ "<div class='jsonDialogMacroContainer'><textarea rows='4' cols='50' class='jsonPasteTextArea'></textarea></div><div class='jsonResultField'>",
 						"panel-body");
 
 		$(".jqlSearchButton").on("click", function() {
 			jqlCallToBackend();
 		});
-		
+
 		dialog.addLink("Cancel", function(dialog) {
 			dialog.hide();
 		}, "#");
@@ -163,20 +175,19 @@
 				conDecAPI.storeKnowledgeElements(savedJsonString, pageId, macroId);
 				dialog.hide();
 			} else {
-				showFlag("error", "No search results were found.");
+				conDecAPI.showFlag("error", "No search results were found.");
 			}
 		});
 
 		dialog.show();
 	};
-
+	
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function(e, macroNode) {
 		var macroId = macroNode.getAttribute("data-macro-id");
 		if (macroId && macroId !== "") {
 			updateMacro(macroId);
 		} else {
-			showFlag("error", "Please save the page first before updating the macro.");
+			conDecAPI.showFlag("error", "Please save the page first before updating the macro.");
 		}
 	});
-
-})();
+});

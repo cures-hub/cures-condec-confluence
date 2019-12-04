@@ -43,6 +43,12 @@ public class TestKnowledgePersistenceManager {
 	}
 
 	@Test
+	public void testGetElementsInvalidInput() {
+		List<DecisionKnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(0, null);
+		assertEquals(0, storedElements.size());
+	}
+
+	@Test
 	public void testRemoveElement() {
 		KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
 		KnowledgePersistenceManager.removeDecisionKnowledgeElement(element.getId());

@@ -3,8 +3,6 @@ package de.uhd.ifi.se.decision.management.confluence.macro;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
 import com.atlassian.confluence.macro.Macro;
@@ -13,33 +11,43 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.confluence.xhtml.api.MacroDefinition;
 import com.atlassian.fugue.Option;
-import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
-import com.atlassian.webresource.api.assembler.PageBuilderService;
 
 import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 
 public class DecisionKnowledgeImportMacro implements Macro {
 
-	private PageBuilderService pageBuilderService;
-
-	@Autowired
-	public DecisionKnowledgeImportMacro(@ComponentImport PageBuilderService pageBuilderService) {
-		this.pageBuilderService = pageBuilderService;
-	}
-
 	@Override
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
-		pageBuilderService.assembler().resources().requireWebResource(
-				"de.uhd.ifi.se.decision.management.confluence.macro:decision-knowledge-import-resources");
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		String macroId = getMacroId(conversionContext);
 
-		// Save all issues in an ArrayList data structure.
 		List<DecisionKnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 
-		// Create a new context for rendering...
+		boolean freeze = false;
+		if ("true".equals(map.get("freeze"))) {
+			freeze = true;
+		}
+
+		if (knowledgeElements.isEmpty() || !freeze) {
+			String projectKey = map.get("project");
+			String query = map.get("query");
+			if (query == null) {
+				query = "";
+			}
+			if (projectKey != null && !projectKey.isEmpty()) {
+				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
+				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
+				for (DecisionKnowledgeElement element : knowledgeElements) {
+					element.setPageId(pageId);
+					element.setMacroId(macroId);
+					KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
+				}
+			}
+		}
+
 		Map<String, Object> renderContext = MacroUtils.defaultVelocityContext();
 		renderContext.put("knowledgeElements", knowledgeElements);
 
