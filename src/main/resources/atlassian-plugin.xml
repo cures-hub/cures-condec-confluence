@@ -61,8 +61,9 @@
 		<description key="condec.import.macro.description" />
 		<category name="external-content" />
 		<parameters>
-			<parameter name="query" type="string" />
+			<parameter name="query" type="string"/>
 			<parameter name="project" type="enum" />
+			<parameter name="freeze" type="boolean" default="false" required="true" />
 		</parameters>
 		<property-panel>
 			<button id="updateButton" label="Update Stand-up Table" />
