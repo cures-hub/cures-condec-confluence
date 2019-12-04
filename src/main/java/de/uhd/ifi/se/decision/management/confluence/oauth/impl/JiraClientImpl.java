@@ -1,6 +1,7 @@
 package de.uhd.ifi.se.decision.management.confluence.oauth.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import com.atlassian.sal.api.net.Request;
 import com.atlassian.sal.api.net.Response;
 import com.atlassian.sal.api.net.ResponseException;
 
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 
 /**
@@ -93,16 +95,21 @@ public class JiraClientImpl implements JiraClient {
 	}
 
 	@Override
-	public String getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys) {
+	public List<DecisionKnowledgeElement> getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys) {
 		String queryWithJiraIssues = JiraClient.getJiraCallQuery(jiraIssueKeys);
 		String projectKey = JiraClient.retrieveProjectKey(jiraIssueKeys);
 		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey);
 	}
 
 	@Override
-	public String getDecisionKnowledgeFromJira(String query, String projectKey) {
+	public List<DecisionKnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey) {
+		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey);
+		return DecisionKnowledgeElement.parseJsonString(jsonString);
+	}
+
+	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey) {
 		return getResponseFromJiraWithApplicationLink(
-				"rest/decisions/latest/decisions/getElements.json?allTrees=true&query=" + query + "&projectKey="
+				"rest/decisions/latest/decisions/getElements.json?allTrees=false&query=" + query + "&projectKey="
 						+ projectKey);
 	}
 }

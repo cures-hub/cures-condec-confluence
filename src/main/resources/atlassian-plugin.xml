@@ -61,7 +61,7 @@
 		<description key="condec.import.macro.description" />
 		<category name="external-content" />
 		<parameters>
-			<parameter name="yourJsonArray" type="string" />
+			<parameter name="query" type="string" />
 			<parameter name="project" type="enum" />
 		</parameters>
 		<property-panel>

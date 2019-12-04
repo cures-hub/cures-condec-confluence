@@ -1,3 +1,4 @@
+$webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluence:decision-knowledge-import-resources")
 <div id="wrapper">
     <div class="box">
             <table class="aui aui-table-list aui-table-sortable">

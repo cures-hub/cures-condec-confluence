@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.atlassian.confluence.macro.Macro.BodyType;
@@ -33,6 +34,7 @@ public class TestDecisionKnowledgeImportMacro {
 		assertNotNull(new DecisionKnowledgeImportMacro(null));
 	}
 
+	@Ignore
 	@Test(expected = ExceptionInInitializerError.class)
 	public void testExecute() {
 		try {

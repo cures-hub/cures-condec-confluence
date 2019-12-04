@@ -1,7 +1,31 @@
-(function() {
-
+AJS.bind("init.rte", function() {
+	
 	var macroName = "decision-knowledge-import-macro";
 
+	var jsOverrides = {
+		"fields" : {
+			"enum" : {
+				"project" : function(params, options) {
+					var field = AJS.MacroBrowser.ParameterFields["enum"](params, options);
+					conDecAPI.getProjectsFromJira(function(projects) {
+						var options = "";
+						projects.map(function(project) {
+							options += createOptionForProject(project);
+						});
+						field.input.append(options);
+					});
+					return field;
+				}
+			}
+		}
+	};
+
+	function createOptionForProject(project) {
+		return '<option value="' + project["key"] + '">' + project["name"] + '</option>';
+	}
+
+	AJS.MacroBrowser.setMacroJsOverride(macroName, jsOverrides);
+	
 	function createTableHeader() {
 		return "<h4>Current Knowledge Elements</h4>" + "<table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
 	}
@@ -23,10 +47,6 @@
 		tableRow += "<td>" + element["type"] + "</td>";
 		tableRow += "</tr>";
 		return tableRow;
-	}
-
-	function createOptionForProject(project) {
-		return '<option value="' + project["key"] + '">' + project["name"] + '</option>';
 	}
 
 	function jqlCallToBackend() {
@@ -67,7 +87,8 @@
 
 	var updateMacro = function(macroId) {
 
-		// Standard sizes are 400, 600, 800 and 960 pixels wide
+		// Standard sizes are 400, 600, 800 and 960 pixels
+		// wide
 		var dialog = new AJS.Dialog({
 			width : 960,
 			height : 800,
@@ -160,7 +181,7 @@
 
 		dialog.show();
 	};
-
+	
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function(e, macroNode) {
 		var macroId = macroNode.getAttribute("data-macro-id");
 		if (macroId && macroId !== "") {
@@ -169,24 +190,4 @@
 			conDecAPI.showFlag("error", "Please save the page first before updating the macro.");
 		}
 	});
-
-	var jsOverrides = {
-		"fields" : {
-			"enum" : {
-				"project" : function(params, options) {
-					var field = AJS.MacroBrowser.ParameterFields["enum"](params, options);
-					conDecAPI.getProjectsFromJira(function(projects) {
-						var options = "";
-						projects.map(function(project) {
-							options += createOptionForProject(project);							
-						});
-						field.input.append(options);
-					});
-					return field;
-				}
-			}
-		}
-	};
-	AJS.MacroBrowser.setMacroJsOverride("decision-knowledge-import-macro", jsOverrides);
-
-})();
+});

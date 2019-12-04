@@ -89,8 +89,9 @@ public class KnowledgeRestImpl implements KnowledgeRest {
 	public Response getKnowledgeElementsFromJira(@QueryParam("projectKey") String projectKey,
 			@QueryParam("query") String query) {
 		try {
-			String jsonString = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
-			return Response.status(Response.Status.OK).entity(jsonString).build();
+			List<DecisionKnowledgeElement> elements = JiraClient.instance.getDecisionKnowledgeFromJira(query,
+					projectKey);
+			return Response.status(Response.Status.OK).entity(elements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}

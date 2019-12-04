@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.BeforeClass;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import com.atlassian.sal.api.component.ComponentLocator;
 
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockComponentLocator;
+import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.impl.JiraClientImpl;
 
 public class TestJiraClient {
@@ -39,8 +41,9 @@ public class TestJiraClient {
 
 	@Test
 	public void testGetDecisionKnowledgeFromJira() {
-		String decisionKnowledgeJsonString = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC");
-		assertEquals("[[{'type':'issue'}, {'type':'decision'}]]", decisionKnowledgeJsonString);
+		List<DecisionKnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC");
+		assertEquals("issue", elements.get(0).getType());
+		assertEquals("decision", elements.get(1).getType());
 	}
 
 	@Test
@@ -49,8 +52,9 @@ public class TestJiraClient {
 		jiraIssueKeys.add("CONDEC-1");
 		jiraIssueKeys.add("CONDEC-2");
 
-		String decisionKnowledgeJsonString = jiraClient.getDecisionKnowledgeFromJira(jiraIssueKeys);
-		assertEquals("[[{'type':'issue'}, {'type':'decision'}]]", decisionKnowledgeJsonString);
+		List<DecisionKnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira(jiraIssueKeys);
+		assertEquals("issue", elements.get(0).getType());
+		assertEquals("decision", elements.get(1).getType());
 	}
 
 	@Test

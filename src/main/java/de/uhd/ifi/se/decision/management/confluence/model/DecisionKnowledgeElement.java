@@ -8,6 +8,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
+import com.google.gson.Gson;
+
 import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
 
 /**
@@ -27,9 +29,10 @@ public interface DecisionKnowledgeElement {
 					.constructCollectionType(List.class, DecisionKnowledgeElementImpl.class));
 		} catch (JsonMappingException e) {
 			try {
-				List<DecisionKnowledgeElement[]> myelements = objectMapper.readValue(jsonString, objectMapper
-						.getTypeFactory().constructCollectionType(List.class, DecisionKnowledgeElementImpl[].class));
-				elements = Arrays.asList(myelements.get(0));
+				Gson g = new Gson();
+				DecisionKnowledgeElementImpl[] myelements = g.fromJson(jsonString.substring(1, jsonString.length() - 1),
+						DecisionKnowledgeElementImpl[].class);
+				elements = Arrays.asList(myelements);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
