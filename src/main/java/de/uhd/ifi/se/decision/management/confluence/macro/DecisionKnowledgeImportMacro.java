@@ -3,8 +3,6 @@ package de.uhd.ifi.se.decision.management.confluence.macro;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
 import com.atlassian.confluence.macro.Macro;
@@ -20,10 +18,6 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 
 public class DecisionKnowledgeImportMacro implements Macro {
 
-	@Autowired
-	public DecisionKnowledgeImportMacro() {
-	}
-
 	@Override
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
@@ -32,15 +26,18 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 		List<DecisionKnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 
-		String projectKey = map.get("project");
-		String query = map.get("query");
 		boolean freeze = false;
 		if ("true".equals(map.get("freeze"))) {
 			freeze = true;
 		}
 
-		if (projectKey != null && !projectKey.isEmpty()) {
-			if (knowledgeElements.isEmpty() || !freeze) {
+		if (knowledgeElements.isEmpty() || !freeze) {
+			String projectKey = map.get("project");
+			String query = map.get("query");
+			if (query == null) {
+				query = "";
+			}
+			if (projectKey != null && !projectKey.isEmpty()) {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
 				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
 				for (DecisionKnowledgeElement element : knowledgeElements) {
