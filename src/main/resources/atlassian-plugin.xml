@@ -61,12 +61,15 @@
 		<description key="condec.import.macro.description" />
 		<category name="external-content" />
 		<parameters>
-			<parameter name="query" type="string"/>
+			<parameter name="query" type="string" desc="filter=allopenissues" />
 			<parameter name="project" type="enum" />
-			<parameter name="freeze" type="boolean" default="false" required="true" />
+			<parameter name="freeze" type="boolean" default="false" required="true"
+				title="Freeze the content?" />
 		</parameters>
 		<property-panel>
-			<button id="updateButton" label="Update Stand-up Table" />
+			<button id="updateButton" label="Edit Manually">
+				<label key="condec.import.macro.update.button" />
+			</button>
 		</property-panel>
 	</xhtml-macro>
 

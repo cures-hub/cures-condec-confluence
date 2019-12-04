@@ -41,6 +41,9 @@ public class KnowledgePersistenceManager {
 
 	public static List<DecisionKnowledgeElement> getElements(int pageId, String macroId) {
 		List<DecisionKnowledgeElement> elements = new ArrayList<DecisionKnowledgeElement>();
+		if (pageId == 0 || macroId == null) {
+			return elements;
+		}
 
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
 			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) bandanaManager

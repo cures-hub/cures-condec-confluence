@@ -138,7 +138,7 @@ AJS.bind("init.rte", function() {
 		dialog
 				.addPanel(
 						"Import from Jira",
-						"<p>If the connection to Jira exists, you can import knowledge here.</p>"
+						"<p>If you chose to \"freeze\" the input, you can edit the stand-up table here.</p>"
 								+ "<div class='jsonDialogMacroContainer'><div class='jqlInputFieldContainer'></div>"
 								+ "<div class='field-group'><label for='text-input'>Search query:</label> <input class='jqlInputField text medium-long-field' placeholder='jql='/><button class='jqlSearchButton aui-button aui-button-primary'><span class='aui-icon aui-icon-small aui-iconfont-search'>Search</span></button></div></div><div class='jqlResultField'></div>"
 								+ "<textarea class='hiddenJqlIssueSaver' style='display:none'></textarea>",
@@ -146,7 +146,7 @@ AJS.bind("init.rte", function() {
 		dialog
 				.addPanel(
 						"Parse JSON String",
-						"<p>Paste a JSON String exported from Jira here.</p>"
+						"<p>Paste a JSON String exported from Jira or manually edit the existing one.</p>"
 								+ "<div class='jsonDialogMacroContainer'><textarea rows='4' cols='50' class='jsonPasteTextArea'></textarea></div><div class='jsonResultField'>",
 						"panel-body");
 
