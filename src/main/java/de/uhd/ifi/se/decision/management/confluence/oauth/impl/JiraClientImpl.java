@@ -1,5 +1,7 @@
 package de.uhd.ifi.se.decision.management.confluence.oauth.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -108,8 +110,17 @@ public class JiraClientImpl implements JiraClient {
 	}
 
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey) {
-		return getResponseFromJiraWithApplicationLink(
-				"rest/decisions/latest/decisions/getElements.json?allTrees=false&query=" + query + "&projectKey="
-						+ projectKey);
+		return getResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/getElements.json?query="
+				+ encodeUserInputQuery(query) + "&projectKey=" + projectKey);
+	}
+
+	private static String encodeUserInputQuery(String query) {
+		String encodedUrl = "";
+		try {
+			encodedUrl = URLEncoder.encode(query, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return encodedUrl;
 	}
 }
