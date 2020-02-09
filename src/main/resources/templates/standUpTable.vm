@@ -46,27 +46,34 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
         var res;
         var path = "$req.contextPath/download/resources/de.uhd.ifi.se.decision.management.confluence:decision-knowledge-import-resources/images/"
         var aImages = ["alternative", "argument", "argument_con", "argument_pro", "assessment", "assumption", "claim", "constraint", "context", "decision", "goal", "implication", "issue", "other", "problem", "solution"]
+        if (sType == "pro") {
+        	sType = "argument_pro";
+        }
+        if (sType == "con") {
+        	sType = "argument_con";
+        }
         if (aImages.indexOf(sType) > -1) {
             var img = new Image();
 
-            // just use some one of the
             img.src = path + sType + ".png";
-            res=img;
+            res = img;
         } else {
         	var oIcons={"aui-iconfont-jira-completed-task":["aufgabe","task"],
-                "aui-iconfont-subtask":["unteraufgabe","subtask"]
+                "aui-iconfont-subtask":["unteraufgabe","subtask","sub-task"],
+                "aui-iconfont-radio":["bug"],
+                "aui-iconfont-comment":["story","user story"]
         	};
             // standard icon
-            var sIcon="aui-iconfont-jira";
+            var sIcon = "aui-iconfont-jira";
             // check oIcons for sType
             Object.entries(oIcons).map(function (aElement){
-                if (aElement[1].indexOf(sType)>-1){
+                if (aElement[1].indexOf(sType) > -1){
                 	// found translation
-                    sIcon=aElement[0];
+                    sIcon = aElement[0];
                 }
             })
-        	var span= '<span class="aui-icon aui-icon-small '+sIcon+'">'+sType+'</span>';
-        	res=span;
+        	var span = '<span class="aui-icon aui-icon-small '+ sIcon + '">' + sType + '</span>';
+        	res = span;
         }
         return res;
     }
