@@ -58,10 +58,11 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
             img.src = path + sType + ".png";
             res = img;
         } else {
-        	var oIcons={"aui-iconfont-jira-completed-task":["aufgabe","task"],
+        	var oIcons={"aui-iconfont-task":["aufgabe","task"],
                 "aui-iconfont-subtask":["unteraufgabe","subtask","sub-task"],
                 "aui-iconfont-radio":["bug"],
-                "aui-iconfont-comment":["story","user story"]
+                "aui-iconfont-comment":["story","user story"],
+                "aui-iconfont-emoji":["epic"]
         	};
             // standard icon
             var sIcon = "aui-iconfont-jira";
