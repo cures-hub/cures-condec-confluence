@@ -27,7 +27,7 @@ AJS.bind("init.rte", function() {
 	AJS.MacroBrowser.setMacroJsOverride(macroName, jsOverrides);
 	
 	function createTableHeader() {
-		return "<h4>Current Knowledge Elements</h4>" + "<table><tr><th>Key</th><th>Summary</th><th>Type</th></tr>";
+		return "<h4>Current Knowledge Elements</h4>" + "<table><tr><th>Key</th><th>Summary</th><th>Type</th><th>Author</th></tr>";
 	}
 
 	function itiOverSingleArray(elements) {
@@ -36,7 +36,7 @@ AJS.bind("init.rte", function() {
 			tableRows += createTableRow(element);
 		});
 		// add empty rows
-		tableRows += "<tr><th> </th><th> </th><th> </th></tr>";
+		tableRows += "<tr><th> </th><th> </th><th> </th><th> </th></tr>";
 		return tableRows;
 	}
 
@@ -45,6 +45,7 @@ AJS.bind("init.rte", function() {
 		var tableRow = "<tr><td><a target='_blank' href='" + url + "'>" + element["key"] + "</a></td>";
 		tableRow += "<td>" + element["summary"] + "</td>";
 		tableRow += "<td>" + element["type"] + "</td>";
+		tableRow += "<td>" + element["creator"] + "</td>";
 		tableRow += "</tr>";
 		return tableRow;
 	}

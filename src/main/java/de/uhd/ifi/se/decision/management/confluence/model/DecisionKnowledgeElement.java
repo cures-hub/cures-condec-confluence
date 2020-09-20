@@ -74,4 +74,12 @@ public interface DecisionKnowledgeElement {
 	String getDescription();
 
 	void setDescription(String description);
+
+	String getCreator();
+
+	void setCreator(String name);
+
+	String getUpdatingDate();
+
+	void setUpdatingDate(String date);
 }

@@ -34,6 +34,9 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	private String macroId;
 	@XmlElement
 	private String description;
+	@XmlElement
+	private String creator;
+	private String updatingDate;
 
 	public DecisionKnowledgeElementImpl(String link, int pageId, String summary, String type, String key,
 			String description, String macroId) {
@@ -138,5 +141,27 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public String getCreator() {
+		return creator;
+	}
+
+	@Override
+	@JsonProperty("creator")
+	public void setCreator(String name) {
+		this.creator = name;
+	}
+
+	@Override
+	public String getUpdatingDate() {
+		return updatingDate;
+	}
+
+	@Override
+	@JsonProperty("updatingDate")
+	public void setUpdatingDate(String date) {
+		this.updatingDate = date;
 	}
 }
