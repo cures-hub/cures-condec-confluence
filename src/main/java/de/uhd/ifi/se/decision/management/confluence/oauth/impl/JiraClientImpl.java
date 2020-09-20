@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.core.MediaType;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -96,6 +98,35 @@ public class JiraClientImpl implements JiraClient {
 		return responseBody;
 	}
 
+	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey) {
+		String responseBody = "";
+		if (jiraApplicationLink == null) {
+			return responseBody;
+		}
+		try {
+			ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
+			ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.POST, jiraUrl);
+			request.addHeader("Content-Type", "application/json");
+			request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + query + "\"}",
+					MediaType.APPLICATION_JSON);
+
+			responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>() {
+				@Override
+				public String credentialsRequired(final Response response) throws ResponseException {
+					return response.getResponseBodyAsString();
+				}
+
+				@Override
+				public String handle(final Response response) throws ResponseException {
+					return response.getResponseBodyAsString();
+				}
+			});
+		} catch (CredentialsRequiredException | ResponseException e) {
+			responseBody = e.getMessage();
+		}
+		return responseBody;
+	}
+
 	@Override
 	public List<DecisionKnowledgeElement> getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys) {
 		String queryWithJiraIssues = JiraClient.getJiraCallQuery(jiraIssueKeys);
@@ -110,8 +141,8 @@ public class JiraClientImpl implements JiraClient {
 	}
 
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey) {
-		return getResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/getElements.json?query="
-				+ encodeUserInputQuery(query) + "&projectKey=" + projectKey);
+		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
+				encodeUserInputQuery(query), projectKey);
 	}
 
 	private static String encodeUserInputQuery(String query) {
