@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uhd.ifi.se.decision</groupId>
 	<artifactId>management.confluence</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 
 	<organization>
 		<name>Software Engineering Research Group, Heidelberg University</name>
@@ -219,7 +219,7 @@
 		<amps.version>8.1.1</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.4</jacoco-version>
+		<jacoco-version>0.8.6</jacoco-version>
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
 			generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>

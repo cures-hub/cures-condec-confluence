@@ -7,14 +7,12 @@ import org.junit.Test;
 
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-import de.uhd.ifi.se.decision.management.confluence.rest.impl.KnowledgeRestImpl;
-
 public class TestStoreKnowledgeElements {
 	private KnowledgeRest knowledgeRest;
 
 	@Before
 	public void setUp() {
-		knowledgeRest = new KnowledgeRestImpl();
+		knowledgeRest = new KnowledgeRest();
 	}
 
 	@Test

@@ -1,7 +1,10 @@
-package de.uhd.ifi.se.decision.management.confluence.model.impl;
+package de.uhd.ifi.se.decision.management.confluence.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,13 +13,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import com.google.gson.Gson;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
+public class KnowledgeElement {
 
 	@XmlElement
 	private String link;
@@ -38,8 +43,33 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 	private String creator;
 	private String updatingDate;
 
-	public DecisionKnowledgeElementImpl(String link, int pageId, String summary, String type, String key,
-			String description, String macroId) {
+	public static List<KnowledgeElement> parseJsonString(String jsonString) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.writerWithDefaultPrettyPrinter();
+
+		List<KnowledgeElement> elements = new ArrayList<KnowledgeElement>();
+
+		try {
+			elements = objectMapper.readValue(jsonString,
+					objectMapper.getTypeFactory().constructCollectionType(List.class, KnowledgeElement.class));
+		} catch (JsonMappingException e) {
+			try {
+				Gson g = new Gson();
+				KnowledgeElement[] myelements = g.fromJson(jsonString.substring(1, jsonString.length() - 1),
+						KnowledgeElement[].class);
+				elements = Arrays.asList(myelements);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return elements;
+	}
+
+	public KnowledgeElement(String link, int pageId, String summary, String type, String key, String description,
+			String macroId) {
 		this.pageId = pageId;
 		this.summary = summary;
 		this.type = type;
@@ -55,65 +85,53 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 		this.id = datetime + key;
 	}
 
-	public DecisionKnowledgeElementImpl() {
+	public KnowledgeElement() {
 	}
 
-	@Override
 	public int getPageId() {
 		return pageId;
 	}
 
-	@Override
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
 	}
 
-	@Override
 	public String getId() {
 		return id;
 	}
 
-	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	@Override
 	public String getSummary() {
 		return summary;
 	}
 
-	@Override
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
 
-	@Override
 	public String getType() {
 		return type;
 	}
 
-	@Override
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	@Override
 	public String getKey() {
 		return key;
 	}
 
-	@Override
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-	@Override
 	public String getLink() {
 		return link;
 	}
 
-	@Override
 	public void setLink(String link) {
 		this.link = link;
 	}
@@ -123,43 +141,35 @@ public class DecisionKnowledgeElementImpl implements DecisionKnowledgeElement {
 		this.setLink(link);
 	}
 
-	@Override
 	public String getMacroId() {
 		return macroId;
 	}
 
-	@Override
 	public void setMacroId(String macroId) {
 		this.macroId = macroId;
 	}
 
-	@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	@Override
 	public String getCreator() {
 		return creator;
 	}
 
-	@Override
 	@JsonProperty("creator")
 	public void setCreator(String name) {
 		this.creator = name;
 	}
 
-	@Override
 	public String getUpdatingDate() {
 		return updatingDate;
 	}
 
-	@Override
 	@JsonProperty("updatingDate")
 	public void setUpdatingDate(String date) {
 		this.updatingDate = date;

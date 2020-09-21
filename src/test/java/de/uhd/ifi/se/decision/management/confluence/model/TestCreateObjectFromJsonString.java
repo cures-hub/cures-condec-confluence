@@ -15,8 +15,8 @@ public class TestCreateObjectFromJsonString {
 				+ "\"macroId\":\"28e02c88-0754-40de-9df1-ac403833dd38\",\"description\":\"Link "
 				+ "new created type to different devices inside the pop up field.\"}]";
 
-		List<DecisionKnowledgeElement> elements = DecisionKnowledgeElement.parseJsonString(jsonString);
-		DecisionKnowledgeElement element = elements.get(0);
+		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
+		KnowledgeElement element = elements.get(0);
 		assertEquals("link type to devices", element.getSummary());
 		assertEquals(122191874, element.getPageId());
 		assertEquals("ISE2019-103", element.getKey());
@@ -30,8 +30,8 @@ public class TestCreateObjectFromJsonString {
 				+ "jump-to methods for jira issue nodes, git commit nodes, changed file nodes, "
 				+ "code method nodes and decision knowledge element nodes.\",\"type\":\"Work "
 				+ "Item\",\"key\":\"ECONDEC-20\",\"url\":\"https:\\/\\/jira-se.ifi.uni-heidelberg.de/browse/ECONDEC-20\"}]";
-		List<DecisionKnowledgeElement> elements = DecisionKnowledgeElement.parseJsonString(jsonString);
-		DecisionKnowledgeElement element = elements.get(0);
+		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
+		KnowledgeElement element = elements.get(0);
 		assertEquals("WI: Implement jump-to methods for nodes in knowledge graph", element.getSummary());
 		assertEquals(0, element.getPageId());
 		assertEquals("ECONDEC-20", element.getKey());
@@ -41,7 +41,7 @@ public class TestCreateObjectFromJsonString {
 	@Test
 	public void testParseTypes() {
 		String jsonString = "[[{'type':'issue'}, {'type':'decision'}]]";
-		List<DecisionKnowledgeElement> elements = DecisionKnowledgeElement.parseJsonString(jsonString);
+		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}
@@ -49,7 +49,7 @@ public class TestCreateObjectFromJsonString {
 	@Test
 	public void testParseInvalidJsonString() {
 		String jsonString = "[[test]]";
-		List<DecisionKnowledgeElement> elements = DecisionKnowledgeElement.parseJsonString(jsonString);
+		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		assertEquals(0, elements.size());
 	}
 }

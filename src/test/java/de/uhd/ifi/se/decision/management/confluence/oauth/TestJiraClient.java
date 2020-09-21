@@ -15,8 +15,7 @@ import org.junit.Test;
 import com.atlassian.sal.api.component.ComponentLocator;
 
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockComponentLocator;
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
-import de.uhd.ifi.se.decision.management.confluence.oauth.impl.JiraClientImpl;
+import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 
 public class TestJiraClient {
 
@@ -25,12 +24,12 @@ public class TestJiraClient {
 	@BeforeClass
 	public static void setUp() {
 		ComponentLocator.setComponentLocator(new MockComponentLocator());
-		jiraClient = new JiraClientImpl();
+		jiraClient = new JiraClient();
 	}
 
 	@Test
 	public void testConstructor() {
-		assertNotNull(new JiraClientImpl());
+		assertNotNull(new JiraClient());
 	}
 
 	@Test
@@ -41,7 +40,7 @@ public class TestJiraClient {
 
 	@Test
 	public void testGetDecisionKnowledgeFromJira() {
-		List<DecisionKnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC");
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC");
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}
@@ -52,20 +51,20 @@ public class TestJiraClient {
 		jiraIssueKeys.add("CONDEC-1");
 		jiraIssueKeys.add("CONDEC-2");
 
-		List<DecisionKnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira(jiraIssueKeys);
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira(jiraIssueKeys);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}
 
 	@Test
 	public void testParseJiraProjectsJsonOneProject() {
-		Set<String> projects = ((JiraClientImpl) jiraClient).parseJiraProjectsJson("CONDEC");
+		Set<String> projects = ((JiraClient) jiraClient).parseJiraProjectsJson("CONDEC");
 		assertEquals("CONDEC", projects.iterator().next());
 	}
 
 	@Test
 	public void testParseJiraProjectsJsonManyProjects() {
-		Set<String> projects = ((JiraClientImpl) jiraClient)
+		Set<String> projects = ((JiraClient) jiraClient)
 				.parseJiraProjectsJson("[ {'key' : 'TEST'}, {'key' : 'CONDEC'} ]");
 		assertEquals(2, projects.size());
 	}

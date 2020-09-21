@@ -11,7 +11,6 @@ import com.atlassian.sal.api.component.ComponentLocator;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
 import de.uhd.ifi.se.decision.management.confluence.mocks.MockComponentLocator;
-import de.uhd.ifi.se.decision.management.confluence.rest.impl.KnowledgeRestImpl;
 
 public class TestGetProjectsFromJira {
 	private KnowledgeRest knowledgeRest;
@@ -19,7 +18,7 @@ public class TestGetProjectsFromJira {
 	@Before
 	public void setUp() {
 		ComponentLocator.setComponentLocator(new MockComponentLocator());
-		knowledgeRest = new KnowledgeRestImpl();
+		knowledgeRest = new KnowledgeRest();
 	}
 
 	@Test
