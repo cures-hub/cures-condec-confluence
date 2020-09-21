@@ -177,27 +177,6 @@
 					<verbose>false</verbose>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M2</version>
-				<executions>
-					<execution>
-						<id>enforce-java</id>
-						<phase>package</phase>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireJavaVersion>
-									<version>1.8</version>
-								</requireJavaVersion>
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -245,8 +224,8 @@
 			generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 
 	<url>https://github.com/cures-hub/cures-condec-confluence</url>
