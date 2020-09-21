@@ -37,7 +37,7 @@ public class TestKnowledgePersistenceManager {
 
 	@Test
 	public void testAddElement() {
-		KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
+		KnowledgePersistenceManager.addKnowledgeElement(element);
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23, "42");
 		assertEquals(element, storedElements.get(0));
 	}
@@ -50,16 +50,16 @@ public class TestKnowledgePersistenceManager {
 
 	@Test
 	public void testRemoveElement() {
-		KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
-		KnowledgePersistenceManager.removeDecisionKnowledgeElement(element.getId());
+		KnowledgePersistenceManager.addKnowledgeElement(element);
+		KnowledgePersistenceManager.removeKnowledgeElement(element.getId());
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23, "42");
 		assertEquals(0, storedElements.size());
 	}
 
 	@Test
 	public void testRemoveElements() {
-		KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
-		KnowledgePersistenceManager.removeDecisionKnowledgeElements(23, "42");
+		KnowledgePersistenceManager.addKnowledgeElement(element);
+		KnowledgePersistenceManager.removeKnowledgeElements(23, "42");
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23, "42");
 		assertEquals(0, storedElements.size());
 	}

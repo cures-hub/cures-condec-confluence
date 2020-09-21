@@ -49,13 +49,13 @@ public class KnowledgeRest {
 		try {
 			// first remove issues from this page
 			if (elements.size() > 0) {
-				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
+				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 			}
 
 			for (KnowledgeElement element : elements) {
 				element.setPageId(pageId);
 				element.setMacroId(macroId);
-				KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
+				KnowledgePersistenceManager.addKnowledgeElement(element);
 			}
 
 		} catch (Exception e) {

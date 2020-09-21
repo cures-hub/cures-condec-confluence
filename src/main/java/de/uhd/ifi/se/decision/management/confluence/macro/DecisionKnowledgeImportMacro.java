@@ -39,11 +39,11 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			}
 			if (projectKey != null && !projectKey.isEmpty()) {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
-				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
+				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);
 					element.setMacroId(macroId);
-					KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
+					KnowledgePersistenceManager.addKnowledgeElement(element);
 				}
 			}
 		}
