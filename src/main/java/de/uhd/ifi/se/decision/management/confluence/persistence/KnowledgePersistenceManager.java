@@ -11,7 +11,7 @@ import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ConfluenceImport;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 
 /*
  * @issue How to store the knowledge in Confluence?
@@ -31,45 +31,43 @@ public class KnowledgePersistenceManager {
 		setBandanaContext(new ConfluenceBandanaContext("knowledge"));
 	}
 
-	public static void addDecisionKnowledgeElement(DecisionKnowledgeElement decisionKnowledgeElement) {
-		bandanaManager.setValue(bandanaContext, decisionKnowledgeElement.getId(), decisionKnowledgeElement);
+	public static void addKnowledgeElement(KnowledgeElement knowledgeElement) {
+		bandanaManager.setValue(bandanaContext, knowledgeElement.getId(), knowledgeElement);
 	}
 
-	public static void removeDecisionKnowledgeElement(String id) {
+	public static void removeKnowledgeElement(String id) {
 		bandanaManager.removeValue(bandanaContext, id);
 	}
 
-	public static List<DecisionKnowledgeElement> getElements(int pageId, String macroId) {
-		List<DecisionKnowledgeElement> elements = new ArrayList<DecisionKnowledgeElement>();
+	public static List<KnowledgeElement> getElements(int pageId, String macroId) {
+		List<KnowledgeElement> elements = new ArrayList<KnowledgeElement>();
 		if (pageId == 0 || macroId == null) {
 			return elements;
 		}
 
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) bandanaManager
-					.getValue(bandanaContext, id);
+			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
 			// add only if the page id and Macro id corresponds // if macro id is null
 			// return all from page
-			if (decisionKnowledgeElement != null && decisionKnowledgeElement.getPageId() == pageId
-					&& decisionKnowledgeElement.getMacroId() != null
-					&& (decisionKnowledgeElement.getMacroId().equals(macroId)) || macroId == null) {
-				elements.add(decisionKnowledgeElement);
+			if (knowledgeElement != null && knowledgeElement.getPageId() == pageId
+					&& knowledgeElement.getMacroId() != null && (knowledgeElement.getMacroId().equals(macroId))
+					|| macroId == null) {
+				elements.add(knowledgeElement);
 			}
 		}
 		return elements;
 	}
 
-	public static void removeDecisionKnowledgeElements(int pageId, String macroId) {
+	public static void removeKnowledgeElements(int pageId, String macroId) {
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			DecisionKnowledgeElement decisionKnowledgeElement = (DecisionKnowledgeElement) bandanaManager
-					.getValue(bandanaContext, id);
+			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
 			// remove only if the page id and Macro id corresponds remove all where macroId
 			// is null
-			String issueMacroId = decisionKnowledgeElement.getMacroId();
+			String issueMacroId = knowledgeElement.getMacroId();
 
-			if (isNullOrEmpty(issueMacroId) || (!isNullOrEmpty(issueMacroId)
-					&& decisionKnowledgeElement.getPageId() == pageId && issueMacroId.equals(macroId))) {
-				removeDecisionKnowledgeElement(decisionKnowledgeElement.getId());
+			if (isNullOrEmpty(issueMacroId) || (!isNullOrEmpty(issueMacroId) && knowledgeElement.getPageId() == pageId
+					&& issueMacroId.equals(macroId))) {
+				removeKnowledgeElement(knowledgeElement.getId());
 			}
 		}
 	}

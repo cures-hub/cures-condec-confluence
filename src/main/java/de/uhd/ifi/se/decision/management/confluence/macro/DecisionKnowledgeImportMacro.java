@@ -12,7 +12,7 @@ import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.confluence.xhtml.api.MacroDefinition;
 import com.atlassian.fugue.Option;
 
-import de.uhd.ifi.se.decision.management.confluence.model.DecisionKnowledgeElement;
+import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 
@@ -24,7 +24,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		String macroId = getMacroId(conversionContext);
 
-		List<DecisionKnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 
 		boolean freeze = false;
 		if ("true".equals(map.get("freeze"))) {
@@ -39,11 +39,11 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			}
 			if (projectKey != null && !projectKey.isEmpty()) {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey);
-				KnowledgePersistenceManager.removeDecisionKnowledgeElements(pageId, macroId);
-				for (DecisionKnowledgeElement element : knowledgeElements) {
+				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
+				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);
 					element.setMacroId(macroId);
-					KnowledgePersistenceManager.addDecisionKnowledgeElement(element);
+					KnowledgePersistenceManager.addKnowledgeElement(element);
 				}
 			}
 		}

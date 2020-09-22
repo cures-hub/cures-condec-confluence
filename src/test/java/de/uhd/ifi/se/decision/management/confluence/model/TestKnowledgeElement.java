@@ -6,14 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.uhd.ifi.se.decision.management.confluence.model.impl.DecisionKnowledgeElementImpl;
-
-public class TestDecisionKnowledgeElement {
-	private DecisionKnowledgeElement element;
+public class TestKnowledgeElement {
+	private KnowledgeElement element;
 
 	@Before
 	public void createElement() {
-		element = new DecisionKnowledgeElementImpl();
+		element = new KnowledgeElement();
 		element.setDescription("myDescription");
 		element.setId("myId");
 		element.setKey("myKey");
@@ -26,7 +24,7 @@ public class TestDecisionKnowledgeElement {
 
 	@Test
 	public void testConstructor() {
-		DecisionKnowledgeElement element = new DecisionKnowledgeElementImpl("", 0, "", "", "", "", "");
+		KnowledgeElement element = new KnowledgeElement("", 0, "", "", "", "", "");
 		assertNotNull(element);
 	}
 

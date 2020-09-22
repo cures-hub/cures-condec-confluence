@@ -6,15 +6,19 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
                 <tr>
                 	<th>Type</th>
                     <th>Summary</th>
+                    <th>Author</th>
+                    <th>Last Update</th>
                     <th>Key</th>                    
                 </tr>
-                    #foreach($decisionKnowledgeElement in $knowledgeElements)
-                        #set ($type = $decisionKnowledgeElement.getType())
+                    #foreach($knowledgeElement in $knowledgeElements)
+                        #set ($type = $knowledgeElement.getType())
                         #set ($imgPath="$type.png")
                 <tr>
-                    	<td><a target="_blank" href="$decisionKnowledgeElement.getLink()"><span class="type_images type_class_$decisionKnowledgeElement.getType()"></span> $decisionKnowledgeElement.getType()</a></td>                    	
-                        <td>$decisionKnowledgeElement.getSummary()</td>
-                        <td><a target="_blank" href="$decisionKnowledgeElement.getLink()">$decisionKnowledgeElement.getKey()</a></td>                        
+                    	<td><a target="_blank" href="$knowledgeElement.getLink()"><span class="type_images type_class_$knowledgeElement.getType()"></span> $knowledgeElement.getType()</a></td>                    	
+                        <td>$knowledgeElement.getSummary()</td>
+                        <td>$knowledgeElement.getCreator()</td>
+                        <td>$knowledgeElement.getUpdatingDate()</td>
+                        <td><a target="_blank" href="$knowledgeElement.getLink()">$knowledgeElement.getKey()</a></td>                        
                 </tr>
                     #end
                 </tbody>
