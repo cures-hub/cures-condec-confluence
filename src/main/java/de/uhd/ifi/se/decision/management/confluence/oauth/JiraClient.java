@@ -99,11 +99,17 @@ public class JiraClient {
 
 	private String getResponseFromJiraWithApplicationLink(String jiraUrl) {
 		ApplicationLinkRequest request = createRequest(Request.MethodType.GET, jiraUrl);
+		if (request == null) {
+			return "";
+		}
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
 	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey) {
 		ApplicationLinkRequest request = createRequest(Request.MethodType.POST, jiraUrl);
+		if (request == null) {
+			return "";
+		}
 		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + query + "\"}",
 				MediaType.APPLICATION_JSON);
 		return receiveResponseFromJiraWithApplicationLink(request);
