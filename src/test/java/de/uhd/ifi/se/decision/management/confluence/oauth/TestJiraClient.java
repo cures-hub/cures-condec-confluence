@@ -51,7 +51,7 @@ public class TestJiraClient {
 		jiraIssueKeys.add("CONDEC-1");
 		jiraIssueKeys.add("CONDEC-2");
 
-		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira(jiraIssueKeys);
+		List<KnowledgeElement> elements = jiraClient.getKnowledgeElementsFromJira(jiraIssueKeys);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}

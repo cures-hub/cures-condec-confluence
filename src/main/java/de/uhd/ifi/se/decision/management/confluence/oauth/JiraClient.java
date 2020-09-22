@@ -69,6 +69,19 @@ public class JiraClient {
 		return getResponseFromJiraWithApplicationLink("rest/api/2/project");
 	}
 
+	/**
+	 * @param query
+	 *            JQL query.
+	 * @param projectKey
+	 *            of the Jira project.
+	 * @return list of knowledge elements that match a certain query and the project
+	 *         key.
+	 */
+	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey) {
+		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey);
+		return KnowledgeElement.parseJsonString(jsonString);
+	}
+
 	public Set<String> parseJiraProjectsJson(String projectsAsJsonString) {
 		Set<String> projectKeys = new HashSet<String>();
 		try {
@@ -85,44 +98,33 @@ public class JiraClient {
 	}
 
 	private String getResponseFromJiraWithApplicationLink(String jiraUrl) {
-		String responseBody = "";
-		if (jiraApplicationLink == null) {
-			return responseBody;
-		}
-		try {
-			ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
-			ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.GET, jiraUrl);
-			request.addHeader("Content-Type", "application/json");
-
-			responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>() {
-				@Override
-				public String credentialsRequired(final Response response) throws ResponseException {
-					return response.getResponseBodyAsString();
-				}
-
-				@Override
-				public String handle(final Response response) throws ResponseException {
-					return response.getResponseBodyAsString();
-				}
-			});
-		} catch (CredentialsRequiredException | ResponseException e) {
-			responseBody = e.getMessage();
-		}
-		return responseBody;
+		ApplicationLinkRequest request = createRequest(Request.MethodType.GET, jiraUrl);
+		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
 	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey) {
-		String responseBody = "";
-		if (jiraApplicationLink == null) {
-			return responseBody;
-		}
-		try {
-			ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
-			ApplicationLinkRequest request = requestFactory.createRequest(Request.MethodType.POST, jiraUrl);
-			request.addHeader("Content-Type", "application/json");
-			request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + query + "\"}",
-					MediaType.APPLICATION_JSON);
+		ApplicationLinkRequest request = createRequest(Request.MethodType.POST, jiraUrl);
+		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + query + "\"}",
+				MediaType.APPLICATION_JSON);
+		return receiveResponseFromJiraWithApplicationLink(request);
+	}
 
+	private ApplicationLinkRequest createRequest(Request.MethodType type, String url) {
+		if (jiraApplicationLink == null) {
+			return null;
+		}
+		ApplicationLinkRequestFactory requestFactory = jiraApplicationLink.createAuthenticatedRequestFactory();
+		try {
+			return requestFactory.createRequest(type, url);
+		} catch (CredentialsRequiredException e) {
+		}
+		return null;
+	}
+
+	private String receiveResponseFromJiraWithApplicationLink(ApplicationLinkRequest request) {
+		String responseBody = "";
+		try {
+			request.addHeader("Content-Type", "application/json");
 			responseBody = request.executeAndReturn(new ApplicationLinkResponseHandler<String>() {
 				@Override
 				public String credentialsRequired(final Response response) throws ResponseException {
@@ -134,39 +136,21 @@ public class JiraClient {
 					return response.getResponseBodyAsString();
 				}
 			});
-		} catch (CredentialsRequiredException | ResponseException e) {
+		} catch (ResponseException e) {
 			responseBody = e.getMessage();
 		}
 		return responseBody;
 	}
 
 	/**
-	 * Retrieves the decision knowledge elements from Jira that are associated to a
-	 * set of Jira issues.
-	 * 
 	 * @param jiraIssueKeys
 	 *            as a set of strings.
-	 * @return list of decision knowledge elements.
+	 * @return list of knowledge elements from Jira that match the filter criteria.
 	 */
-	public List<KnowledgeElement> getDecisionKnowledgeFromJira(Set<String> jiraIssueKeys) {
+	public List<KnowledgeElement> getKnowledgeElementsFromJira(Set<String> jiraIssueKeys) {
 		String queryWithJiraIssues = JiraClient.getJiraCallQuery(jiraIssueKeys);
 		String projectKey = JiraClient.retrieveProjectKey(jiraIssueKeys);
 		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey);
-	}
-
-	/**
-	 * Retrieves the decision knowledge elements from Jira that match a certain
-	 * query and the project key.
-	 * 
-	 * @param query
-	 *            JQL query.
-	 * @param projectKey
-	 *            of the Jira project.
-	 * @return list of decision knowledge elements.
-	 */
-	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey) {
-		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey);
-		return KnowledgeElement.parseJsonString(jsonString);
 	}
 
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey) {
