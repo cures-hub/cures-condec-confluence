@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -23,26 +22,25 @@ import com.google.gson.Gson;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KnowledgeElement {
 
-	@XmlElement
 	private String link;
-	@XmlElement
 	private int pageId;
-	@XmlElement
 	private String summary;
-	@XmlElement
 	private String type;
-	@XmlElement
 	private String key;
-	@XmlElement
 	private String id;
-	@XmlElement
 	private String macroId;
-	@XmlElement
 	private String description;
-	@XmlElement
 	private String creator;
 	private String updatingDate;
 
+	/**
+	 * @issue How can we convert a JSON string into a list of KnowledgeElement
+	 *        objects?
+	 * @decision Convert a JSON string into a list of KnowledgeElement objects
+	 *           manually using the GSON library!
+	 * @con This is not very elegant and hard to understand. Their might be an
+	 *      easier way of mapping JSON Strings into objects.
+	 */
 	public static List<KnowledgeElement> parseJsonString(String jsonString) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.writerWithDefaultPrettyPrinter();
@@ -171,7 +169,8 @@ public class KnowledgeElement {
 	}
 
 	@JsonProperty("updatingDate")
-	public void setUpdatingDate(String date) {
-		this.updatingDate = date;
+	public void setUpdatingDate(String epochTime) {
+		Date date = new Date(Long.parseLong(epochTime));
+		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 }
