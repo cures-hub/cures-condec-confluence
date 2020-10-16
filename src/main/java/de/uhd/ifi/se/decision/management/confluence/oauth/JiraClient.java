@@ -77,8 +77,8 @@ public class JiraClient {
 	 * @return list of knowledge elements that match a certain query and the project
 	 *         key.
 	 */
-	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey) {
-		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey);
+	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey, long startDate, long endDate) {
+		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey, startDate, endDate);
 		return KnowledgeElement.parseJsonString(jsonString);
 	}
 
@@ -105,13 +105,18 @@ public class JiraClient {
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
-	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey) {
+	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey, long startDate, long endDate) {
 		ApplicationLinkRequest request = createRequest(Request.MethodType.POST, jiraUrl);
 		if (request == null) {
 			return "";
 		}
-		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + query + "\"}",
+		request.setRequestBody(
+			"{\"projectKey\":\"" + projectKey + "\"," +
+				"\"searchTerm\":\"" + query + "\"," +
+				"\"startDate\":\"" + startDate + "\"," +
+				"\"endDate\":\"" + endDate + "\"}",
 				MediaType.APPLICATION_JSON);
+
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
@@ -153,15 +158,15 @@ public class JiraClient {
 	 *            as a set of strings.
 	 * @return list of knowledge elements from Jira that match the filter criteria.
 	 */
-	public List<KnowledgeElement> getKnowledgeElementsFromJira(Set<String> jiraIssueKeys) {
+	public List<KnowledgeElement> getKnowledgeElementsFromJira(Set<String> jiraIssueKeys, long startDate, long endDate) {
 		String queryWithJiraIssues = JiraClient.getJiraCallQuery(jiraIssueKeys);
 		String projectKey = JiraClient.retrieveProjectKey(jiraIssueKeys);
-		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey);
+		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey, startDate, endDate);
 	}
 
-	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey) {
+	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate, long endDate) {
 		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
-				encodeUserInputQuery(query), projectKey);
+				encodeUserInputQuery(query), projectKey, startDate, endDate);
 	}
 
 	/**

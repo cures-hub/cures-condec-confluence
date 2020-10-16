@@ -32,6 +32,8 @@ public class TestDecisionKnowledgeImportMacro {
 		map = new HashMap<String, String>();
 		map.put("project", "CONDEC");
 		map.put("query", "");
+		map.put("startDate", "");
+		map.put("endDate", "");
 		map.put("freeze", "false");
 	}
 

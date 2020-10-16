@@ -24,7 +24,7 @@ public class TestGetKnowledgeElementsFromJira {
 
 	@Test
 	public void testValid() {
-		Response response = knowledgeRest.getKnowledgeElementsFromJira("CONDEC", "");
+		Response response = knowledgeRest.getKnowledgeElementsFromJira("CONDEC", "", 1585699200000L, 1588291200000L);
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
 

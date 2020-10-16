@@ -63,6 +63,15 @@
 		<parameters>
 			<parameter name="query" type="string" desc="filter=allopenissues" />
 			<parameter name="project" type="enum" />
+            <!-- Dom -->
+            <!-- <parameter name="type" type="enum"/> -->
+            <parameter name="startDate" type="string" title="yyyy-MM-ddThh:mm">
+
+            </parameter>
+            <parameter name="endDate" type="string" title="yyyy-MM-ddThh:mm">
+
+            </parameter>
+            <!-- end Dom-->
 			<parameter name="freeze" type="boolean" default="false" required="true"
 				title="Freeze the content?" />
 		</parameters>
