@@ -40,7 +40,7 @@ public class TestJiraClient {
 
 	@Test
 	public void testGetDecisionKnowledgeFromJira() {
-		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC");
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC", 1585699200, 1604188800);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}
@@ -51,7 +51,7 @@ public class TestJiraClient {
 		jiraIssueKeys.add("CONDEC-1");
 		jiraIssueKeys.add("CONDEC-2");
 
-		List<KnowledgeElement> elements = jiraClient.getKnowledgeElementsFromJira(jiraIssueKeys);
+		List<KnowledgeElement> elements = jiraClient.getKnowledgeElementsFromJira(jiraIssueKeys, 1585699200, 1604188800);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
 	}

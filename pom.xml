@@ -215,17 +215,31 @@
 	</profiles>
 
 	<properties>
-		<confluence.version>7.7.3</confluence.version>
+		<!-- <confluence.version>7.7.3</confluence.version>
+
 		<amps.version>8.1.1</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.6</jacoco-version>
+		<jacoco-version>0.8.6</jacoco-version> -->
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
 			generate bundle. -->
+        <!--
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.target>11</maven.compiler.target> -->
+
+        <confluence.version>7.0.4</confluence.version>
+        <amps.version>8.0.3</amps.version>
+        <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
+        <atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
+        <jacoco-version>0.8.4</jacoco-version>
+        <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to
+            generate bundle. -->
+        <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<url>https://github.com/cures-hub/cures-condec-confluence</url>
