@@ -86,10 +86,11 @@ public class KnowledgeRest {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getKnowledgeElementsFromJira(@QueryParam("projectKey") String projectKey,
-			@QueryParam("query") String query, @QueryParam("startDate") long startDate, @QueryParam("endDate") long endDate) {
+			@QueryParam("query") String query, @QueryParam("startDate") long startDate,
+			@QueryParam("endDate") long endDate) {
 		try {
-			List<KnowledgeElement> elements = JiraClient.instance.getDecisionKnowledgeFromJira(
-				query, projectKey, startDate, endDate);
+			List<KnowledgeElement> elements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey,
+					startDate, endDate);
 			return Response.status(Response.Status.OK).entity(elements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
@@ -100,7 +101,7 @@ public class KnowledgeRest {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getProjectsFromJira() {
-		String jiraProjects = JiraClient.instance.getJiraProjectsAsJson();
-		return Response.status(Response.Status.OK).entity(jiraProjects).build();
+		String jiraProjectsJsonResponse = JiraClient.instance.getJiraProjectsAsJson();
+		return Response.status(Response.Status.OK).entity(jiraProjectsJsonResponse).build();
 	}
 }

@@ -3,10 +3,7 @@ package de.uhd.ifi.se.decision.management.confluence.oauth;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
@@ -71,7 +68,7 @@ public class JiraClient {
 
 	/**
 	 * @param searchTerm
-	 *            substring.
+	 *            substring that the knowledge elements must contain.
 	 * @param projectKey
 	 *            of the Jira project.
 	 * @return list of knowledge elements that match a certain query and the project
@@ -112,10 +109,8 @@ public class JiraClient {
 		if (request == null) {
 			return "";
 		}
-		request.setRequestBody(
-				"{\"projectKey\":\"" + projectKey + "\"," + "\"searchTerm\":\"" + searchTerm + "\","
-						+ "\"startDate\":\"" + startDate + "\"," + "\"endDate\":\"" + endDate + "\"}",
-				MediaType.APPLICATION_JSON);
+		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\","
+				+ "\"startDate\":\"" + startDate + "\",\"endDate\":\"" + endDate + "\"}", MediaType.APPLICATION_JSON);
 
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
@@ -153,84 +148,10 @@ public class JiraClient {
 		return responseBody;
 	}
 
-	/**
-	 * @param jiraIssueKeys
-	 *            as a set of strings.
-	 * @return list of knowledge elements from Jira that match the filter criteria.
-	 */
-	public List<KnowledgeElement> getKnowledgeElementsFromJira(Set<String> jiraIssueKeys, long startDate,
-			long endDate) {
-		String queryWithJiraIssues = getJiraCallQuery(jiraIssueKeys);
-		String projectKey = JiraClient.retrieveProjectKey(jiraIssueKeys);
-		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey, startDate, endDate);
-	}
-
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate,
 			long endDate) {
 		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
 				encodeUserInputQuery(query), projectKey, startDate, endDate);
-	}
-
-	/**
-	 * @param message
-	 *            that might contain a Jira issue key, e.g., a commit message,
-	 *            branch name, or pull request title.
-	 * @return list of all mentioned Jira issue keys in a message in upper case
-	 *         letters (is ordered by their appearance in the message).
-	 */
-	static Set<String> getJiraIssueKeys(String message) {
-		Set<String> keys = new LinkedHashSet<String>();
-		String[] words = message.split("[\\s,:]+");
-		String projectKey = null;
-		for (String word : words) {
-			word = word.toUpperCase(Locale.ENGLISH);
-			if (word.contains("-")) {
-				if (projectKey == null) {
-					projectKey = word.split("-")[0];
-				}
-				if (word.startsWith(projectKey)) {
-					keys.add(word);
-				}
-			}
-		}
-		return keys;
-	}
-
-	/**
-	 * @param jiraIssueKeys
-	 *            as a set of strings.
-	 * @return potential Jira project key (e.g. CONDEC).
-	 */
-	public static String retrieveProjectKey(Set<String> jiraIssueKeys) {
-		Set<String> projectKeys = JiraClient.instance.getJiraProjects();
-		if (jiraIssueKeys == null || jiraIssueKeys.isEmpty()) {
-			return "";
-		}
-		for (String jiraIssueKey : jiraIssueKeys) {
-			String potentialProjectKey = jiraIssueKey.split("-")[0];
-			if (isProjectKeyExisting(potentialProjectKey, projectKeys)) {
-				return potentialProjectKey;
-			}
-		}
-		return "";
-	}
-
-	public static boolean isProjectKeyExisting(String projectKey, Set<String> projectKeys) {
-		return !projectKey.isEmpty() && projectKeys.contains(projectKey);
-	}
-
-	public static String getJiraCallQuery(Set<String> jiraIssueKeys) {
-		String query = "?jql=key in (";
-		Iterator<String> iterator = jiraIssueKeys.iterator();
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			query += key;
-			if (iterator.hasNext()) {
-				query += ",";
-			}
-		}
-		query += ")";
-		return encodeUserInputQuery(query);
 	}
 
 	private static String encodeUserInputQuery(String query) {
