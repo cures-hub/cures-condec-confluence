@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
+
 import com.atlassian.applinks.api.ApplicationLink;
 import com.atlassian.applinks.api.ApplicationLinkRequest;
 import com.atlassian.applinks.api.ApplicationLinkRequestFactory;
@@ -54,12 +56,15 @@ public class JiraClient {
 	 *            substring that the knowledge elements must contain.
 	 * @param projectKey
 	 *            of the Jira project.
+	 * @param status
+	 * @param knowledgeTypes
 	 * @return list of knowledge elements that match a certain query and the project
 	 *         key.
 	 */
 	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String searchTerm, String projectKey, long startDate,
-			long endDate) {
-		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(searchTerm, projectKey, startDate, endDate);
+			long endDate, List<String> knowledgeTypes, List<String> status) {
+		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(searchTerm, projectKey, startDate, endDate,
+				knowledgeTypes, status);
 		return KnowledgeElement.parseJsonString(jsonString);
 	}
 
@@ -72,14 +77,16 @@ public class JiraClient {
 	}
 
 	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String searchTerm, String projectKey,
-			long startDate, long endDate) {
+			long startDate, long endDate, String knowledgeTypes, String status) {
 		ApplicationLinkRequest request = createRequest(Request.MethodType.POST, jiraUrl);
 		if (request == null) {
 			return "";
 		}
-		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\","
-				+ "\"startDate\":\"" + startDate + "\",\"endDate\":\"" + endDate + "\"}", MediaType.APPLICATION_JSON);
-
+		request.setRequestBody(
+				"{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\"," + "\"startDate\":\""
+						+ startDate + "\",\"endDate\":\"" + endDate + "\",\"knowledgeTypes\":" + knowledgeTypes + "}",
+				MediaType.APPLICATION_JSON);
+		// ",\"status\":" + status +
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
@@ -117,9 +124,14 @@ public class JiraClient {
 	}
 
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate,
-			long endDate) {
+			long endDate, List<String> knowledgeTypes, List<String> status) {
 		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
-				encodeUserInputQuery(query), projectKey, startDate, endDate);
+				encodeUserInputQuery(query), projectKey, startDate, endDate, convertToJsonArray(knowledgeTypes),
+				convertToJsonArray(status));
+	}
+
+	public static String convertToJsonArray(List<String> list) {
+		return new JSONArray(list).toString();
 	}
 
 	private static String encodeUserInputQuery(String query) {

@@ -3,6 +3,7 @@ package de.uhd.ifi.se.decision.management.confluence.oauth;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -30,8 +31,17 @@ public class TestJiraClient {
 
 	@Test
 	public void testGetDecisionKnowledgeFromJira() {
-		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC", 1585699200, 1604188800);
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC", 1585699200, 1604188800,
+				new ArrayList<>(), new ArrayList<>());
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
+	}
+
+	@Test
+	public void testConvertListToJson() {
+		List<String> knowledgeTypes = new ArrayList<>();
+		knowledgeTypes.add("Issue");
+		knowledgeTypes.add("Decision");
+		assertEquals("[\"Issue\",\"Decision\"]", JiraClient.convertToJsonArray(knowledgeTypes));
 	}
 }

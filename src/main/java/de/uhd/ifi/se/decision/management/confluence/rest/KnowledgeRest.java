@@ -1,5 +1,6 @@
 package de.uhd.ifi.se.decision.management.confluence.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,7 +91,7 @@ public class KnowledgeRest {
 			@QueryParam("endDate") long endDate) {
 		try {
 			List<KnowledgeElement> elements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey,
-					startDate, endDate);
+					startDate, endDate, new ArrayList<>(), new ArrayList<>());
 			return Response.status(Response.Status.OK).entity(elements).build();
 		} catch (Exception e) {
 			return Response.serverError().build();
