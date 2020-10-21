@@ -2,14 +2,9 @@ package de.uhd.ifi.se.decision.management.confluence.oauth;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.atlassian.applinks.api.ApplicationLink;
 import com.atlassian.applinks.api.ApplicationLinkRequest;
@@ -47,18 +42,6 @@ public class JiraClient {
 	}
 
 	/**
-	 * @return all Jira projects that the user is allowed to access as a set of
-	 *         project keys.
-	 */
-	public Set<String> getJiraProjects() {
-		String projectsAsJsonString = getJiraProjectsAsJson();
-		if (projectsAsJsonString.isEmpty()) {
-			return new HashSet<String>();
-		}
-		return parseJiraProjectsJson(projectsAsJsonString);
-	}
-
-	/**
 	 * @return all Jira projects that the user is allowed to access as a JSON
 	 *         string.
 	 */
@@ -78,21 +61,6 @@ public class JiraClient {
 			long endDate) {
 		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(searchTerm, projectKey, startDate, endDate);
 		return KnowledgeElement.parseJsonString(jsonString);
-	}
-
-	public Set<String> parseJiraProjectsJson(String projectsAsJsonString) {
-		Set<String> projectKeys = new HashSet<String>();
-		try {
-			JSONArray projectArray = new JSONArray(projectsAsJsonString);
-			for (Object project : projectArray) {
-				JSONObject projectMap = (JSONObject) project;
-				String projectKey = (String) projectMap.get("key");
-				projectKeys.add(projectKey.toUpperCase());
-			}
-		} catch (Exception e) {
-			projectKeys.add(projectsAsJsonString);
-		}
-		return projectKeys;
 	}
 
 	private String getResponseFromJiraWithApplicationLink(String jiraUrl) {

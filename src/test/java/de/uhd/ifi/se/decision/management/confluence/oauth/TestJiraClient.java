@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
-import java.util.Set;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,27 +29,9 @@ public class TestJiraClient {
 	}
 
 	@Test
-	public void testGetCurrentActiveJiraProjects() {
-		Set<String> projectKeys = jiraClient.getJiraProjects();
-		assertEquals(1, projectKeys.size());
-	}
-
-	@Test
 	public void testGetDecisionKnowledgeFromJira() {
 		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("", "CONDEC", 1585699200, 1604188800);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());
-	}
-
-	@Test
-	public void testParseJiraProjectsJsonOneProject() {
-		Set<String> projects = jiraClient.parseJiraProjectsJson("CONDEC");
-		assertEquals("CONDEC", projects.iterator().next());
-	}
-
-	@Test
-	public void testParseJiraProjectsJsonManyProjects() {
-		Set<String> projects = jiraClient.parseJiraProjectsJson("[ {'key' : 'TEST'}, {'key' : 'CONDEC'} ]");
-		assertEquals(2, projects.size());
 	}
 }
