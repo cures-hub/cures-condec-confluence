@@ -61,14 +61,14 @@
 		<description key="condec.import.macro.description" />
 		<category name="external-content" />
 		<parameters>
-			<parameter name="query" type="string" desc="filter=allopenissues" />
+			<parameter name="substring" type="string" default="" />
 			<parameter name="project" type="enum" />
             <!-- Dom -->
             <!-- <parameter name="type" type="enum"/> -->
-            <parameter name="startDate" type="string" title="yyyy-MM-ddThh:mm">
+            <parameter name="startDate" type="string" default="yyyy-MM-ddThh:mm">
 
             </parameter>
-            <parameter name="endDate" type="string" title="yyyy-MM-ddThh:mm">
+            <parameter name="endDate" type="string" default="yyyy-MM-ddThh:mm">
 
             </parameter>
             <!-- end Dom-->

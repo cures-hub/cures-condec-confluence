@@ -29,13 +29,6 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
 <script type="application/javascript">
     setImages();
 
-    AJS.$('#macro-param-startDate').tooltip({
-        title: function () {
-            var index = AJS.$("a").index(this);
-            return "This is link number " + index + " in all of the page";
-        }
-    });
-
     function setImages() {
         $(".type_images").each(function (container) {
             var jElement = $($(".type_images")[container]);
