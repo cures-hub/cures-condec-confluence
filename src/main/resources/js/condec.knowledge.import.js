@@ -36,8 +36,13 @@ AJS.bind("init.rte", function() {
 	AJS.MacroBrowser.setMacroJsOverride(macroName, jsOverrides);
 	
 	var updateMacro = function (macroId) {		
+		var dialog = $("#json-dialog");
+		if (dialog !== null) {
+			dialog.remove();
+		}
+		
 		// Standard sizes are 400, 600, 800 and 960 pixels
-		var dialog = new AJS.Dialog({
+		dialog = new AJS.Dialog({
 			width : 960,
 			height : 800,
 			id : "json-dialog",
