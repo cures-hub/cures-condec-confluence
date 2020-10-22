@@ -46,7 +46,7 @@ AJS.bind("init.rte", function() {
 			
 		dialog.addPanel(
 			"Edit JSON String",
-			"<p>Paste a JSON String exported from Jira or manually edit the existing one:</p>"
+			"<p>Paste a JSON String exported from Jira or manually edit the existing one. <mark>Make sure you enabled the 'freeze' option!</mark></p>"
 			+ "<form class='aui'><textarea class='textarea full-width-field' rows='30' id='jsonTextArea'></textarea></form>",
 			"panel-body");				
 		
