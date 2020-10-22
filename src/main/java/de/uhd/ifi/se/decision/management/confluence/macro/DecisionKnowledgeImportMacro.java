@@ -1,14 +1,13 @@
 package de.uhd.ifi.se.decision.management.confluence.macro;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-// dom
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.util.Date;
-import java.time.LocalDate;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
@@ -33,37 +32,75 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 
-		boolean freeze = false;
-		if ("true".equals(map.get("freeze"))) {
-			freeze = true;
-		}
+		boolean freeze = "true".equals(map.get("freeze"));
 
 		if (knowledgeElements.isEmpty() || !freeze) {
 			String projectKey = map.get("project");
-			String query = map.get("query");
-
+			String searchTerm = map.get("substring");
+			boolean areUnresolvedIssuesShown = !"false".equals(map.get("unresolvedDecisionProblems"));
+			boolean areResolvedIssuesShown = !"false".equals(map.get("resolvedDecisionProblems"));
+			boolean areDecisionsShown = !"false".equals(map.get("decisions"));
+			boolean areAlternativesShown = !"false".equals(map.get("alternatives"));
+			boolean areArgumentsShown = "true".equals(map.get("arguments"));
 			long startDate = 0L;
 			long endDate = 0L;
 
-			if ((map.get("startDate") == "") || (map.get("startDate") == null)) {
+			if (map.get("startDate") == null || map.get("startDate").isBlank()
+					|| map.get("startDate").equals("yyyy-MM-ddThh:mm")) {
 				System.out.println(map.get("startDate"));
 				LocalDate localStartDate = LocalDate.now().minusDays(14);
 				System.out.println(localStartDate);
 				startDate = convertToUnixTimeStamp(localStartDate.toString());
 				System.out.println(startDate);
-			} else startDate = convertToUnixTimeStamp(map.get("startDate"));
+			} else
+				startDate = convertToUnixTimeStamp(map.get("startDate"));
 
-			if ((map.get("endDate") == "") || (map.get("endDate") == null)) {
+			if (map.get("endDate") == null || map.get("endDate").isBlank()
+					|| map.get("endDate").equals("yyyy-MM-ddThh:mm")) {
 				System.out.println(map.get("endDate"));
 				endDate = Instant.now().getEpochSecond() * 1000;
 				System.out.println(endDate);
-			} else endDate = convertToUnixTimeStamp(map.get("endDate"));
+			} else
+				endDate = convertToUnixTimeStamp(map.get("endDate"));
 
-			if (query == null) {
-				query = "";
+			if (searchTerm == null) {
+				searchTerm = "";
 			}
-			if (projectKey != null && !projectKey.isEmpty()) {
-				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(query, projectKey, startDate, endDate);
+
+			List<String> knowledgeTypes = new ArrayList<>();
+
+			if (areUnresolvedIssuesShown || areResolvedIssuesShown) {
+				knowledgeTypes.add("Issue");
+				knowledgeTypes.add("Problem");
+				knowledgeTypes.add("Goal");
+			}
+			if (areDecisionsShown) {
+				knowledgeTypes.add("Decision");
+				knowledgeTypes.add("Solution");
+			}
+			if (areAlternativesShown) {
+				knowledgeTypes.add("Alternative");
+			}
+			if (areArgumentsShown) {
+				knowledgeTypes.add("Argument");
+			}
+
+			List<String> status = new ArrayList<>();
+			if (areResolvedIssuesShown) {
+				status.add("resolved");
+			}
+			if (areUnresolvedIssuesShown) {
+				status.add("unresolved");
+			}
+			status.add("decided");
+			status.add("challenged");
+			status.add("rejected");
+			status.add("idea");
+			status.add("discarded");
+
+			if (projectKey != null && !projectKey.isBlank()) {
+				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(searchTerm, projectKey, startDate,
+						endDate, knowledgeTypes, status);
 				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);

@@ -16,7 +16,7 @@ before_install:
 - atlas-version
 install: true
 script:
-  - atlas-package -P jacoco
+  - atlas-package -P jacoco -q
 notifications:
   email: false
 deploy:

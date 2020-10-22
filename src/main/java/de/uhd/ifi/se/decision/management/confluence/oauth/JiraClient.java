@@ -2,17 +2,11 @@ package de.uhd.ifi.se.decision.management.confluence.oauth;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.atlassian.applinks.api.ApplicationLink;
 import com.atlassian.applinks.api.ApplicationLinkRequest;
@@ -50,18 +44,6 @@ public class JiraClient {
 	}
 
 	/**
-	 * @return all Jira projects that the user is allowed to access as a set of
-	 *         project keys.
-	 */
-	public Set<String> getJiraProjects() {
-		String projectsAsJsonString = getJiraProjectsAsJson();
-		if (projectsAsJsonString.isEmpty()) {
-			return new HashSet<String>();
-		}
-		return parseJiraProjectsJson(projectsAsJsonString);
-	}
-
-	/**
 	 * @return all Jira projects that the user is allowed to access as a JSON
 	 *         string.
 	 */
@@ -70,31 +52,20 @@ public class JiraClient {
 	}
 
 	/**
-	 * @param query
-	 *            JQL query.
+	 * @param searchTerm
+	 *            substring that the knowledge elements must contain.
 	 * @param projectKey
 	 *            of the Jira project.
+	 * @param status
+	 * @param knowledgeTypes
 	 * @return list of knowledge elements that match a certain query and the project
 	 *         key.
 	 */
-	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String query, String projectKey, long startDate, long endDate) {
-		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(query, projectKey, startDate, endDate);
+	public List<KnowledgeElement> getDecisionKnowledgeFromJira(String searchTerm, String projectKey, long startDate,
+			long endDate, List<String> knowledgeTypes, List<String> status) {
+		String jsonString = getDecisionKnowledgeFromJiraAsJsonString(searchTerm, projectKey, startDate, endDate,
+				knowledgeTypes, status);
 		return KnowledgeElement.parseJsonString(jsonString);
-	}
-
-	public Set<String> parseJiraProjectsJson(String projectsAsJsonString) {
-		Set<String> projectKeys = new HashSet<String>();
-		try {
-			JSONArray projectArray = new JSONArray(projectsAsJsonString);
-			for (Object project : projectArray) {
-				JSONObject projectMap = (JSONObject) project;
-				String projectKey = (String) projectMap.get("key");
-				projectKeys.add(projectKey.toUpperCase());
-			}
-		} catch (Exception e) {
-			projectKeys.add(projectsAsJsonString);
-		}
-		return projectKeys;
 	}
 
 	private String getResponseFromJiraWithApplicationLink(String jiraUrl) {
@@ -105,18 +76,17 @@ public class JiraClient {
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
-	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String query, String projectKey, long startDate, long endDate) {
+	private String postResponseFromJiraWithApplicationLink(String jiraUrl, String searchTerm, String projectKey,
+			long startDate, long endDate, String knowledgeTypes, String status) {
 		ApplicationLinkRequest request = createRequest(Request.MethodType.POST, jiraUrl);
 		if (request == null) {
 			return "";
 		}
 		request.setRequestBody(
-			"{\"projectKey\":\"" + projectKey + "\"," +
-				"\"searchTerm\":\"" + query + "\"," +
-				"\"startDate\":\"" + startDate + "\"," +
-				"\"endDate\":\"" + endDate + "\"}",
+				"{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\"," + "\"startDate\":\""
+						+ startDate + "\",\"endDate\":\"" + endDate + "\",\"knowledgeTypes\":" + knowledgeTypes + "}",
 				MediaType.APPLICATION_JSON);
-
+		// ",\"status\":" + status +
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
@@ -153,82 +123,15 @@ public class JiraClient {
 		return responseBody;
 	}
 
-	/**
-	 * @param jiraIssueKeys
-	 *            as a set of strings.
-	 * @return list of knowledge elements from Jira that match the filter criteria.
-	 */
-	public List<KnowledgeElement> getKnowledgeElementsFromJira(Set<String> jiraIssueKeys, long startDate, long endDate) {
-		String queryWithJiraIssues = JiraClient.getJiraCallQuery(jiraIssueKeys);
-		String projectKey = JiraClient.retrieveProjectKey(jiraIssueKeys);
-		return getDecisionKnowledgeFromJira(queryWithJiraIssues, projectKey, startDate, endDate);
-	}
-
-	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate, long endDate) {
+	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate,
+			long endDate, List<String> knowledgeTypes, List<String> status) {
 		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
-				encodeUserInputQuery(query), projectKey, startDate, endDate);
+				encodeUserInputQuery(query), projectKey, startDate, endDate, convertToJsonArray(knowledgeTypes),
+				convertToJsonArray(status));
 	}
 
-	/**
-	 * @param message
-	 *            that might contain a Jira issue key, e.g., a commit message,
-	 *            branch name, or pull request title.
-	 * @return list of all mentioned Jira issue keys in a message in upper case
-	 *         letters (is ordered by their appearance in the message).
-	 */
-	static Set<String> getJiraIssueKeys(String message) {
-		Set<String> keys = new LinkedHashSet<String>();
-		String[] words = message.split("[\\s,:]+");
-		String projectKey = null;
-		for (String word : words) {
-			word = word.toUpperCase(Locale.ENGLISH);
-			if (word.contains("-")) {
-				if (projectKey == null) {
-					projectKey = word.split("-")[0];
-				}
-				if (word.startsWith(projectKey)) {
-					keys.add(word);
-				}
-			}
-		}
-		return keys;
-	}
-
-	/**
-	 * @param jiraIssueKeys
-	 *            as a set of strings.
-	 * @return potential Jira project key (e.g. CONDEC).
-	 */
-	public static String retrieveProjectKey(Set<String> jiraIssueKeys) {
-		Set<String> projectKeys = JiraClient.instance.getJiraProjects();
-		if (jiraIssueKeys == null || jiraIssueKeys.isEmpty()) {
-			return "";
-		}
-		for (String jiraIssueKey : jiraIssueKeys) {
-			String potentialProjectKey = jiraIssueKey.split("-")[0];
-			if (isProjectKeyExisting(potentialProjectKey, projectKeys)) {
-				return potentialProjectKey;
-			}
-		}
-		return "";
-	}
-
-	public static boolean isProjectKeyExisting(String projectKey, Set<String> projectKeys) {
-		return !projectKey.isEmpty() && projectKeys.contains(projectKey);
-	}
-
-	public static String getJiraCallQuery(Set<String> jiraIssueKeys) {
-		String query = "?jql=key in (";
-		Iterator<String> iterator = jiraIssueKeys.iterator();
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-			query += key;
-			if (iterator.hasNext()) {
-				query += ",";
-			}
-		}
-		query += ")";
-		return encodeUserInputQuery(query);
+	public static String convertToJsonArray(List<String> list) {
+		return new JSONArray(list).toString();
 	}
 
 	private static String encodeUserInputQuery(String query) {
