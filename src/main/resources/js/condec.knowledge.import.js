@@ -46,21 +46,22 @@ AJS.bind("init.rte", function() {
 			
 		dialog.addPanel(
 			"Edit JSON String",
-			"<p>Paste a JSON String exported from Jira or manually edit the existing one. <mark>Make sure you enabled the 'freeze' option!</mark></p>"
+			"<p>Paste a JSON String exported from Jira or manually edit the existing one. " 
+			+ "<mark>Make sure you enabled the 'freeze' option! Otherwise changes will not be saved!</mark></p>"
 			+ "<form class='aui'><textarea class='textarea full-width-field' rows='30' id='jsonTextArea'></textarea></form>",
 			"panel-body");				
 		
 		// get knowledge elements from backend via REST 
 		var pageId = parseInt(AJS.params.pageId, 10);
 		conDecAPI.getStoredKnowledgeElements(pageId, macroId, function(elements) {
-			$("#jsonTextArea").val("[" + JSON.stringify(elements) + "]");
+			$("#jsonTextArea").val("[" + JSON.stringify(elements, undefined, "\t") + "]");
 		});
 		
 		dialog.addLink("Cancel", function(dialog) {
 			dialog.hide();
 		}, "#");
 
-		dialog.addHeader("Knowledge Edit and Export Dialog");
+		dialog.addHeader("Knowledge Edit and Import Dialog");
 
 		dialog.addButton("Update Knowledge", function(dialog) {
 			var userInput = $("#jsonTextArea").val();
@@ -76,7 +77,7 @@ AJS.bind("init.rte", function() {
 		if (macroId && macroId !== "") {
 			updateMacro(macroId);
 		} else {
-			conDecAPI.showFlag("error", "Please save the page first before updating the macro.");
+			conDecAPI.showFlag("error", "Please save the page first before manually updating the JSON string.");
 		}
 	});
 });

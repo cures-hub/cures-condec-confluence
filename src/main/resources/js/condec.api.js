@@ -29,6 +29,8 @@
 	};
 
 	/*
+	 * Used to get the JSON string that can be manually edited by the user.
+	 *
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, macroId, callback) {
@@ -41,6 +43,7 @@
 	};
 
 	/*
+	 * Used to store the JSON string that was manually edited/imported from Jira by the user.
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(userInput, pageId, macroId) {
