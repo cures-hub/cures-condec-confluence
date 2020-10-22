@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -22,15 +23,25 @@ import com.google.gson.Gson;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KnowledgeElement {
 
+	@XmlElement
 	private String link;
+	@XmlElement
 	private int pageId;
+	@XmlElement
 	private String summary;
+	@XmlElement
 	private String type;
+	@XmlElement
 	private String key;
+	@XmlElement
 	private String id;
+	@XmlElement
 	private String macroId;
+	@XmlElement
 	private String description;
+	@XmlElement
 	private String creator;
+	@XmlElement
 	private String updatingDate;
 
 	/**

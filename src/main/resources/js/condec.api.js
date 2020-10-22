@@ -29,23 +29,8 @@
 	};
 
 	/*
-	 * external references: condec.knowledge.import
-	 */
-	ConDecAPI.prototype.getKnowledgeElementsFromJira = function getKnowledgeElementsFromJira(projectKey, userInput, callback) {
-		var url = this.restPrefix + "/knowledge/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
-		getJSON(url, function(error, elements) {
-			if (error === null && !checkForError(elements)) {				
-				if (elements.length === 0) {
-					showFlag("error", "No search results were found.");
-				} 
-				callback(elements);
-			} else {
-				showFlag("success", "Results were found!");
-			}
-		});
-	};
-
-	/*
+	 * Used to get the JSON string that can be manually edited by the user.
+	 *
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, macroId, callback) {
@@ -58,6 +43,7 @@
 	};
 
 	/*
+	 * Used to store the JSON string that was manually edited/imported from Jira by the user.
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(userInput, pageId, macroId) {

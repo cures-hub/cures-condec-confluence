@@ -19,8 +19,7 @@
 		name="ConDec Decision Knowledge in Wiki Pages Resources">
 		<description>
 			Provides the JavaScript files for the import of decision
-			knowledge into wiki pages
-			(e.g. for meetings).
+			knowledge into wiki pages (e.g. for meetings).
 		</description>
 		<context>editor</context>
 		<context>atl.general</context>
