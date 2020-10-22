@@ -31,23 +31,6 @@
 	/*
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getKnowledgeElementsFromJira = function getKnowledgeElementsFromJira(projectKey, userInput, callback) {
-		var url = this.restPrefix + "/knowledge/getKnowledgeElementsFromJira?projectKey=" + projectKey + "&query=?" + userInput;
-		getJSON(url, function(error, elements) {
-			if (error === null && !checkForError(elements)) {				
-				if (elements.length === 0) {
-					showFlag("error", "No search results were found.");
-				} 
-				callback(elements);
-			} else {
-				showFlag("success", "Results were found!");
-			}
-		});
-	};
-
-	/*
-	 * external references: condec.knowledge.import
-	 */
 	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, macroId, callback) {
 		var url = this.restPrefix + "/knowledge/getStoredKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
 		getJSON(url, function(error, elements) {

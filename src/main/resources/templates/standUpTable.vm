@@ -4,7 +4,7 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
             <table class="aui aui-table-list aui-table-sortable">
                 <tbody>
                 <tr>
-                	<th>Type</th>
+                	<th class="type">Type</th>
                     <th>Summary</th>
                     <th>Author</th>
                     <th>Last Update</th>
