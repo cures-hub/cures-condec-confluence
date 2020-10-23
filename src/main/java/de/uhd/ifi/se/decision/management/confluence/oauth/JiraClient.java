@@ -82,11 +82,9 @@ public class JiraClient {
 		if (request == null) {
 			return "";
 		}
-		request.setRequestBody(
-				"{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\"," + "\"startDate\":\""
-						+ startDate + "\",\"endDate\":\"" + endDate + "\",\"knowledgeTypes\":" + knowledgeTypes + "}",
-				MediaType.APPLICATION_JSON);
-		// ",\"status\":" + status +
+		request.setRequestBody("{\"projectKey\":\"" + projectKey + "\",\"searchTerm\":\"" + searchTerm + "\","
+				+ "\"startDate\":\"" + startDate + "\",\"endDate\":\"" + endDate + "\",\"knowledgeTypes\":"
+				+ knowledgeTypes + ",\"status\":" + status + "}", MediaType.APPLICATION_JSON);
 		return receiveResponseFromJiraWithApplicationLink(request);
 	}
 
