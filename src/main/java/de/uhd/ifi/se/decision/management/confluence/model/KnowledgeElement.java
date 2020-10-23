@@ -161,7 +161,7 @@ public class KnowledgeElement {
 	}
 
 	public String getDescription() {
-		return description;
+		return description != null ? description : getSummary();
 	}
 
 	public void setDescription(String description) {

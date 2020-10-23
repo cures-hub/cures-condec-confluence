@@ -14,7 +14,7 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
                         #set ($type = $knowledgeElement.getType())
                         #set ($imgPath="$type.png")
                         #set ($textColor=$knowledgeElement.getStatusColor())
-                <tr>
+                <tr title="$type of status $knowledgeElement.getStatus(): $knowledgeElement.getDescription()">
                     	<td><a target="_blank" href="$knowledgeElement.getLink()"><span class="type_images type_class_$knowledgeElement.getType()"></span> $knowledgeElement.getType()</a></td>                    	
                         <td style="color:$textColor">$knowledgeElement.getSummary()</td>
                         <td>$knowledgeElement.getCreator()</td>
