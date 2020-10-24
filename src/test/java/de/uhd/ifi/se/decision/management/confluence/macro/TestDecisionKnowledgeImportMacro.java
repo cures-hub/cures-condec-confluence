@@ -38,7 +38,7 @@ public class TestDecisionKnowledgeImportMacro {
 		map.put("resolvedDecisionProblems", "true");
 		map.put("decisions", "true");
 		map.put("alternatives", "true");
-		map.put("arguments", "false");
+		map.put("arguments", "true");
 		map.put("freeze", "false");
 	}
 
