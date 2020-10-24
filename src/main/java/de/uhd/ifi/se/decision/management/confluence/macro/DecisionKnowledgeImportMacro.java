@@ -95,8 +95,8 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			if (projectKey != null && !projectKey.isBlank()) {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(searchTerm, projectKey, startDate,
 						endDate, knowledgeTypes, status);
-				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
 				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
+				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
 				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);
 					element.setMacroId(macroId);
