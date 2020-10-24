@@ -31,9 +31,14 @@ public class TestDecisionKnowledgeImportMacro {
 		KnowledgePersistenceManager.setBandanaManager(new MockBandanaManager());
 		map = new HashMap<String, String>();
 		map.put("project", "CONDEC");
-		map.put("query", "");
+		map.put("substring", "");
 		map.put("startDate", "");
 		map.put("endDate", "");
+		map.put("unresolvedDecisionProblems", "true");
+		map.put("resolvedDecisionProblems", "true");
+		map.put("decisions", "true");
+		map.put("alternatives", "true");
+		map.put("arguments", "true");
 		map.put("freeze", "false");
 	}
 
@@ -42,7 +47,7 @@ public class TestDecisionKnowledgeImportMacro {
 		assertNotNull(new DecisionKnowledgeImportMacro());
 	}
 
-	@Test(expected = ExceptionInInitializerError.class)
+	@Test(expected = Exception.class)
 	public void testExecute() {
 		try {
 			macro.execute(map, null, new MockConversionContext());

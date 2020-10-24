@@ -12,7 +12,6 @@ public class TestKnowledgeElement {
 	@Before
 	public void createElement() {
 		element = new KnowledgeElement();
-		element.setDescription("myDescription");
 		element.setId("myId");
 		element.setKey("myKey");
 		element.setLink("myLink");
@@ -20,6 +19,8 @@ public class TestKnowledgeElement {
 		element.setPageId(1);
 		element.setSummary("mySummary");
 		element.setType("myType");
+		element.setCreator("myAuthor");
+		element.setUpdatingDate("0");
 	}
 
 	@Test
@@ -30,6 +31,10 @@ public class TestKnowledgeElement {
 
 	@Test
 	public void testDescription() {
+		// if desription is null the summary is returned
+		assertEquals("mySummary", element.getDescription());
+
+		element.setDescription("myDescription");
 		assertEquals("myDescription", element.getDescription());
 	}
 
@@ -68,4 +73,27 @@ public class TestKnowledgeElement {
 		assertEquals("myType", element.getType());
 	}
 
+	@Test
+	public void testStatus() {
+		assertEquals("undefined", element.getStatus());
+		assertEquals("black", element.getStatusColor());
+
+		element.setStatus("unresolved");
+		assertEquals("unresolved", element.getStatus());
+		assertEquals("crimson", element.getStatusColor());
+
+		element.setStatus("rejected");
+		assertEquals("rejected", element.getStatus());
+		assertEquals("gray", element.getStatusColor());
+	}
+
+	@Test
+	public void testCreator() {
+		assertEquals("myAuthor", element.getCreator());
+	}
+
+	@Test
+	public void testUpdatingDate() {
+		assertEquals("1970-01-01", element.getUpdatingDate());
+	}
 }

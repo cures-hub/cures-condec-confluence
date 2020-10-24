@@ -43,6 +43,8 @@ public class KnowledgeElement {
 	private String creator;
 	@XmlElement
 	private String updatingDate;
+	@XmlElement
+	private String status;
 
 	/**
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
@@ -159,7 +161,7 @@ public class KnowledgeElement {
 	}
 
 	public String getDescription() {
-		return description;
+		return description != null ? description : getSummary();
 	}
 
 	public void setDescription(String description) {
@@ -183,5 +185,28 @@ public class KnowledgeElement {
 	public void setUpdatingDate(String epochTime) {
 		Date date = new Date(Long.parseLong(epochTime));
 		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+	}
+
+	public String getStatus() {
+		if (status == null) {
+			return "undefined";
+		}
+		return status;
+	}
+
+	public String getStatusColor() {
+		String status = getStatus();
+		if (status.equals("unresolved") || status.equals("challenged")) {
+			return "crimson";
+		}
+		if (status.equals("discarded") || status.equals("rejected")) {
+			return "gray";
+		}
+		return "black";
+	}
+
+	@JsonProperty("status")
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

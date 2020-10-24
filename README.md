@@ -14,7 +14,7 @@ Thus, the developers get an overview which issues (decision problems) need to be
 
 ### Prerequisites
 The following prerequisites are necessary to compile the plug-in from source code:
-- Java 8 JDK
+- Java 11 JDK
 - [Atlassian SDK](https://developer.atlassian.com/docs/getting-started/set-up-the-atlassian-plugin-sdk-and-build-a-project)
 
 ### Compilation via Terminal
@@ -42,3 +42,6 @@ The authentication type needs to be **OAuth (impersonation)**.
 ### Decision Knowledge Import Macro
 The *Decision Knowledge Import Macro* can be used to create a stand-up table in meetings. 
 The stand-up table contains relevant requirements, as well as open and solved decision problems for a certain time frame.
+
+![Decision Knowledge Import Macro](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/macro_edit_dialog.png)
+*Macro to import decision knowledge from Jira*

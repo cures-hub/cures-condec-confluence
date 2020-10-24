@@ -76,7 +76,7 @@
 			<parameter name="unresolvedDecisionProblems" type="boolean"
 				default="true" required="true" title="Show decision problems that need to be resolved?" />
 			<parameter name="resolvedDecisionProblems" type="boolean"
-				default="true" required="true" title="Show decision problems that are resolved?"/>
+				default="true" required="true" title="Show decision problems that are resolved?" />
 			<parameter name="decisions" type="boolean" default="true"
 				required="true" />
 			<parameter name="alternatives" type="boolean"

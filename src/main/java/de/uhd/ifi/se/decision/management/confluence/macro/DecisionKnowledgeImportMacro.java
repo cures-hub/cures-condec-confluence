@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,24 +48,17 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 			if (map.get("startDate") == null || map.get("startDate").isBlank()
 					|| map.get("startDate").equals("yyyy-MM-ddThh:mm")) {
-				System.out.println(map.get("startDate"));
 				LocalDate localStartDate = LocalDate.now().minusDays(14);
-				System.out.println(localStartDate);
 				startDate = convertToUnixTimeStamp(localStartDate.toString());
-				System.out.println(startDate);
-			} else
+			} else {
 				startDate = convertToUnixTimeStamp(map.get("startDate"));
+			}
 
 			if (map.get("endDate") == null || map.get("endDate").isBlank()
 					|| map.get("endDate").equals("yyyy-MM-ddThh:mm")) {
-				System.out.println(map.get("endDate"));
 				endDate = Instant.now().getEpochSecond() * 1000;
-				System.out.println(endDate);
-			} else
+			} else {
 				endDate = convertToUnixTimeStamp(map.get("endDate"));
-
-			if (searchTerm == null) {
-				searchTerm = "";
 			}
 
 			List<String> knowledgeTypes = new ArrayList<>();
@@ -102,6 +96,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(searchTerm, projectKey, startDate,
 						endDate, knowledgeTypes, status);
 				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
+				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
 				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);
 					element.setMacroId(macroId);
@@ -146,7 +141,6 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
 			Option<MacroId> option = macroDefinition.getMacroId();
 			macroId = option.get().getId();
-			System.out.println(macroId);
 		} catch (Exception e) {
 		}
 		return macroId;

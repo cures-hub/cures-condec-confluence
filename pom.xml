@@ -64,6 +64,12 @@
 
 		<!-- Unit tests -->
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.atlassian.plugins</groupId>
 			<artifactId>atlassian-plugins-osgi-testrunner</artifactId>
 			<version>${plugin.testrunner.version}</version>
