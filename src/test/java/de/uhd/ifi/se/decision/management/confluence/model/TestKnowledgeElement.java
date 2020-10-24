@@ -76,5 +76,9 @@ public class TestKnowledgeElement {
 		element.setStatus("unresolved");
 		assertEquals("unresolved", element.getStatus());
 		assertEquals("crimson", element.getStatusColor());
+
+		element.setStatus("rejected");
+		assertEquals("rejected", element.getStatus());
+		assertEquals("gray", element.getStatusColor());
 	}
 }
