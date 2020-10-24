@@ -68,4 +68,13 @@ public class TestKnowledgeElement {
 		assertEquals("myType", element.getType());
 	}
 
+	@Test
+	public void testStatus() {
+		assertEquals("undefined", element.getStatus());
+		assertEquals("black", element.getStatusColor());
+
+		element.setStatus("unresolved");
+		assertEquals("unresolved", element.getStatus());
+		assertEquals("crimson", element.getStatusColor());
+	}
 }
