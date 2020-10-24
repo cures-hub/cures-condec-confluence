@@ -12,7 +12,6 @@ public class TestKnowledgeElement {
 	@Before
 	public void createElement() {
 		element = new KnowledgeElement();
-		element.setDescription("myDescription");
 		element.setId("myId");
 		element.setKey("myKey");
 		element.setLink("myLink");
@@ -32,6 +31,10 @@ public class TestKnowledgeElement {
 
 	@Test
 	public void testDescription() {
+		// if desription is null the summary is returned
+		assertEquals("mySummary", element.getDescription());
+
+		element.setDescription("myDescription");
 		assertEquals("myDescription", element.getDescription());
 	}
 

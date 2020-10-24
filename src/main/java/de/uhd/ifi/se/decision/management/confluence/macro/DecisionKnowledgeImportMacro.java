@@ -50,17 +50,15 @@ public class DecisionKnowledgeImportMacro implements Macro {
 					|| map.get("startDate").equals("yyyy-MM-ddThh:mm")) {
 				LocalDate localStartDate = LocalDate.now().minusDays(14);
 				startDate = convertToUnixTimeStamp(localStartDate.toString());
-			} else
+			} else {
 				startDate = convertToUnixTimeStamp(map.get("startDate"));
+			}
 
 			if (map.get("endDate") == null || map.get("endDate").isBlank()
 					|| map.get("endDate").equals("yyyy-MM-ddThh:mm")) {
 				endDate = Instant.now().getEpochSecond() * 1000;
-			} else
+			} else {
 				endDate = convertToUnixTimeStamp(map.get("endDate"));
-
-			if (searchTerm == null) {
-				searchTerm = "";
 			}
 
 			List<String> knowledgeTypes = new ArrayList<>();
