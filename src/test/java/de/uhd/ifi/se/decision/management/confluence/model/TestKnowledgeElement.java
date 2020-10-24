@@ -20,6 +20,8 @@ public class TestKnowledgeElement {
 		element.setPageId(1);
 		element.setSummary("mySummary");
 		element.setType("myType");
+		element.setCreator("myAuthor");
+		element.setUpdatingDate("0");
 	}
 
 	@Test
@@ -80,5 +82,15 @@ public class TestKnowledgeElement {
 		element.setStatus("rejected");
 		assertEquals("rejected", element.getStatus());
 		assertEquals("gray", element.getStatusColor());
+	}
+
+	@Test
+	public void testCreator() {
+		assertEquals("myAuthor", element.getCreator());
+	}
+
+	@Test
+	public void testUpdatingDate() {
+		assertEquals("1970-01-01", element.getUpdatingDate());
 	}
 }
