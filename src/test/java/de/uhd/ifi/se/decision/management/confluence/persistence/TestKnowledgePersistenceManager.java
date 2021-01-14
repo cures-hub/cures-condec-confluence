@@ -43,8 +43,14 @@ public class TestKnowledgePersistenceManager {
 	}
 
 	@Test
-	public void testGetElementsInvalidInput() {
-		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(0, null);
+	public void testGetElementsInvalidPageId() {
+		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(0, "42");
+		assertEquals(0, storedElements.size());
+	}
+
+	@Test
+	public void testGetElementsInvalidMacroId() {
+		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(42, null);
 		assertEquals(0, storedElements.size());
 	}
 
