@@ -48,6 +48,7 @@ public class KnowledgeRest {
 			element.setMacroId(macroId);
 			KnowledgePersistenceManager.addKnowledgeElement(element);
 		}
+		LOGGER.info(elements.size() + " knowledge elements were stored in database");
 		return Response.ok().build();
 	}
 
