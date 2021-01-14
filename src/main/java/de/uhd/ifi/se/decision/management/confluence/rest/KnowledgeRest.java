@@ -38,37 +38,17 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty() || jsonString == null) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-
-		boolean result = handlePostRequestResult(pageId, macroId, jsonString);
-		if (result) {
-			return Response.ok().build();
-		}
-		return Response.serverError().build();
-	}
-
-	public boolean handlePostRequestResult(int pageId, String macroId, String jsonString) {
-		boolean result = true;
-
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
-
-		try {
-			// first remove issues from this page
-			if (elements.size() > 0) {
-				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
-			}
-
-			for (KnowledgeElement element : elements) {
-				element.setPageId(pageId);
-				element.setMacroId(macroId);
-				KnowledgePersistenceManager.addKnowledgeElement(element);
-			}
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			return false;
+		// first remove issues from this page
+		if (elements.size() > 0) {
+			KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 		}
-
-		return result;
+		for (KnowledgeElement element : elements) {
+			element.setPageId(pageId);
+			element.setMacroId(macroId);
+			KnowledgePersistenceManager.addKnowledgeElement(element);
+		}
+		return Response.ok().build();
 	}
 
 	@Path("/getStoredKnowledgeElements")
