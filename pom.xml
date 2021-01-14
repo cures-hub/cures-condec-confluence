@@ -17,6 +17,78 @@
 	<description>This is a plugin that provides a macro to import decision knowledge in Confluence.</description>
 	<packaging>atlassian-plugin</packaging>
 
+	<repositories>
+		<repository>
+			<id>atlassian-external</id>
+			<url>https://packages.atlassian.com/mvn/maven-external/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://packages.atlassian.com/maven-public/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>atlassian-3party</id>
+			<url>https://packages.atlassian.com/maven-3rdparty/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Central MVN Repo</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>spring-release</id>
+			<url>https://repo.spring.io/libs-release/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>atlassian-public</id>
+			<url>https://m2proxy.atlassian.com/repository/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencies>
 		<!-- Confluence -->
 		<dependency>
@@ -220,13 +292,13 @@
 	</profiles>
 
 	<properties>
-	<confluence.version>7.10.0</confluence.version>
+		<confluence.version>7.10.0</confluence.version>
 		<amps.version>8.2.0-2ef5d6e15</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.2.1-8199150</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.6</jacoco-version> 
-		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
-			generate bundle. -->
+		<jacoco-version>0.8.6</jacoco-version>
+		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml 
+			and the key to generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
