@@ -5,4 +5,7 @@ coverage:
   precision: 2
   round: up
   range: "50...90"
-ignore:
+  status:
+    patch:
+      default:
+        target: 65%

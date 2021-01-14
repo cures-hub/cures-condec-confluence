@@ -22,7 +22,13 @@ public class TestStoreKnowledgeElements {
 	}
 
 	@Test
-	public void testValidRequest() {
+	public void testValidRequestJsonStringEmpty() {
 		assertEquals(Status.OK.getStatusCode(), knowledgeRest.storeKnowledgeElements(null, 1, "1", "").getStatus());
+	}
+
+	@Test
+	public void testValidRequest() {
+		assertEquals(Status.INTERNAL_SERVER_ERROR, knowledgeRest
+				.storeKnowledgeElements(null, 1, "1", "[[{'key' : 'CONDEC-1', 'type':'issue'}]]").getStatus());
 	}
 }
