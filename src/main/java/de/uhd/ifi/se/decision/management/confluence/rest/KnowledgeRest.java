@@ -59,13 +59,8 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		try {
-			List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
-			return Response.status(Response.Status.OK).entity(storedElements).build();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			return Response.serverError().build();
-		}
+		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		return Response.status(Response.Status.OK).entity(storedElements).build();
 	}
 
 	@Path("/getProjectsFromJira")
