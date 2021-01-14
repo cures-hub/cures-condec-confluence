@@ -38,6 +38,22 @@ public class TestJiraClient {
 	}
 
 	@Test
+	public void testGetDecisionKnowledgeFromJiraQueryNull() {
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira(null, "CONDEC", 1585699200,
+				1604188800, new ArrayList<>(), new ArrayList<>());
+		assertEquals("issue", elements.get(0).getType());
+		assertEquals("decision", elements.get(1).getType());
+	}
+
+	@Test
+	public void testGetDecisionKnowledgeFromJiraQueryFilled() {
+		List<KnowledgeElement> elements = jiraClient.getDecisionKnowledgeFromJira("filter substring", "CONDEC",
+				1585699200, 1604188800, new ArrayList<>(), new ArrayList<>());
+		assertEquals("issue", elements.get(0).getType());
+		assertEquals("decision", elements.get(1).getType());
+	}
+
+	@Test
 	public void testConvertListToJson() {
 		List<String> knowledgeTypes = new ArrayList<>();
 		knowledgeTypes.add("Issue");

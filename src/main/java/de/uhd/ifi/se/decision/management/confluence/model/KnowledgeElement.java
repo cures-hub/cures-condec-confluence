@@ -206,10 +206,10 @@ public class KnowledgeElement implements Serializable {
 
 	public String getStatusColor() {
 		String status = getStatus();
-		if (status.equals("unresolved") || status.equals("challenged")) {
+		if ("unresolved".equals(status) || "challenged".equals(status)) {
 			return "crimson";
 		}
-		if (status.equals("discarded") || status.equals("rejected")) {
+		if ("discarded".equals(status) || "rejected".equals(status)) {
 			return "gray";
 		}
 		return "black";
