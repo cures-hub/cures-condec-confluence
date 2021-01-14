@@ -1,5 +1,6 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,9 @@ import com.google.gson.Gson;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KnowledgeElement {
+public class KnowledgeElement implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeElement.class);
 

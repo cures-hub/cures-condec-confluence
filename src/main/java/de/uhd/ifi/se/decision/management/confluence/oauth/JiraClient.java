@@ -128,7 +128,6 @@ public class JiraClient {
 
 	private String getDecisionKnowledgeFromJiraAsJsonString(String query, String projectKey, long startDate,
 			long endDate, List<String> knowledgeTypes, List<String> status) {
-		LOGGER.error(query);
 		return postResponseFromJiraWithApplicationLink("rest/condec/latest/knowledge/knowledgeElements.json",
 				encodeUserInputQuery(query), projectKey, startDate, endDate, convertToJsonArray(knowledgeTypes),
 				convertToJsonArray(status));

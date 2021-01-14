@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.2.1.RELEASE</version>
+			<version>5.3.3</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -86,13 +86,13 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.2.2-atlassian-1</version>
+			<version>2.8.6</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20190722</version>
+			<version>20201115</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -220,13 +220,13 @@
 	</profiles>
 
 	<properties>
-		<confluence.version>7.7.3</confluence.version>
-		<amps.version>8.1.1</amps.version>
+	<confluence.version>7.10.0</confluence.version>
+		<amps.version>8.2.0-2ef5d6e15</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
-		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.6</jacoco-version>
-		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml 
-			and the key to generate bundle. -->
+		<atlassian.spring.scanner.version>2.2.1-8199150</atlassian.spring.scanner.version>
+		<jacoco-version>0.8.6</jacoco-version> 
+		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
+			generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
