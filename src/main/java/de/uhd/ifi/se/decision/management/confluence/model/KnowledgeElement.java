@@ -15,6 +15,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -22,6 +24,8 @@ import com.google.gson.Gson;
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KnowledgeElement {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeElement.class);
 
 	@XmlElement
 	private String link;
@@ -70,10 +74,10 @@ public class KnowledgeElement {
 						KnowledgeElement[].class);
 				elements = Arrays.asList(myelements);
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				LOGGER.error(e1.getMessage());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 		return elements;

@@ -96,6 +96,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.4.0-b180830.0359</version>
+		</dependency>
+		<dependency>
 			<groupId>com.atlassian.plugins.rest</groupId>
 			<artifactId>atlassian-rest-common</artifactId>
 			<version>6.1.1</version>
@@ -144,9 +149,9 @@
 
 						<!-- Add package import here -->
 						<Import-Package>
-							org.springframework.osgi;resolution:="optional",
-							org.eclipse.gemini.blueprint;resolution:="optional",
-							*
+							org.springframework.osgi.*;resolution:="optional",
+							org.eclipse.gemini.blueprint.*;resolution:="optional",
+							*;resolution:=optional
 						</Import-Package>
 
 						<!-- Ensure plugin is spring powered -->
@@ -215,13 +220,13 @@
 	</profiles>
 
 	<properties>
-	<confluence.version>7.7.3</confluence.version>
+		<confluence.version>7.7.3</confluence.version>
 		<amps.version>8.1.1</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.1.13</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.6</jacoco-version> 
-		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to 
-			generate bundle. -->
+		<jacoco-version>0.8.6</jacoco-version>
+		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml 
+			and the key to generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>

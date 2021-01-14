@@ -14,6 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
@@ -23,6 +26,8 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
  */
 @Path("/knowledge")
 public class KnowledgeRest {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeRest.class);
 
 	@Path("/storeKnowledgeElements")
 	@POST
@@ -59,7 +64,7 @@ public class KnowledgeRest {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 			return false;
 		}
 
@@ -78,6 +83,7 @@ public class KnowledgeRest {
 			List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
 			return Response.status(Response.Status.OK).entity(storedElements).build();
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
 			return Response.serverError().build();
 		}
 	}
