@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -52,6 +53,8 @@ public class KnowledgeElement implements Serializable {
 	private String updatingDate;
 	@XmlElement
 	private String status;
+	@XmlElement
+	private List<String> groups;
 
 	/**
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
@@ -215,5 +218,17 @@ public class KnowledgeElement implements Serializable {
 	@JsonProperty("status")
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@JsonProperty("groups")
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
+	}
+
+	public String getGroups() {
+		if (groups == null) {
+			groups = new ArrayList<>();
+		}
+		return StringUtils.join(groups, ", ");
 	}
 }
