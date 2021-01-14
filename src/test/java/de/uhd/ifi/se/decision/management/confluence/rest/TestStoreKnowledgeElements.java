@@ -28,7 +28,7 @@ public class TestStoreKnowledgeElements {
 
 	@Test
 	public void testValidRequest() {
-		assertEquals(Status.INTERNAL_SERVER_ERROR, knowledgeRest
+		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), knowledgeRest
 				.storeKnowledgeElements(null, 1, "1", "[[{'key' : 'CONDEC-1', 'type':'issue'}]]").getStatus());
 	}
 }
