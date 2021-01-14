@@ -14,6 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
@@ -24,6 +27,8 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 @Path("/knowledge")
 public class KnowledgeRest {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeRest.class);
+
 	@Path("/storeKnowledgeElements")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -33,37 +38,18 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty() || jsonString == null) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-
-		boolean result = handlePostRequestResult(pageId, macroId, jsonString);
-		if (result) {
-			return Response.ok().build();
-		}
-		return Response.serverError().build();
-	}
-
-	public boolean handlePostRequestResult(int pageId, String macroId, String jsonString) {
-		boolean result = true;
-
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
-
-		try {
-			// first remove issues from this page
-			if (elements.size() > 0) {
-				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
-			}
-
-			for (KnowledgeElement element : elements) {
-				element.setPageId(pageId);
-				element.setMacroId(macroId);
-				KnowledgePersistenceManager.addKnowledgeElement(element);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		// first remove issues from this page
+		if (elements.size() > 0) {
+			KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 		}
-
-		return result;
+		for (KnowledgeElement element : elements) {
+			element.setPageId(pageId);
+			element.setMacroId(macroId);
+			KnowledgePersistenceManager.addKnowledgeElement(element);
+		}
+		LOGGER.info(elements.size() + " knowledge elements were stored in database");
+		return Response.ok().build();
 	}
 
 	@Path("/getStoredKnowledgeElements")
@@ -74,12 +60,8 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		try {
-			List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
-			return Response.status(Response.Status.OK).entity(storedElements).build();
-		} catch (Exception e) {
-			return Response.serverError().build();
-		}
+		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		return Response.status(Response.Status.OK).entity(storedElements).build();
 	}
 
 	@Path("/getProjectsFromJira")

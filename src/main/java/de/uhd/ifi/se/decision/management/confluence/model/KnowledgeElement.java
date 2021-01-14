@@ -1,5 +1,6 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,17 +12,24 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KnowledgeElement {
+public class KnowledgeElement implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeElement.class);
 
 	@XmlElement
 	private String link;
@@ -45,6 +53,8 @@ public class KnowledgeElement {
 	private String updatingDate;
 	@XmlElement
 	private String status;
+	@XmlElement
+	private List<String> groups;
 
 	/**
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
@@ -70,10 +80,10 @@ public class KnowledgeElement {
 						KnowledgeElement[].class);
 				elements = Arrays.asList(myelements);
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				LOGGER.error(e1.getMessage());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 		return elements;
@@ -196,10 +206,10 @@ public class KnowledgeElement {
 
 	public String getStatusColor() {
 		String status = getStatus();
-		if (status.equals("unresolved") || status.equals("challenged")) {
+		if ("unresolved".equals(status) || "challenged".equals(status)) {
 			return "crimson";
 		}
-		if (status.equals("discarded") || status.equals("rejected")) {
+		if ("discarded".equals(status) || "rejected".equals(status)) {
 			return "gray";
 		}
 		return "black";
@@ -208,5 +218,17 @@ public class KnowledgeElement {
 	@JsonProperty("status")
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@JsonProperty("groups")
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
+	}
+
+	public String getGroups() {
+		if (groups == null) {
+			groups = new ArrayList<>();
+		}
+		return StringUtils.join(groups, ", ");
 	}
 }

@@ -3,6 +3,9 @@ package de.uhd.ifi.se.decision.management.confluence.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +24,10 @@ public class TestKnowledgeElement {
 		element.setType("myType");
 		element.setCreator("myAuthor");
 		element.setUpdatingDate("0");
+		List<String> groups = new ArrayList<>();
+		groups.add("High Level");
+		groups.add("Git");
+		element.setGroups(groups);
 	}
 
 	@Test
@@ -95,5 +102,10 @@ public class TestKnowledgeElement {
 	@Test
 	public void testUpdatingDate() {
 		assertEquals("1970-01-01", element.getUpdatingDate());
+	}
+
+	@Test
+	public void testGroups() {
+		assertEquals("High Level, Git", element.getGroups());
 	}
 }

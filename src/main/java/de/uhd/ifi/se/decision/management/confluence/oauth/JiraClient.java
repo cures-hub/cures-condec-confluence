@@ -1,12 +1,14 @@
 package de.uhd.ifi.se.decision.management.confluence.oauth;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atlassian.applinks.api.ApplicationLink;
 import com.atlassian.applinks.api.ApplicationLinkRequest;
@@ -29,6 +31,7 @@ import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 public class JiraClient {
 
 	private ApplicationLink jiraApplicationLink;
+	private static final Logger LOGGER = LoggerFactory.getLogger(JiraClient.class);
 
 	/**
 	 * The singleton instance of the JiraClient. Please use this instance.
@@ -96,6 +99,7 @@ public class JiraClient {
 		try {
 			return requestFactory.createRequest(type, url);
 		} catch (CredentialsRequiredException e) {
+			LOGGER.error(e.getMessage());
 		}
 		return null;
 	}
@@ -116,6 +120,7 @@ public class JiraClient {
 				}
 			});
 		} catch (ResponseException e) {
+			LOGGER.error(e.getMessage());
 			responseBody = e.getMessage();
 		}
 		return responseBody;
@@ -133,12 +138,9 @@ public class JiraClient {
 	}
 
 	private static String encodeUserInputQuery(String query) {
-		String encodedUrl = "";
-		try {
-			encodedUrl = URLEncoder.encode(query, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		if (query == null || query.isBlank()) {
+			return "";
 		}
-		return encodedUrl;
+		return URLEncoder.encode(query, StandardCharsets.UTF_8);
 	}
 }

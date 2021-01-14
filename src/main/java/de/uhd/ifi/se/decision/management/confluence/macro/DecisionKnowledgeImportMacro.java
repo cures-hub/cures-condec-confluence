@@ -1,6 +1,5 @@
 package de.uhd.ifi.se.decision.management.confluence.macro;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -9,6 +8,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
@@ -25,6 +27,8 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 
 public class DecisionKnowledgeImportMacro implements Macro {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DecisionKnowledgeImportMacro.class);
+
 	@Override
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
@@ -32,6 +36,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		String macroId = getMacroId(conversionContext);
 
 		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		LOGGER.info("Number of elements in database:" + knowledgeElements.size());
 
 		boolean freeze = "true".equals(map.get("freeze"));
 
@@ -95,6 +100,8 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			if (projectKey != null && !projectKey.isBlank()) {
 				knowledgeElements = JiraClient.instance.getDecisionKnowledgeFromJira(searchTerm, projectKey, startDate,
 						endDate, knowledgeTypes, status);
+				LOGGER.info("Number of elements imported from Jira:" + knowledgeElements.size());
+
 				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
 				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
 				for (KnowledgeElement element : knowledgeElements) {
@@ -119,16 +126,16 @@ public class DecisionKnowledgeImportMacro implements Macro {
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
 				Date date = simpleDateFormat.parse(dateString);
 				unixTimeStamp = date.getTime();
-			} catch (ParseException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
 			}
 		} else {
 			try {
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = simpleDateFormat.parse(dateString);
 				unixTimeStamp = date.getTime();
-			} catch (ParseException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
 			}
 		}
 
@@ -142,6 +149,7 @@ public class DecisionKnowledgeImportMacro implements Macro {
 			Option<MacroId> option = macroDefinition.getMacroId();
 			macroId = option.get().getId();
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
 		}
 		return macroId;
 	}
