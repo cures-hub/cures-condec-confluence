@@ -292,7 +292,7 @@
 	</profiles>
 
 	<properties>
-		<confluence.version>7.10.0</confluence.version>
+		<confluence.version>7.14.0-ZDUCONNEXT-100</confluence.version>
 		<amps.version>8.2.0-2ef5d6e15</amps.version>
 		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.2.1-8199150</atlassian.spring.scanner.version>
