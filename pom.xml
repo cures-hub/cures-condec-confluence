@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.3.3</version>
+			<version>5.3.8</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -124,7 +124,7 @@
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
-			<version>4.0.0</version>
+			<version>4.5.2</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
 		<dependency>
@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -164,7 +164,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20201115</version>
+			<version>20210307</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -175,7 +175,7 @@
 		<dependency>
 			<groupId>com.atlassian.plugins.rest</groupId>
 			<artifactId>atlassian-rest-common</artifactId>
-			<version>6.1.1</version>
+			<version>6.1.11</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -189,7 +189,7 @@
 		<dependency>
 			<groupId>com.atlassian.applinks</groupId>
 			<artifactId>applinks-api</artifactId>
-			<version>7.1.0</version>
+			<version>8.0.6</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -293,9 +293,9 @@
 
 	<properties>
 		<confluence.version>7.10.0</confluence.version>
-		<amps.version>8.2.0-2ef5d6e15</amps.version>
-		<plugin.testrunner.version>2.0.1</plugin.testrunner.version>
-		<atlassian.spring.scanner.version>2.2.1-8199150</atlassian.spring.scanner.version>
+		<amps.version>8.3.0-128eead6d</amps.version>
+		<plugin.testrunner.version>2.0.2</plugin.testrunner.version>
+		<atlassian.spring.scanner.version>2.2.2</atlassian.spring.scanner.version>
 		<jacoco-version>0.8.6</jacoco-version>
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml 
 			and the key to generate bundle. -->
