@@ -46,5 +46,5 @@ The stand-up table contains relevant requirements, as well as open and solved de
 ![Decision Knowledge Import Macro](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/macro_edit_dialog.png)
 *Macro to import decision knowledge from Jira*
 
-![Decision Knowledge Import Macro](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/macro_edit_dialog.png)
-*List of decision knowledge in a meeting agenda/protocol (stand-up table)*
+![Decision Knowledge List](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/imported_decision_knowledge.png)
+*List of decision knowledge as part of a meeting agenda/protocol (used as stand-up table)*
