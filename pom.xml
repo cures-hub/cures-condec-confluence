@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.3.8</version>
+			<version>5.3.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -124,7 +124,7 @@
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
-			<version>4.5.2</version>
+			<version>4.5.3</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
 		<dependency>
@@ -158,7 +158,7 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.8.6</version>
+			<version>2.8.7</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -189,7 +189,7 @@
 		<dependency>
 			<groupId>com.atlassian.applinks</groupId>
 			<artifactId>applinks-api</artifactId>
-			<version>8.0.6</version>
+			<version>8.0.7</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -295,8 +295,8 @@
 		<confluence.version>7.10.0</confluence.version>
 		<amps.version>8.3.0-128eead6d</amps.version>
 		<plugin.testrunner.version>2.0.2</plugin.testrunner.version>
-		<atlassian.spring.scanner.version>2.2.2</atlassian.spring.scanner.version>
-		<jacoco-version>0.8.6</jacoco-version>
+		<atlassian.spring.scanner.version>2.2.3</atlassian.spring.scanner.version>
+		<jacoco-version>0.8.7</jacoco-version>
 		<!-- This key is used to keep the consistency between the key in atlassian-plugin.xml 
 			and the key to generate bundle. -->
 		<atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
