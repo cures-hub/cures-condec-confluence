@@ -293,7 +293,7 @@
 
 	<properties>
 		<confluence.version>7.14.1-xpln-1903</confluence.version>
-		<amps.version>8.3.0-128eead6d</amps.version>
+		<amps.version>8.3.2</amps.version>
 		<plugin.testrunner.version>2.0.2</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.2.3</atlassian.spring.scanner.version>
 		<jacoco-version>0.8.7</jacoco-version>
