@@ -13,10 +13,10 @@ import com.atlassian.plugin.spring.scanner.annotation.imports.ConfluenceImport;
 
 import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 
-/*
+/**
  * @issue How to store the knowledge in Confluence?
- * @decision Use the Confluence BandanaManager for persistent storage! 
- * See http://docs.atlassian.com/atlassian-bandana/0.2.0/com/atlassian/bandana/BandanaManager.html
+ * @decision Use the Confluence BandanaManager for persistent storage! See
+ *           http://docs.atlassian.com/atlassian-bandana/0.2.0/com/atlassian/bandana/BandanaManager.html
  */
 @Named
 public class KnowledgePersistenceManager {

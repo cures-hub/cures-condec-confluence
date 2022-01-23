@@ -20,6 +20,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.google.gson.Gson;
 
 @XmlRootElement
@@ -191,7 +192,8 @@ public class KnowledgeElement implements Serializable {
 		return updatingDate;
 	}
 
-	@JsonProperty("updatingDate")
+	@JsonProperty("latestUpdatingDate")
+	@JsonAlias("updatingDate")
 	public void setUpdatingDate(String epochTime) {
 		Date date = new Date(Long.parseLong(epochTime));
 		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
