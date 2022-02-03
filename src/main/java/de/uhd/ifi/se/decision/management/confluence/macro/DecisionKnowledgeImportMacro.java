@@ -35,7 +35,12 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		String macroId = getMacroId(conversionContext);
 
-		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		List<KnowledgeElement> knowledgeElements = new ArrayList<>();
+		try {
+			knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
 		LOGGER.info("Number of elements in database:" + knowledgeElements.size());
 
 		boolean freeze = "true".equals(map.get("freeze"));

@@ -60,7 +60,11 @@ public class KnowledgePersistenceManager {
 
 	public static void removeKnowledgeElements(int pageId, String macroId) {
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
+			Object storedObject = bandanaManager.getValue(bandanaContext, id);
+			if (!(storedObject instanceof KnowledgeElement)) {
+				continue;
+			}
+			KnowledgeElement knowledgeElement = (KnowledgeElement) storedObject;
 			// remove only if the page id and Macro id corresponds remove all where macroId
 			// is null
 			String issueMacroId = knowledgeElement.getMacroId();

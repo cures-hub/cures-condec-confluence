@@ -6,8 +6,8 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
                 <tr>
                 	<th class="type">Type</th>
                     <th>Summary</th>
-                    <th>Author</th>
-                    <th>Last Update</th>
+                    <th>Latest Author</th>
+                    <th>Latest Update</th>
                     <th>Decision Groups</th>
                     <th>Key</th>                    
                 </tr>
@@ -18,7 +18,7 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
                 <tr title="$type of status $knowledgeElement.getStatus(): $knowledgeElement.getDescription()">
                     	<td><a target="_blank" href="$knowledgeElement.getLink()"><span class="type_images type_class_$knowledgeElement.getType()"></span> $knowledgeElement.getType()</a></td>                    	
                         <td style="color:$textColor">$knowledgeElement.getSummary()</td>
-                        <td>$knowledgeElement.getCreator()</td>
+                        <td>$knowledgeElement.getLatestAuthor()</td>
                         <td>$knowledgeElement.getUpdatingDate()</td>
                         <td>$knowledgeElement.getGroups()</td>
                         <td><a target="_blank" href="$knowledgeElement.getLink()">$knowledgeElement.getKey()</a></td>                        

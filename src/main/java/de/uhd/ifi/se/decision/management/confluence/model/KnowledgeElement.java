@@ -56,6 +56,8 @@ public class KnowledgeElement implements Serializable {
 	private String status;
 	@XmlElement
 	private List<String> groups;
+	@XmlElement
+	private String latestAuthor;
 
 	/**
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
@@ -197,6 +199,15 @@ public class KnowledgeElement implements Serializable {
 	public void setUpdatingDate(String epochTime) {
 		Date date = new Date(Long.parseLong(epochTime));
 		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+	}
+
+	public String getLatestAuthor() {
+		return latestAuthor;
+	}
+
+	@JsonProperty
+	public void setLatestAuthor(String latestAuthor) {
+		this.latestAuthor = latestAuthor;
 	}
 
 	public String getStatus() {
