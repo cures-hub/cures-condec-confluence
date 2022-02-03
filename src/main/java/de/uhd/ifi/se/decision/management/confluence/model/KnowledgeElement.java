@@ -148,13 +148,20 @@ public class KnowledgeElement implements Serializable {
 
 	@XmlElement
 	public String getLink() {
-		return URLDecoder.decode(link, Charset.defaultCharset());
+		if (link != null) {
+			return URLDecoder.decode(link, Charset.defaultCharset());
+		}
+		return "";
 	}
 
-	@JsonProperty("url")
-	@JsonAlias("link")
+	@JsonProperty
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	@JsonProperty
+	public void setUrl(String link) {
+		setLink(link);
 	}
 
 	@XmlElement
