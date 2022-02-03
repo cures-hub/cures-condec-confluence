@@ -38,8 +38,7 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
             var sIssueType = getTypeFromClass(jElement);
             var img = mapTypeToIconsAndCreateImg(sIssueType);
             jElement.html(img);
-
-        })
+        });
     }
 
     function getTypeFromClass(jElement) {
