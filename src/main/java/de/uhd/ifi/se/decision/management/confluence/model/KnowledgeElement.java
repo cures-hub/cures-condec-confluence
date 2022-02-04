@@ -1,16 +1,15 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -23,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.google.gson.Gson;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KnowledgeElement implements Serializable {
 
@@ -32,37 +29,26 @@ public class KnowledgeElement implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeElement.class);
 
-	@XmlElement
 	private String link;
-	@XmlElement
 	private int pageId;
-	@XmlElement
 	private String summary;
-	@XmlElement
 	private String type;
-	@XmlElement
 	private String key;
-	@XmlElement
 	private String id;
-	@XmlElement
 	private String macroId;
-	@XmlElement
 	private String description;
-	@XmlElement
 	private String creator;
-	@XmlElement
 	private String updatingDate;
-	@XmlElement
 	private String status;
-	@XmlElement
 	private List<String> groups;
+	private String latestAuthor;
 
 	/**
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
 	 *        objects?
 	 * @decision Convert a JSON string into a list of KnowledgeElement objects
 	 *           manually using the GSON library!
-	 * @con This is not very elegant and hard to understand. Their might be an
+	 * @con This is not very elegant and hard to understand. There might be an
 	 *      easier way of mapping JSON Strings into objects.
 	 */
 	public static List<KnowledgeElement> parseJsonString(String jsonString) {
@@ -110,84 +96,105 @@ public class KnowledgeElement implements Serializable {
 	public KnowledgeElement() {
 	}
 
+	@XmlElement
 	public int getPageId() {
 		return pageId;
 	}
 
+	@JsonProperty
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
 	}
 
+	@XmlElement
 	public String getId() {
 		return id;
 	}
 
+	@JsonProperty
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	@XmlElement
 	public String getSummary() {
 		return summary;
 	}
 
+	@JsonProperty
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
 
+	@XmlElement
 	public String getType() {
 		return type;
 	}
 
+	@JsonProperty
 	public void setType(String type) {
 		this.type = type;
 	}
 
+	@XmlElement
 	public String getKey() {
 		return key;
 	}
 
+	@JsonProperty
 	public void setKey(String key) {
 		this.key = key;
 	}
 
+	@XmlElement
 	public String getLink() {
-		return link;
+		if (link != null) {
+			return URLDecoder.decode(link, Charset.defaultCharset());
+		}
+		return "";
 	}
 
+	@JsonProperty
 	public void setLink(String link) {
 		this.link = link;
 	}
 
-	@JsonProperty("url")
+	@JsonProperty
 	public void setUrl(String link) {
-		this.setLink(link);
+		setLink(link);
 	}
 
+	@XmlElement
 	public String getMacroId() {
 		return macroId;
 	}
 
+	@JsonProperty
 	public void setMacroId(String macroId) {
 		this.macroId = macroId;
 	}
 
+	@XmlElement
 	public String getDescription() {
 		return description != null ? description : getSummary();
 	}
 
+	@JsonProperty
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	@XmlElement
 	public String getCreator() {
 		return creator;
 	}
 
-	@JsonProperty("creator")
+	@JsonProperty
 	public void setCreator(String name) {
 		this.creator = name;
 	}
 
+	@XmlElement
 	public String getUpdatingDate() {
 		return updatingDate;
 	}
@@ -199,6 +206,17 @@ public class KnowledgeElement implements Serializable {
 		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 
+	@XmlElement
+	public String getLatestAuthor() {
+		return latestAuthor;
+	}
+
+	@JsonProperty
+	public void setLatestAuthor(String latestAuthor) {
+		this.latestAuthor = latestAuthor;
+	}
+
+	@XmlElement
 	public String getStatus() {
 		if (status == null) {
 			return "undefined";
@@ -217,16 +235,17 @@ public class KnowledgeElement implements Serializable {
 		return "black";
 	}
 
-	@JsonProperty("status")
+	@JsonProperty
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	@JsonProperty("groups")
+	@JsonProperty
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
 	}
 
+	@XmlElement
 	public String getGroups() {
 		if (groups == null) {
 			groups = new ArrayList<>();

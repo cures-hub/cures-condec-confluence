@@ -46,12 +46,15 @@ public class KnowledgePersistenceManager {
 		}
 
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
-			// add only if the page id and Macro id corresponds // if macro id is null
-			// return all from page
-			if (knowledgeElement != null && knowledgeElement.getPageId() == pageId
-					&& knowledgeElement.getMacroId() != null && (knowledgeElement.getMacroId().equals(macroId))
-					|| macroId == null) {
+			Object storedObject = bandanaManager.getValue(bandanaContext, id);
+			if (!(storedObject instanceof KnowledgeElement)) {
+				continue;
+			}
+			KnowledgeElement knowledgeElement = (KnowledgeElement) storedObject;
+			// add only if the page id and Macro id corresponds
+			// if macro id is null return all from page
+			if (knowledgeElement.getPageId() == pageId && knowledgeElement.getMacroId() != null
+					&& (knowledgeElement.getMacroId().equals(macroId)) || macroId == null) {
 				elements.add(knowledgeElement);
 			}
 		}
@@ -59,16 +62,8 @@ public class KnowledgePersistenceManager {
 	}
 
 	public static void removeKnowledgeElements(int pageId, String macroId) {
-		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
-			// remove only if the page id and Macro id corresponds remove all where macroId
-			// is null
-			String issueMacroId = knowledgeElement.getMacroId();
-
-			if (isNullOrEmpty(issueMacroId) || (!isNullOrEmpty(issueMacroId) && knowledgeElement.getPageId() == pageId
-					&& issueMacroId.equals(macroId))) {
-				removeKnowledgeElement(knowledgeElement.getId());
-			}
+		for (KnowledgeElement element : getElements(pageId, macroId)) {
+			removeKnowledgeElement(element.getId());
 		}
 	}
 

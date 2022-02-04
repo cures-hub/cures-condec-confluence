@@ -23,6 +23,7 @@ public class TestKnowledgeElement {
 		element.setSummary("mySummary");
 		element.setType("myType");
 		element.setCreator("myAuthor");
+		element.setLatestAuthor("myLatestAuthor");
 		element.setUpdatingDate("0");
 		List<String> groups = new ArrayList<>();
 		groups.add("High Level");
@@ -58,6 +59,8 @@ public class TestKnowledgeElement {
 	@Test
 	public void testLink() {
 		assertEquals("myLink", element.getLink());
+		element.setLink(null);
+		assertEquals("", element.getLink());
 	}
 
 	@Test
@@ -97,6 +100,11 @@ public class TestKnowledgeElement {
 	@Test
 	public void testCreator() {
 		assertEquals("myAuthor", element.getCreator());
+	}
+
+	@Test
+	public void testLatestAuthor() {
+		assertEquals("myLatestAuthor", element.getLatestAuthor());
 	}
 
 	@Test
