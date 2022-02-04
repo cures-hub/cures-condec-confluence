@@ -40,7 +40,7 @@ public class TestCreateObjectFromJsonString {
 
 	@Test
 	public void testParseTypes() {
-		String jsonString = "[[{'type':'issue'}, {'type':'decision'}]]";
+		String jsonString = "[{'type':'issue'}, {'type':'decision'}]";
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());

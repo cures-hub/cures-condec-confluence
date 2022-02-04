@@ -59,7 +59,7 @@ AJS.bind("init.rte", function() {
 		// get knowledge elements from backend via REST 
 		var pageId = parseInt(AJS.params.pageId, 10);
 		conDecAPI.getStoredKnowledgeElements(pageId, macroId, function(elements) {
-			$("#jsonTextArea").val("[" + JSON.stringify(elements, undefined, "\t") + "]");
+			$("#jsonTextArea").val(JSON.stringify(elements, undefined, "\t"));
 		});
 		
 		dialog.addLink("Cancel", function(dialog) {

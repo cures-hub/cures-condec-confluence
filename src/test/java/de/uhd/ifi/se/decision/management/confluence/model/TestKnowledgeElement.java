@@ -1,7 +1,6 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +23,11 @@ public class TestKnowledgeElement {
 		element.setType("myType");
 		element.setCreator("myAuthor");
 		element.setLatestAuthor("myLatestAuthor");
-		element.setUpdatingDate("0");
+		element.setLatestUpdatingDate("0");
 		List<String> groups = new ArrayList<>();
 		groups.add("High Level");
 		groups.add("Git");
 		element.setGroups(groups);
-	}
-
-	@Test
-	public void testConstructor() {
-		KnowledgeElement element = new KnowledgeElement("", 0, "", "", "", "", "");
-		assertNotNull(element);
 	}
 
 	@Test
@@ -114,6 +107,6 @@ public class TestKnowledgeElement {
 
 	@Test
 	public void testGroups() {
-		assertEquals("High Level, Git", element.getGroups());
+		assertEquals(List.of("High Level", "Git"), element.getGroups());
 	}
 }

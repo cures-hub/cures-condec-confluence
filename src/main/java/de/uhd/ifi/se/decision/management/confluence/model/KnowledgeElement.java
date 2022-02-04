@@ -3,24 +3,23 @@ package de.uhd.ifi.se.decision.management.confluence.model;
 import java.io.Serializable;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KnowledgeElement implements Serializable {
@@ -38,7 +37,7 @@ public class KnowledgeElement implements Serializable {
 	private String macroId;
 	private String description;
 	private String creator;
-	private String updatingDate;
+	private String latestUpdatingDate;
 	private String status;
 	private List<String> groups;
 	private String latestAuthor;
@@ -54,38 +53,36 @@ public class KnowledgeElement implements Serializable {
 	public static List<KnowledgeElement> parseJsonString(String jsonString) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.writerWithDefaultPrettyPrinter();
-
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+		objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		List<KnowledgeElement> elements = new ArrayList<KnowledgeElement>();
-
 		try {
-			elements = objectMapper.readValue(jsonString,
-					objectMapper.getTypeFactory().constructCollectionType(List.class, KnowledgeElement.class));
-		} catch (JsonMappingException e) {
-			try {
-				Gson g = new Gson();
-				KnowledgeElement[] myelements = g.fromJson(jsonString.substring(1, jsonString.length() - 1),
-						KnowledgeElement[].class);
-				elements = Arrays.asList(myelements);
-			} catch (Exception e1) {
-				LOGGER.error(e1.getMessage());
-			}
+			elements = objectMapper.readValue(jsonString, new TypeReference<List<KnowledgeElement>>() {
+			});
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			LOGGER.error(e.getMessage());
 		}
 
 		return elements;
 	}
 
-	public KnowledgeElement(String link, int pageId, String summary, String type, String key, String description,
-			String macroId) {
-		this.pageId = pageId;
-		this.summary = summary;
-		this.type = type;
-		this.key = key;
-		this.link = link;
-		this.description = description;
-		this.macroId = macroId;
+	public static String toJsonString(List<KnowledgeElement> elements) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+		objectMapper.writerWithDefaultPrettyPrinter();
+		String jsonString = "";
+		try {
+			jsonString = objectMapper.writeValueAsString(elements);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		return jsonString;
+	}
 
+	public KnowledgeElement() {
 		// generate unique id
 		Date dNow = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyMMddhhmmssMs");
@@ -93,60 +90,46 @@ public class KnowledgeElement implements Serializable {
 		this.id = datetime + key;
 	}
 
-	public KnowledgeElement() {
-	}
-
-	@XmlElement
 	public int getPageId() {
 		return pageId;
 	}
 
-	@JsonProperty
 	public void setPageId(int pageId) {
 		this.pageId = pageId;
 	}
 
-	@XmlElement
 	public String getId() {
 		return id;
 	}
 
-	@JsonProperty
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	@XmlElement
 	public String getSummary() {
 		return summary;
 	}
 
-	@JsonProperty
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
 
-	@XmlElement
 	public String getType() {
 		return type;
 	}
 
-	@JsonProperty
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	@XmlElement
 	public String getKey() {
 		return key;
 	}
 
-	@JsonProperty
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-	@XmlElement
 	public String getLink() {
 		if (link != null) {
 			return URLDecoder.decode(link, Charset.defaultCharset());
@@ -154,12 +137,11 @@ public class KnowledgeElement implements Serializable {
 		return "";
 	}
 
-	@JsonProperty
 	public void setLink(String link) {
 		this.link = link;
 	}
 
-	@JsonProperty
+	@JsonProperty("url")
 	public void setUrl(String link) {
 		setLink(link);
 	}
@@ -174,7 +156,6 @@ public class KnowledgeElement implements Serializable {
 		this.macroId = macroId;
 	}
 
-	@XmlElement
 	public String getDescription() {
 		return description != null ? description : getSummary();
 	}
@@ -184,7 +165,6 @@ public class KnowledgeElement implements Serializable {
 		this.description = description;
 	}
 
-	@XmlElement
 	public String getCreator() {
 		return creator;
 	}
@@ -194,19 +174,31 @@ public class KnowledgeElement implements Serializable {
 		this.creator = name;
 	}
 
-	@XmlElement
 	public String getUpdatingDate() {
-		return updatingDate;
+		if (latestUpdatingDate == null) {
+			return "";
+		}
+		Date date = new Date(Long.parseLong(latestUpdatingDate));
+		return new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 
-	@JsonProperty("latestUpdatingDate")
-	@JsonAlias("updatingDate")
-	public void setUpdatingDate(String epochTime) {
-		Date date = new Date(Long.parseLong(epochTime));
-		this.updatingDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+	@JsonProperty
+	public void setLatestUpdatingDate(String epochTime) {
+		this.latestUpdatingDate = epochTime;
 	}
 
-	@XmlElement
+	@JsonProperty
+	public void setUpdatingDate(String formatedDate) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		try {
+			date = format.parse(formatedDate);
+		} catch (ParseException e) {
+			LOGGER.error(e.getMessage());
+		}
+		this.latestUpdatingDate = date.getTime() + "";
+	}
+
 	public String getLatestAuthor() {
 		return latestAuthor;
 	}
@@ -216,7 +208,6 @@ public class KnowledgeElement implements Serializable {
 		this.latestAuthor = latestAuthor;
 	}
 
-	@XmlElement
 	public String getStatus() {
 		if (status == null) {
 			return "undefined";
@@ -245,11 +236,15 @@ public class KnowledgeElement implements Serializable {
 		this.groups = groups;
 	}
 
-	@XmlElement
-	public String getGroups() {
-		if (groups == null) {
-			groups = new ArrayList<>();
-		}
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	public String getGroupsAsString() {
 		return StringUtils.join(groups, ", ");
+	}
+
+	public boolean equals(Object object) {
+		return ((KnowledgeElement) object).getSummary().equals(getSummary());
 	}
 }

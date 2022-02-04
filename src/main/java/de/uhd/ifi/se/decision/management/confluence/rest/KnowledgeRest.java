@@ -1,7 +1,5 @@
 package de.uhd.ifi.se.decision.management.confluence.rest;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,12 +15,12 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 
 /**
- * REST resource: Enables importing decision knowledge from Jira and storing it.
+ * REST resource: Enables importing decision knowledge from Jira and storing it
+ * using the {@link KnowledgePersistenceManager}.
  */
 @Path("/knowledge")
 public class KnowledgeRest {
@@ -38,17 +36,8 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty() || jsonString == null) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
-		// first remove issues from this page
-		if (elements.size() > 0) {
-			KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
-		}
-		for (KnowledgeElement element : elements) {
-			element.setPageId(pageId);
-			element.setMacroId(macroId);
-			KnowledgePersistenceManager.addKnowledgeElement(element);
-		}
-		LOGGER.info(elements.size() + " knowledge elements were stored in database");
+		KnowledgePersistenceManager.removeKnowledgeElements(pageId);
+		KnowledgePersistenceManager.addKnowledgeElements(jsonString, pageId);
 		return Response.ok().build();
 	}
 
@@ -60,8 +49,7 @@ public class KnowledgeRest {
 		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(pageId, macroId);
-		return Response.status(Response.Status.OK).entity(storedElements).build();
+		return Response.ok(KnowledgePersistenceManager.getElementsAsJsonString(pageId)).build();
 	}
 
 	@Path("/getProjectsFromJira")
@@ -69,6 +57,6 @@ public class KnowledgeRest {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getProjectsFromJira() {
 		String jiraProjectsJsonResponse = JiraClient.instance.getJiraProjectsAsJson();
-		return Response.status(Response.Status.OK).entity(jiraProjectsJsonResponse).build();
+		return Response.ok(jiraProjectsJsonResponse).build();
 	}
 }

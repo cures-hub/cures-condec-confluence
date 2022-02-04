@@ -35,8 +35,8 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
 		String macroId = getMacroId(conversionContext);
 
-		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
-		LOGGER.info("Number of elements in database:" + knowledgeElements.size());
+		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId);
+		LOGGER.error("Number of elements in database:" + knowledgeElements.size());
 
 		boolean freeze = "true".equals(map.get("freeze"));
 
@@ -102,13 +102,14 @@ public class DecisionKnowledgeImportMacro implements Macro {
 						endDate, knowledgeTypes, status);
 				LOGGER.info("Number of elements imported from Jira:" + knowledgeElements.size());
 
-				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
+				KnowledgePersistenceManager.removeKnowledgeElements(pageId);
 				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
 				for (KnowledgeElement element : knowledgeElements) {
 					element.setPageId(pageId);
 					element.setMacroId(macroId);
-					KnowledgePersistenceManager.addKnowledgeElement(element);
+
 				}
+				KnowledgePersistenceManager.addKnowledgeElements(knowledgeElements, pageId);
 			}
 		}
 
