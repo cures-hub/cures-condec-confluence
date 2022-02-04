@@ -23,19 +23,24 @@ public class TestStoreKnowledgeElements {
 	}
 
 	@Test
-	public void testInvalidRequest() {
+	public void testInvalidRequestPageIdZero() {
+		assertEquals(Status.BAD_REQUEST.getStatusCode(), knowledgeRest.storeKnowledgeElements(null, 0, "").getStatus());
+	}
+
+	@Test
+	public void testInvalidRequestJsonStringNull() {
 		assertEquals(Status.BAD_REQUEST.getStatusCode(),
-				knowledgeRest.storeKnowledgeElements(null, 1, "", "").getStatus());
+				knowledgeRest.storeKnowledgeElements(null, 42, null).getStatus());
 	}
 
 	@Test
 	public void testValidRequestJsonStringEmpty() {
-		assertEquals(Status.OK.getStatusCode(), knowledgeRest.storeKnowledgeElements(null, 1, "1", "").getStatus());
+		assertEquals(Status.OK.getStatusCode(), knowledgeRest.storeKnowledgeElements(null, 1, "").getStatus());
 	}
 
 	@Test
 	public void testValidRequest() {
-		assertEquals(Status.OK.getStatusCode(), knowledgeRest
-				.storeKnowledgeElements(null, 1, "1", "[[{'key' : 'CONDEC-1', 'type':'issue'}]]").getStatus());
+		assertEquals(Status.OK.getStatusCode(),
+				knowledgeRest.storeKnowledgeElements(null, 1, "[{'key' : 'CONDEC-1', 'type':'issue'}]").getStatus());
 	}
 }

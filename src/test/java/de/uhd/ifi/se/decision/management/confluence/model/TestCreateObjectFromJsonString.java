@@ -18,7 +18,6 @@ public class TestCreateObjectFromJsonString {
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		KnowledgeElement element = elements.get(0);
 		assertEquals("link type to devices", element.getSummary());
-		assertEquals(122191874, element.getPageId());
 		assertEquals("ISE2019-103", element.getKey());
 		assertEquals("https://jira-se.ifi.uni-heidelberg.de/browse/ISE2019-103", element.getLink());
 	}
@@ -33,14 +32,13 @@ public class TestCreateObjectFromJsonString {
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		KnowledgeElement element = elements.get(0);
 		assertEquals("WI: Implement jump-to methods for nodes in knowledge graph", element.getSummary());
-		assertEquals(0, element.getPageId());
 		assertEquals("ECONDEC-20", element.getKey());
 		assertEquals("https://jira-se.ifi.uni-heidelberg.de/browse/ECONDEC-20", element.getLink());
 	}
 
 	@Test
 	public void testParseTypes() {
-		String jsonString = "[[{'type':'issue'}, {'type':'decision'}]]";
+		String jsonString = "[{'type':'issue'}, {'type':'decision'}]";
 		List<KnowledgeElement> elements = KnowledgeElement.parseJsonString(jsonString);
 		assertEquals("issue", elements.get(0).getType());
 		assertEquals("decision", elements.get(1).getType());

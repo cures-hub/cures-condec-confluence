@@ -13,13 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
-import com.atlassian.confluence.content.render.xhtml.storage.macro.MacroId;
 import com.atlassian.confluence.macro.Macro;
 import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
-import com.atlassian.confluence.xhtml.api.MacroDefinition;
-import com.atlassian.fugue.Option;
 
 import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
@@ -33,9 +30,8 @@ public class DecisionKnowledgeImportMacro implements Macro {
 	public String execute(Map<String, String> map, String s, ConversionContext conversionContext)
 			throws MacroExecutionException {
 		int pageId = Integer.parseInt(conversionContext.getEntity().getIdAsString());
-		String macroId = getMacroId(conversionContext);
 
-		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId, macroId);
+		List<KnowledgeElement> knowledgeElements = KnowledgePersistenceManager.getElements(pageId);
 		LOGGER.info("Number of elements in database:" + knowledgeElements.size());
 
 		boolean freeze = "true".equals(map.get("freeze"));
@@ -102,13 +98,9 @@ public class DecisionKnowledgeImportMacro implements Macro {
 						endDate, knowledgeTypes, status);
 				LOGGER.info("Number of elements imported from Jira:" + knowledgeElements.size());
 
-				KnowledgePersistenceManager.removeKnowledgeElements(pageId, macroId);
+				KnowledgePersistenceManager.removeKnowledgeElements(pageId);
 				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
-				for (KnowledgeElement element : knowledgeElements) {
-					element.setPageId(pageId);
-					element.setMacroId(macroId);
-					KnowledgePersistenceManager.addKnowledgeElement(element);
-				}
+				KnowledgePersistenceManager.addKnowledgeElements(knowledgeElements, pageId);
 			}
 		}
 
@@ -140,18 +132,6 @@ public class DecisionKnowledgeImportMacro implements Macro {
 		}
 
 		return unixTimeStamp;
-	}
-
-	private String getMacroId(ConversionContext conversionContext) {
-		String macroId = "0";
-		try {
-			MacroDefinition macroDefinition = (MacroDefinition) conversionContext.getProperty("macroDefinition");
-			Option<MacroId> option = macroDefinition.getMacroId();
-			macroId = option.get().getId();
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-		}
-		return macroId;
 	}
 
 	@Override

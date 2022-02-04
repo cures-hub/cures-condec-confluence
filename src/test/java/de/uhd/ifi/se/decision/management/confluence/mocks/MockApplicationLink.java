@@ -31,9 +31,9 @@ public class MockApplicationLink implements ApplicationLink {
 			return "[ { 'key' : 'CONDEC' } ]";
 		}
 		if (IS_DOCUMENTATION_COMPLETE) {
-			return "[[{'type':'issue'}, {'type':'decision'}]]";
+			return "[{'type':'issue'}, {'type':'decision'}]";
 		}
-		return "[[{'key' : 'CONDEC-1', 'type':'issue'}]]";
+		return "[{'key' : 'CONDEC-1', 'type':'issue'}]";
 	}
 
 	@Override

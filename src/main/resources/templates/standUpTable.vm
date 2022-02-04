@@ -20,7 +20,7 @@ $webResourceManager.requireResource("de.uhd.ifi.se.decision.management.confluenc
                         <td style="color:$textColor">$knowledgeElement.getSummary()</td>
                         <td>$knowledgeElement.getLatestAuthor()</td>
                         <td>$knowledgeElement.getUpdatingDate()</td>
-                        <td>$knowledgeElement.getGroups()</td>
+                        <td>$knowledgeElement.getGroupsAsString()</td>
                         <td><a target="_blank" href="$knowledgeElement.getLink()">$knowledgeElement.getKey()</a></td>                        
                 </tr>
                     #end

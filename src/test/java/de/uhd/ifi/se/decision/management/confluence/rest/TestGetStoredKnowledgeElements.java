@@ -24,11 +24,11 @@ public class TestGetStoredKnowledgeElements {
 
 	@Test
 	public void testInvalid() {
-		assertEquals(Status.BAD_REQUEST.getStatusCode(), knowledgeRest.getStoredKnowledgeElements(0, "").getStatus());
+		assertEquals(Status.BAD_REQUEST.getStatusCode(), knowledgeRest.getStoredKnowledgeElements(0).getStatus());
 	}
 
 	@Test
 	public void testValid() {
-		assertEquals(Status.OK.getStatusCode(), knowledgeRest.getStoredKnowledgeElements(1, "1").getStatus());
+		assertEquals(Status.OK.getStatusCode(), knowledgeRest.getStoredKnowledgeElements(1).getStatus());
 	}
 }

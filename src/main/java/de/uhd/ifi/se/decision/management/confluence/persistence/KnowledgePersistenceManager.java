@@ -1,10 +1,12 @@
 package de.uhd.ifi.se.decision.management.confluence.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
@@ -21,6 +23,8 @@ import de.uhd.ifi.se.decision.management.confluence.model.KnowledgeElement;
 @Named
 public class KnowledgePersistenceManager {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgePersistenceManager.class);
+
 	@ConfluenceImport
 	private static BandanaManager bandanaManager;
 	private static BandanaContext bandanaContext;
@@ -31,40 +35,37 @@ public class KnowledgePersistenceManager {
 		setBandanaContext(new ConfluenceBandanaContext("knowledge"));
 	}
 
-	public static void addKnowledgeElement(KnowledgeElement knowledgeElement) {
-		bandanaManager.setValue(bandanaContext, knowledgeElement.getId(), knowledgeElement);
+	public static void addKnowledgeElements(List<KnowledgeElement> elements, int pageId) {
+		String jsonString = KnowledgeElement.toJsonString(elements);
+		addKnowledgeElements(jsonString, pageId);
 	}
 
-	public static void removeKnowledgeElement(String id) {
-		bandanaManager.removeValue(bandanaContext, id);
+	public static void addKnowledgeElements(String jsonString, int pageId) {
+		bandanaManager.setValue(bandanaContext, pageId + "", jsonString);
 	}
 
-	public static List<KnowledgeElement> getElements(int pageId, String macroId) {
-		List<KnowledgeElement> elements = new ArrayList<KnowledgeElement>();
-		if (pageId == 0 || macroId == null) {
-			return elements;
-		}
+	public static void removeKnowledgeElements(int pageId) {
+		bandanaManager.removeValue(bandanaContext, pageId + "");
+	}
+
+	public static List<KnowledgeElement> getElements(int pageId) {
+		return KnowledgeElement.parseJsonString(getElementsAsJsonString(pageId));
+	}
+
+	public static String getElementsAsJsonString(int pageId) {
+		String jsonString = "";
+		LOGGER.error("keys: " + bandanaManager.getKeys(bandanaContext).toString());
 
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			Object storedObject = bandanaManager.getValue(bandanaContext, id);
-			if (!(storedObject instanceof KnowledgeElement)) {
+			if (!id.equals(pageId + "")) {
 				continue;
 			}
-			KnowledgeElement knowledgeElement = (KnowledgeElement) storedObject;
-			// add only if the page id and Macro id corresponds
-			// if macro id is null return all from page
-			if (knowledgeElement.getPageId() == pageId && knowledgeElement.getMacroId() != null
-					&& (knowledgeElement.getMacroId().equals(macroId)) || macroId == null) {
-				elements.add(knowledgeElement);
+			Object storedObject = bandanaManager.getValue(bandanaContext, id);
+			if (storedObject instanceof String) {
+				jsonString = (String) storedObject;
 			}
 		}
-		return elements;
-	}
-
-	public static void removeKnowledgeElements(int pageId, String macroId) {
-		for (KnowledgeElement element : getElements(pageId, macroId)) {
-			removeKnowledgeElement(element.getId());
-		}
+		return jsonString;
 	}
 
 	public static void setBandanaManager(BandanaManager bandanaManager) {
