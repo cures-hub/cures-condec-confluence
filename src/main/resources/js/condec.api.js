@@ -15,7 +15,7 @@
 		this.restPrefix = AJS.Data.get("context-path") + "/rest/condec/latest";
 	};
 
-	/*
+	/**
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
@@ -28,13 +28,13 @@
 		});
 	};
 
-	/*
+	/**
 	 * Used to get the JSON string that can be manually edited by the user.
 	 *
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, macroId, callback) {
-		var url = this.restPrefix + "/knowledge/getStoredKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
+	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, callback) {
+		var url = this.restPrefix + "/knowledge/getStoredKnowledgeElements?pageId=" + pageId;
 		getJSON(url, function(error, elements) {
 			if (error === null && !checkForError(elements)) {
 				callback(elements);
@@ -42,18 +42,18 @@
 		});
 	};
 
-	/*
+	/**
 	 * Used to store the JSON string that was manually edited/imported from Jira by the user.
 	 * external references: condec.knowledge.import
 	 */
-	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(userInput, pageId, macroId) {
+	ConDecAPI.prototype.storeKnowledgeElements = function storeKnowledgeElements(userInput, pageId) {
 		var jsonArray = "";
         try {
         	jsonArray = JSON.parse(userInput);
         } catch (e) {
             showFlag("error", "Your input could not be parsed. " + e);
         }
-		var url = this.restPrefix + "/knowledge/storeKnowledgeElements?pageId=" + pageId + "&macroId=" + macroId;
+		var url = this.restPrefix + "/knowledge/storeKnowledgeElements?pageId=" + pageId;
 		postJSON(url, jsonArray, function(error, result) {
 			if (error === null) {				
 				showFlag("success", "The stand-up table was successfully updated.");

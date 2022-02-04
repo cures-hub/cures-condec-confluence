@@ -8,13 +8,13 @@
 *
 * */
 AJS.bind("init.rte", function() {
-	
+
 	var macroName = "decision-knowledge-import-macro";
 
 	var jsOverrides = {
-		"fields" : {
-			"enum" : {
-				"project" : function(params, options) {
+		"fields": {
+			"enum": {
+				"project": function(params, options) {
 					var field = AJS.MacroBrowser.ParameterFields["enum"](params, options);
 					conDecAPI.getProjectsFromJira(function(projects) {
 						var options = "";
@@ -34,34 +34,34 @@ AJS.bind("init.rte", function() {
 	}
 
 	AJS.MacroBrowser.setMacroJsOverride(macroName, jsOverrides);
-	
-	var updateMacro = function (macroId) {		
+
+	var updateMacro = function() {
 		var dialog = $("#json-dialog");
 		if (dialog !== null) {
 			dialog.remove();
 		}
-		
+
 		// Standard sizes are 400, 600, 800 and 960 pixels
 		dialog = new AJS.Dialog({
-			width : 960,
-			height : 800,
-			id : "json-dialog",
-			closeOnOutsideClick : true
+			width: 960,
+			height: 800,
+			id: "json-dialog",
+			closeOnOutsideClick: true
 		});
-			
+
 		dialog.addPanel(
 			"Edit JSON String",
-			"<p>Paste a JSON String exported from Jira or manually edit the existing one. " 
+			"<p>Paste a JSON String exported from Jira or manually edit the existing one. "
 			+ "<mark>Make sure you enabled the 'freeze' option! Otherwise changes will not be saved!</mark></p>"
 			+ "<form class='aui'><textarea class='textarea full-width-field' rows='30' id='jsonTextArea'></textarea></form>",
-			"panel-body");				
-		
+			"panel-body");
+
 		// get knowledge elements from backend via REST 
 		var pageId = parseInt(AJS.params.pageId, 10);
-		conDecAPI.getStoredKnowledgeElements(pageId, macroId, function(elements) {
+		conDecAPI.getStoredKnowledgeElements(pageId, function(elements) {
 			$("#jsonTextArea").val(JSON.stringify(elements, undefined, "\t"));
 		});
-		
+
 		dialog.addLink("Cancel", function(dialog) {
 			dialog.hide();
 		}, "#");
@@ -70,19 +70,14 @@ AJS.bind("init.rte", function() {
 
 		dialog.addButton("Update Knowledge", function(dialog) {
 			var userInput = $("#jsonTextArea").val();
-			conDecAPI.storeKnowledgeElements(userInput, pageId, macroId);
+			conDecAPI.storeKnowledgeElements(userInput, pageId);
 			dialog.hide();
-		});		
+		});
 
 		dialog.show();
 	};
-	
+
 	AJS.Confluence.PropertyPanel.Macro.registerButtonHandler("updateButton", function(e, macroNode) {
-		var macroId = macroNode.getAttribute("data-macro-id");
-		if (macroId && macroId !== "") {
-			updateMacro(macroId);
-		} else {
-			conDecAPI.showFlag("error", "Please save the page first before manually updating the JSON string.");
-		}
+		updateMacro();
 	});
 });

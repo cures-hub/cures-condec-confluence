@@ -12,9 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.uhd.ifi.se.decision.management.confluence.oauth.JiraClient;
 import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersistenceManager;
 
@@ -25,15 +22,13 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 @Path("/knowledge")
 public class KnowledgeRest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeRest.class);
-
 	@Path("/storeKnowledgeElements")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response storeKnowledgeElements(@Context HttpServletRequest request, @QueryParam("pageId") int pageId,
-			@QueryParam("macroId") String macroId, String jsonString) {
+			String jsonString) {
 
-		if (pageId == 0 || macroId == null || macroId.isEmpty() || jsonString == null) {
+		if (pageId == 0 || jsonString == null) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		KnowledgePersistenceManager.removeKnowledgeElements(pageId);
@@ -44,9 +39,8 @@ public class KnowledgeRest {
 	@Path("/getStoredKnowledgeElements")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getStoredKnowledgeElements(@QueryParam("pageId") int pageId,
-			@QueryParam("macroId") String macroId) {
-		if (pageId == 0 || macroId == null || macroId.isEmpty()) {
+	public Response getStoredKnowledgeElements(@QueryParam("pageId") int pageId) {
+		if (pageId == 0) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		return Response.ok(KnowledgePersistenceManager.getElementsAsJsonString(pageId)).build();
