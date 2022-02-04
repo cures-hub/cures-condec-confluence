@@ -55,6 +55,13 @@ The list of decision knowledge elements supports the developers in discussing re
 The unresolved decision problems (issues) are highlighted using red text color to **nudge the developers 
 to collaboratively make and document a decision**.
 
+ConDec's decision knowledge import macro is different to the Jira issue import macro in the following ways:
+- It imports decision knowledge documented in **various documentation locations**, in particular, Jira issue description and comments, 
+code comments, commit messages, and entire Jira issues. 
+The Jira issue import macro would only enable to import decision knowledge elements documented as entire Jira issues.
+- It enables to **freeze** the imported elements so that changes made in the decision knowledge documentation after the meeting are not shown in the meeting protocol of a former meeting. 
+That means that ConDec's decision knowledge import macro enables to **preserve the history**.
+
 ### Design Details
 The decision knowledge is imported from [ConDec Jira](https://github.com/cures-hub/cures-condec-jira) via the REST API.
 To access ConDec Jira's REST API, the application link between Confluence and Jira is used in the [JiraClient class](src/main/java/de/uhd/ifi/se/decision/management/confluence/oauth).
