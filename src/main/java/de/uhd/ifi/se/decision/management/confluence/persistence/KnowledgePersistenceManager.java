@@ -46,12 +46,14 @@ public class KnowledgePersistenceManager {
 		}
 
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			KnowledgeElement knowledgeElement = (KnowledgeElement) bandanaManager.getValue(bandanaContext, id);
-			// add only if the page id and Macro id corresponds // if macro id is null
-			// return all from page
-			if (knowledgeElement != null && knowledgeElement.getPageId() == pageId
-					&& knowledgeElement.getMacroId() != null && (knowledgeElement.getMacroId().equals(macroId))
-					|| macroId == null) {
+			KnowledgeElement knowledgeElement = readElementFromBandana(id);
+			if (knowledgeElement == null) {
+				continue;
+			}
+			// add only if the page id and Macro id corresponds
+			// if macro id is null return all from page
+			if (knowledgeElement.getPageId() == pageId && knowledgeElement.getMacroId() != null
+					&& (knowledgeElement.getMacroId().equals(macroId)) || macroId == null) {
 				elements.add(knowledgeElement);
 			}
 		}
@@ -60,13 +62,12 @@ public class KnowledgePersistenceManager {
 
 	public static void removeKnowledgeElements(int pageId, String macroId) {
 		for (String id : bandanaManager.getKeys(bandanaContext)) {
-			Object storedObject = bandanaManager.getValue(bandanaContext, id);
-			if (!(storedObject instanceof KnowledgeElement)) {
+			KnowledgeElement knowledgeElement = readElementFromBandana(id);
+			if (knowledgeElement == null) {
 				continue;
 			}
-			KnowledgeElement knowledgeElement = (KnowledgeElement) storedObject;
-			// remove only if the page id and Macro id corresponds remove all where macroId
-			// is null
+			// remove only if the page id and Macro id corresponds
+			// remove all where macroId is null
 			String issueMacroId = knowledgeElement.getMacroId();
 
 			if (isNullOrEmpty(issueMacroId) || (!isNullOrEmpty(issueMacroId) && knowledgeElement.getPageId() == pageId
@@ -74,6 +75,14 @@ public class KnowledgePersistenceManager {
 				removeKnowledgeElement(knowledgeElement.getId());
 			}
 		}
+	}
+
+	private static KnowledgeElement readElementFromBandana(String key) {
+		Object storedObject = bandanaManager.getValue(bandanaContext, key);
+		if (!(storedObject instanceof KnowledgeElement)) {
+			return null;
+		}
+		return (KnowledgeElement) storedObject;
 	}
 
 	public static void setBandanaManager(BandanaManager bandanaManager) {

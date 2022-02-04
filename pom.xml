@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.uhd.ifi.se.decision</groupId>
 	<artifactId>management.confluence</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 
 	<organization>
 		<name>Software Engineering Research Group, Heidelberg University</name>

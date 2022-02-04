@@ -8,7 +8,8 @@
 The ConDec Confluence plugin enables to integrate decision knowledge into meeting agendas.
 It enables the meeting creator to filter for decision knowledge to be shown in the meeting agenda.
 For example, it enables the meeting creator to filter for decision knowledge created and relevant for the last sprint.
-Thus, the developers get an overview which issues (decision problems) need to be solved or were solved, i.e., which decisions were made during the last sprint or need to be made during the upcoming sprint.
+Thus, the developers get an overview which issues (decision problems) need to be solved or were solved, 
+i.e., which decisions were made during the last sprint or need to be made during the upcoming sprint.
 
 ## Installation
 
@@ -41,10 +42,16 @@ The authentication type needs to be **OAuth (impersonation)**.
 
 ### Decision Knowledge Import Macro
 The *Decision Knowledge Import Macro* can be used to create a stand-up table in meetings. 
-The stand-up table contains relevant requirements, as well as open and solved decision problems for a certain time frame.
 
-![Decision Knowledge Import Macro](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/macro_edit_dialog.png)
+![Decision Knowledge Import Macro](doc/macro_edit_dialog.png)
 *Macro to import decision knowledge from Jira*
 
-![Decision Knowledge List](https://github.com/cures-hub/cures-condec-confluence/raw/master/doc/imported_decision_knowledge.png)
-*List of decision knowledge as part of a meeting agenda/protocol (used as stand-up table)*
+The stand-up table lists open and solved decision problems, decisions, and other decision knowledge elements for a certain time frame.
+The list of decision knowledge elements support the developers in discussing recently made decisions and open decision problems during meetings.
+
+![Decision Knowledge List](doc/imported_decision_knowledge.png)
+*List of decision knowledge elements as part of a meeting agenda/protocol (used as stand-up table)*
+
+### Design Details
+The decision knowledge is imported from [ConDec Jira](https://github.com/cures-hub/cures-condec-jira) via the REST API.
+To access ConDec Jira's REST API, the application link between Confluence and Jira is used in the [JiraClient class](src/main/java/de/uhd/ifi/se/decision/management/confluence/oauth).
