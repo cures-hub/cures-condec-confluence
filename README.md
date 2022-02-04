@@ -60,7 +60,7 @@ code comments, commit messages, and entire Jira issues.
 The Jira issue import macro would only enable to import decision knowledge elements documented as entire Jira issues.
 - It enables to **freeze** the imported elements so that changes made in the decision knowledge documentation after the meeting are not shown in the meeting protocol of a former meeting. 
 That means that ConDec's decision knowledge import macro enables to **preserve the history**.
-- It enables to manually input a JSON String exported from Jira, e.g. if there are no application links, and to manually edit the JSON String.
+- It enables to manually input a JSON String exported from Jira, e.g. if there are no application links, and to **manually edit the JSON String**.
 - The unresolved decision problems (issues) are highlighted using red text color to **nudge the developers 
 to collaboratively make and document a decision**.
 
