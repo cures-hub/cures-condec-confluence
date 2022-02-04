@@ -59,6 +59,8 @@ public class TestKnowledgeElement {
 	@Test
 	public void testLink() {
 		assertEquals("myLink", element.getLink());
+		element.setLink(null);
+		assertEquals("", element.getLink());
 	}
 
 	@Test

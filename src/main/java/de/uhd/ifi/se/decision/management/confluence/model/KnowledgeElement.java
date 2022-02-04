@@ -48,7 +48,7 @@ public class KnowledgeElement implements Serializable {
 	 *        objects?
 	 * @decision Convert a JSON string into a list of KnowledgeElement objects
 	 *           manually using the GSON library!
-	 * @con This is not very elegant and hard to understand. Their might be an
+	 * @con This is not very elegant and hard to understand. There might be an
 	 *      easier way of mapping JSON Strings into objects.
 	 */
 	public static List<KnowledgeElement> parseJsonString(String jsonString) {
