@@ -11,6 +11,12 @@ import com.atlassian.webresource.api.assembler.WebResourceAssembler;
 public class MockPageBuilderService implements PageBuilderService {
 
 	@Override
+	public void seed(WebResourceAssembler webResourceAssembler) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public WebResourceAssembler assembler() {
 		return new WebResourceAssembler() {
 
@@ -69,8 +75,4 @@ public class MockPageBuilderService implements PageBuilderService {
 		};
 	}
 
-	@Override
-	public void seed(WebResourceAssembler webResourceAssembler) {
-		// TODO Auto-generated method stub
-	}
 }
