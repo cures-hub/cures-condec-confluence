@@ -1,12 +1,9 @@
-/*
-*
-*  This module implements the dialog, which can be used for importing decision knowledge
-*  from Jira and was manually implemented.
-*  It's not sure, if it will be further developed.
-*  The main dialog für importing decision knowledge from Jira
-*  is implemented in atlassian-plugin.xml
-*
-* */
+/**
+ *  This module implements the dialog, which can be used for manual importing decision knowledge
+ *  from Jira via a JSON string and to change the imported elements.
+ *  The main dialog for importing decision knowledge from Jira
+ *  is implemented in atlassian-plugin.xml
+ */
 AJS.bind("init.rte", function() {
 
 	var macroName = "decision-knowledge-import-macro";

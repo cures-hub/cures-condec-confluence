@@ -20,7 +20,7 @@
 	 */
 	ConDecAPI.prototype.getProjectsFromJira = function getProjectsFromJira(callback) {
 		console.log("conDecApi getProjectsFromJira");
-		var url = this.restPrefix + "/knowledge/getProjectsFromJira";
+		var url = this.restPrefix + "/knowledge/projectsFromJira";
 		getJSON(url, function(error, projects) {
 			if (error === null && !checkForError(projects)) {
 				callback(projects);
@@ -34,7 +34,7 @@
 	 * external references: condec.knowledge.import
 	 */
 	ConDecAPI.prototype.getStoredKnowledgeElements = function getStoredKnowledgeElements(pageId, callback) {
-		var url = this.restPrefix + "/knowledge/getStoredKnowledgeElements?pageId=" + pageId;
+		var url = this.restPrefix + "/knowledge/storedKnowledgeElements/" + pageId;
 		getJSON(url, function(error, elements) {
 			if (error === null && !checkForError(elements)) {
 				callback(elements);
@@ -53,7 +53,7 @@
         } catch (e) {
             showFlag("error", "Your input could not be parsed. " + e);
         }
-		var url = this.restPrefix + "/knowledge/storeKnowledgeElements?pageId=" + pageId;
+		var url = this.restPrefix + "/knowledge/storeKnowledgeElements/" + pageId;
 		postJSON(url, jsonArray, function(error, result) {
 			if (error === null) {				
 				showFlag("success", "The stand-up table was successfully updated.");

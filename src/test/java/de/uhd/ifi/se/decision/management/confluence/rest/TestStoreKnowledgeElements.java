@@ -23,8 +23,14 @@ public class TestStoreKnowledgeElements {
 	}
 
 	@Test
-	public void testInvalidRequest() {
+	public void testInvalidRequestPageIdZero() {
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), knowledgeRest.storeKnowledgeElements(null, 0, "").getStatus());
+	}
+
+	@Test
+	public void testInvalidRequestJsonStringNull() {
+		assertEquals(Status.BAD_REQUEST.getStatusCode(),
+				knowledgeRest.storeKnowledgeElements(null, 42, null).getStatus());
 	}
 
 	@Test

@@ -1,14 +1,11 @@
 package de.uhd.ifi.se.decision.management.confluence.rest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -22,12 +19,10 @@ import de.uhd.ifi.se.decision.management.confluence.persistence.KnowledgePersist
 @Path("/knowledge")
 public class KnowledgeRest {
 
-	@Path("/storeKnowledgeElements")
+	@Path("/storeKnowledgeElements/{pageId}")
 	@POST
-	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response storeKnowledgeElements(@Context HttpServletRequest request, @QueryParam("pageId") int pageId,
+	public Response storeKnowledgeElements(@Context HttpServletRequest request, @PathParam("pageId") int pageId,
 			String jsonString) {
-
 		if (pageId == 0 || jsonString == null) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -36,19 +31,17 @@ public class KnowledgeRest {
 		return Response.ok().build();
 	}
 
-	@Path("/getStoredKnowledgeElements")
+	@Path("/storedKnowledgeElements/{pageId}")
 	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getStoredKnowledgeElements(@QueryParam("pageId") int pageId) {
+	public Response getStoredKnowledgeElements(@PathParam("pageId") int pageId) {
 		if (pageId == 0) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		return Response.ok(KnowledgePersistenceManager.getElementsAsJsonString(pageId)).build();
 	}
 
-	@Path("/getProjectsFromJira")
+	@Path("/projectsFromJira")
 	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getProjectsFromJira() {
 		String jiraProjectsJsonResponse = JiraClient.instance.getJiraProjectsAsJson();
 		return Response.ok(jiraProjectsJsonResponse).build();
