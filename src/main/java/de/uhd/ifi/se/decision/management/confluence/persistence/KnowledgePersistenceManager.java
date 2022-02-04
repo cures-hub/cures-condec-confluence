@@ -37,20 +37,15 @@ public class KnowledgePersistenceManager {
 
 	public static void addKnowledgeElements(List<KnowledgeElement> elements, int pageId) {
 		String jsonString = KnowledgeElement.toJsonString(elements);
-		bandanaManager.setValue(bandanaContext, pageId + "", jsonString);
+		addKnowledgeElements(jsonString, pageId);
 	}
 
 	public static void addKnowledgeElements(String jsonString, int pageId) {
 		bandanaManager.setValue(bandanaContext, pageId + "", jsonString);
 	}
 
-	public static void addKnowledgeElement(KnowledgeElement knowledgeElement) {
-		LOGGER.error("add: " + knowledgeElement.getId() + knowledgeElement.getClass().getName());
-		bandanaManager.setValue(bandanaContext, knowledgeElement.getId(), knowledgeElement);
-	}
-
-	public static void removeKnowledgeElement(String id) {
-		bandanaManager.removeValue(bandanaContext, id);
+	public static void removeKnowledgeElements(int pageId) {
+		bandanaManager.removeValue(bandanaContext, pageId + "");
 	}
 
 	public static List<KnowledgeElement> getElements(int pageId) {
@@ -66,21 +61,11 @@ public class KnowledgePersistenceManager {
 				continue;
 			}
 			Object storedObject = bandanaManager.getValue(bandanaContext, id);
-			if (!(storedObject instanceof String)) {
-				LOGGER.error(storedObject.getClass().getName());
-				bandanaManager.removeValue(bandanaContext, id);
-				continue;
+			if (storedObject instanceof String) {
+				jsonString = (String) storedObject;
 			}
-
-			jsonString = (String) storedObject;
 		}
 		return jsonString;
-	}
-
-	public static void removeKnowledgeElements(int pageId) {
-		for (KnowledgeElement element : getElements(pageId)) {
-			removeKnowledgeElement(pageId + "");
-		}
 	}
 
 	public static void setBandanaManager(BandanaManager bandanaManager) {

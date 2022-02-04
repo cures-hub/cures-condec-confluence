@@ -3,6 +3,7 @@ package de.uhd.ifi.se.decision.management.confluence.persistence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -35,7 +36,7 @@ public class TestKnowledgePersistenceManager {
 	}
 
 	@Test
-	public void testAddElements() {
+	public void testAddElementsViaJson() {
 		KnowledgePersistenceManager.addKnowledgeElements(jsonString, 23);
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23);
 		assertEquals(element, storedElements.get(0));
@@ -43,6 +44,7 @@ public class TestKnowledgePersistenceManager {
 
 	@Test
 	public void testGetElementsInvalidPageId() {
+		KnowledgePersistenceManager.addKnowledgeElements(jsonString, 23);
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(0);
 		assertEquals(0, storedElements.size());
 	}
@@ -54,16 +56,10 @@ public class TestKnowledgePersistenceManager {
 	}
 
 	@Test
-	public void testRemoveElement() {
-		KnowledgePersistenceManager.addKnowledgeElement(element);
-		KnowledgePersistenceManager.removeKnowledgeElement(element.getId());
-		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23);
-		assertEquals(0, storedElements.size());
-	}
-
-	@Test
 	public void testRemoveElements() {
-		KnowledgePersistenceManager.addKnowledgeElement(element);
+		List<KnowledgeElement> elements = new ArrayList<>();
+		elements.add(element);
+		KnowledgePersistenceManager.addKnowledgeElements(elements, 23);
 		KnowledgePersistenceManager.removeKnowledgeElements(23);
 		List<KnowledgeElement> storedElements = KnowledgePersistenceManager.getElements(23);
 		assertEquals(0, storedElements.size());
