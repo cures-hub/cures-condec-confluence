@@ -79,7 +79,7 @@ public class KnowledgePersistenceManager {
 
 	public static void removeKnowledgeElements(int pageId) {
 		for (KnowledgeElement element : getElements(pageId)) {
-			removeKnowledgeElement(element.getPageId() + "");
+			removeKnowledgeElement(pageId + "");
 		}
 	}
 

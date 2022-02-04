@@ -9,12 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,12 +28,10 @@ public class KnowledgeElement implements Serializable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeElement.class);
 
 	private String link;
-	private int pageId;
 	private String summary;
 	private String type;
 	private String key;
 	private String id;
-	private String macroId;
 	private String description;
 	private String creator;
 	private String latestUpdatingDate;
@@ -46,16 +43,15 @@ public class KnowledgeElement implements Serializable {
 	 * @issue How can we convert a JSON string into a list of KnowledgeElement
 	 *        objects?
 	 * @decision Convert a JSON string into a list of KnowledgeElement objects
-	 *           manually using the GSON library!
+	 *           manually using an ObjectMapper!
 	 * @con This is not very elegant and hard to understand. There might be an
 	 *      easier way of mapping JSON Strings into objects.
+	 * @alternative We could use GSON for (de)serialization.
+	 * @con GSON only (de)serializes attributes, it is hard to add further getters
+	 *      and setters.
 	 */
 	public static List<KnowledgeElement> parseJsonString(String jsonString) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.writerWithDefaultPrettyPrinter();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-		objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		ObjectMapper objectMapper = createObjectMapper();
 		List<KnowledgeElement> elements = new ArrayList<KnowledgeElement>();
 		try {
 			elements = objectMapper.readValue(jsonString, new TypeReference<List<KnowledgeElement>>() {
@@ -64,15 +60,11 @@ public class KnowledgeElement implements Serializable {
 			System.out.println(e.getMessage());
 			LOGGER.error(e.getMessage());
 		}
-
 		return elements;
 	}
 
 	public static String toJsonString(List<KnowledgeElement> elements) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		objectMapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-		objectMapper.writerWithDefaultPrettyPrinter();
+		ObjectMapper objectMapper = createObjectMapper();
 		String jsonString = "";
 		try {
 			jsonString = objectMapper.writeValueAsString(elements);
@@ -82,26 +74,20 @@ public class KnowledgeElement implements Serializable {
 		return jsonString;
 	}
 
-	public KnowledgeElement() {
-		// generate unique id
-		Date dNow = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("yyMMddhhmmssMs");
-		String datetime = format.format(dNow);
-		this.id = datetime + key;
-	}
-
-	public int getPageId() {
-		return pageId;
-	}
-
-	public void setPageId(int pageId) {
-		this.pageId = pageId;
+	private static ObjectMapper createObjectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		objectMapper.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+		objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		objectMapper.writerWithDefaultPrettyPrinter();
+		return objectMapper;
 	}
 
 	public String getId() {
 		return id;
 	}
 
+	@JsonProperty
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -137,23 +123,10 @@ public class KnowledgeElement implements Serializable {
 		return "";
 	}
 
+	@JsonProperty
+	@JsonAlias("url")
 	public void setLink(String link) {
 		this.link = link;
-	}
-
-	@JsonProperty("url")
-	public void setUrl(String link) {
-		setLink(link);
-	}
-
-	@XmlElement
-	public String getMacroId() {
-		return macroId;
-	}
-
-	@JsonProperty
-	public void setMacroId(String macroId) {
-		this.macroId = macroId;
 	}
 
 	public String getDescription() {
@@ -175,9 +148,6 @@ public class KnowledgeElement implements Serializable {
 	}
 
 	public String getUpdatingDate() {
-		if (latestUpdatingDate == null) {
-			return "";
-		}
 		Date date = new Date(Long.parseLong(latestUpdatingDate));
 		return new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}

@@ -1,6 +1,8 @@
 package de.uhd.ifi.se.decision.management.confluence.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,6 @@ public class TestKnowledgeElement {
 		element.setId("myId");
 		element.setKey("myKey");
 		element.setLink("myLink");
-		element.setMacroId("myMacroId");
-		element.setPageId(1);
 		element.setSummary("mySummary");
 		element.setType("myType");
 		element.setCreator("myAuthor");
@@ -54,16 +54,6 @@ public class TestKnowledgeElement {
 		assertEquals("myLink", element.getLink());
 		element.setLink(null);
 		assertEquals("", element.getLink());
-	}
-
-	@Test
-	public void testMacroId() {
-		assertEquals("myMacroId", element.getMacroId());
-	}
-
-	@Test
-	public void testPageId() {
-		assertEquals(1, element.getPageId());
 	}
 
 	@Test
@@ -103,10 +93,23 @@ public class TestKnowledgeElement {
 	@Test
 	public void testUpdatingDate() {
 		assertEquals("1970-01-01", element.getUpdatingDate());
+		element.setUpdatingDate("2042-01-01");
+		assertEquals("2042-01-01", element.getUpdatingDate());
+
+		element.setUpdatingDate("unknown format");
+		assertNotNull(element.getUpdatingDate());
 	}
 
 	@Test
 	public void testGroups() {
 		assertEquals(List.of("High Level", "Git"), element.getGroups());
+		assertEquals("High Level, Git", element.getGroupsAsString());
+	}
+
+	@Test
+	public void testEquals() {
+		KnowledgeElement secondElement = new KnowledgeElement();
+		secondElement.setSummary(element.getSummary());
+		assertTrue(element.equals(secondElement));
 	}
 }

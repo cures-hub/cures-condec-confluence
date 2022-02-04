@@ -104,11 +104,6 @@ public class DecisionKnowledgeImportMacro implements Macro {
 
 				KnowledgePersistenceManager.removeKnowledgeElements(pageId);
 				knowledgeElements.sort(Comparator.comparing(KnowledgeElement::getKey));
-				for (KnowledgeElement element : knowledgeElements) {
-					element.setPageId(pageId);
-					element.setMacroId(macroId);
-
-				}
 				KnowledgePersistenceManager.addKnowledgeElements(knowledgeElements, pageId);
 			}
 		}
