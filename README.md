@@ -47,10 +47,13 @@ The *Decision Knowledge Import Macro* can be used to create a stand-up table in 
 *Macro to import decision knowledge from Jira*
 
 The stand-up table lists open and solved decision problems, decisions, and other decision knowledge elements for a certain time frame.
-The list of decision knowledge elements support the developers in discussing recently made decisions and open decision problems during meetings.
+The list of decision knowledge elements supports the developers in discussing recently made decisions and open decision problems during meetings.
 
 ![Decision Knowledge List](doc/imported_decision_knowledge.png)
 *List of decision knowledge elements as part of a meeting agenda/protocol (used as stand-up table)*
+
+The unresolved decision problems (issues) are highlighted using red text color to **nudge the developers 
+to collaboratively make and document a decision**.
 
 ### Design Details
 The decision knowledge is imported from [ConDec Jira](https://github.com/cures-hub/cures-condec-jira) via the REST API.
