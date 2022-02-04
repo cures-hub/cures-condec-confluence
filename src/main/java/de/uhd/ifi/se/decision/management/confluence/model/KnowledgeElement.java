@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -57,7 +58,6 @@ public class KnowledgeElement implements Serializable {
 			elements = objectMapper.readValue(jsonString, new TypeReference<List<KnowledgeElement>>() {
 			});
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			LOGGER.error(e.getMessage());
 		}
 		return elements;
@@ -79,6 +79,7 @@ public class KnowledgeElement implements Serializable {
 		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		objectMapper.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES);
 		objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		objectMapper.writerWithDefaultPrettyPrinter();
 		return objectMapper;
 	}
