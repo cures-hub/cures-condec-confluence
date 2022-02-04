@@ -44,12 +44,14 @@ The authentication type needs to be **OAuth (impersonation)**.
 The *Decision Knowledge Import Macro* can be used to create a stand-up table in meetings. 
 
 ![Decision Knowledge Import Macro](doc/macro_edit_dialog.png)
+
 *Macro to import decision knowledge from Jira*
 
 The stand-up table lists open and solved decision problems, decisions, and other decision knowledge elements for a certain time frame.
 The list of decision knowledge elements supports the developers in discussing recently made decisions and open decision problems during meetings.
 
 ![Decision Knowledge List](doc/imported_decision_knowledge.png)
+
 *List of decision knowledge elements as part of a meeting agenda/protocol (used as stand-up table)*
 
 ConDec's decision knowledge import macro is different to the Jira issue import macro in the following ways:
@@ -58,8 +60,18 @@ code comments, commit messages, and entire Jira issues.
 The Jira issue import macro would only enable to import decision knowledge elements documented as entire Jira issues.
 - It enables to **freeze** the imported elements so that changes made in the decision knowledge documentation after the meeting are not shown in the meeting protocol of a former meeting. 
 That means that ConDec's decision knowledge import macro enables to **preserve the history**.
+- It enables to manually input a JSON String exported from Jira, e.g. if there are no application links, and to manually edit the JSON String.
 - The unresolved decision problems (issues) are highlighted using red text color to **nudge the developers 
 to collaboratively make and document a decision**.
+
+![Configuration Possibilities](doc/macro_configuration_possibilities.png)
+
+*Configuration possibilities for the decision knowledge import macro when editing a Confluence page.
+The macro enables to manually edit the imported knowledge elements.*
+
+![Dialog to Manually Edit JSON](doc/macro_json_edit_dialog.png)
+
+*Dialog to manually paste a JSON String exported from Jira or to manually edit the imported knowledge elements.*
 
 ### Design Details
 The decision knowledge is imported from [ConDec Jira](https://github.com/cures-hub/cures-condec-jira) via the REST API.
