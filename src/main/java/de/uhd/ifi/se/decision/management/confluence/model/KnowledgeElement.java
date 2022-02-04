@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -80,6 +81,7 @@ public class KnowledgeElement implements Serializable {
 		objectMapper.enable(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES);
 		objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		objectMapper.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
 		objectMapper.writerWithDefaultPrettyPrinter();
 		return objectMapper;
 	}

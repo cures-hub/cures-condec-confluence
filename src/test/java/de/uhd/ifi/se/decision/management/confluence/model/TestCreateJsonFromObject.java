@@ -15,10 +15,11 @@ public class TestCreateJsonFromObject {
 		element.setSummary("Link new created type to different devices inside the pop up field.");
 		element.setLink("https://jira-se.ifi.uni-heidelberg.de/browse/ISE2019-103");
 		element.setUpdatingDate("2042-01-01");
-		String jsonString = "[{\"link\":\"https://jira-se.ifi.uni-heidelberg.de/browse/ISE2019-103\","
+		String jsonString = "[{\"description\":\"Link new created type to different devices inside the pop up field.\","
+				+ "\"link\":\"https://jira-se.ifi.uni-heidelberg.de/browse/ISE2019-103\","
+				+ "\"status\":\"undefined\",\"statusColor\":\"black\","
 				+ "\"summary\":\"Link new created type to different devices inside the pop up field.\","
-				+ "\"description\":\"Link new created type to different devices inside the pop up field.\","
-				+ "\"status\":\"undefined\",\"updatingDate\":\"2042-01-01\",\"statusColor\":\"black\"}]";
+				+ "\"updatingDate\":\"2042-01-01\"}]";
 
 		List<KnowledgeElement> elements = new ArrayList<>();
 		elements.add(element);
