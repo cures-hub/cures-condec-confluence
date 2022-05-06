@@ -317,7 +317,7 @@
 	</profiles>
 
 	<properties>
-		<confluence.version>7.16.0</confluence.version>
+		<confluence.version>7.17.1</confluence.version>
 		<amps.version>8.3.0-128eead6d</amps.version>
 		<plugin.testrunner.version>2.0.2</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>2.2.3</atlassian.spring.scanner.version>
