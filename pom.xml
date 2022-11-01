@@ -318,7 +318,7 @@
 
 	<properties>
 		<confluence.version>7.18.2</confluence.version>
-		<amps.version>8.3.0-128eead6d</amps.version>
+		<amps.version>8.8.1-29e459e6e</amps.version>
 		<plugin.testrunner.version>2.0.3</plugin.testrunner.version>
 		<atlassian.spring.scanner.version>3.0.2</atlassian.spring.scanner.version>
 		<jacoco-version>0.8.8</jacoco-version>
