@@ -193,7 +193,7 @@
 		<dependency>
 			<groupId>com.atlassian.applinks</groupId>
 			<artifactId>applinks-api</artifactId>
-			<version>9.0.14</version>
+			<version>9.1.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
