@@ -123,7 +123,7 @@
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
-			<version>5.1.0</version>
+			<version>5.1.3</version>
 			<scope>provided</scope> <!-- Uses the application's SAL instead of bundling it into the plugin. -->
 		</dependency>
 		<dependency>
